@@ -1,5 +1,5 @@
 import "./Cancel.css";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { LuShieldCheck, LuRefreshCw } from "react-icons/lu";
