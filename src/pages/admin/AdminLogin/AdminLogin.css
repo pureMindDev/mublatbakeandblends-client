@@ -1,0 +1,275 @@
+/* ===== PAGE ===== */
+.admin-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,170,0,0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255,170,0,0.08), transparent 40%),
+    #000;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-main);
+  color: white;
+  padding: 40px 20px;
+  position: relative;
+}
+
+/* BACK LINK */
+.back-link {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  color: #ccc;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--gold); }
+
+/* ===== CARD ===== */
+.admin-card {
+  width: 420px;
+  background: linear-gradient(145deg, #1c1c1c, #141414);
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 40px 35px;
+  text-align: center;
+  box-shadow:
+    0 0 40px rgba(255,170,0,0.08),
+    inset 0 0 20px rgba(255,170,0,0.03);
+}
+
+/* LOGO */
+.admin-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diamond-svg {
+  color: var(--gold);
+  font-size: 16px;
+}
+
+.admin-logo span {
+  color: var(--gold);
+  font-family: "DM Serif Display", serif;
+  font-size: 20px;
+}
+
+/* TITLE */
+.admin-card h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.admin-card > p {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #333, transparent);
+}
+.divider span {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* ERROR BANNER */
+.login-error {
+  background: rgba(255, 80, 80, 0.12);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #ff8080;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+/* LABELS */
+.admin-card label {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 6px;
+}
+
+/* INPUT BOX */
+.input-box {
+  display: flex;
+  align-items: center;
+  background: #050505;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+  transition: border-color 0.2s;
+}
+.input-box:focus-within {
+  border-color: var(--gold);
+}
+.input-box.input-error {
+  border-color: #ff6b6b;
+}
+.input-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  margin-left: 10px;
+  font-size: 14px;
+}
+.input-box input::placeholder { color: #555; }
+.input-box > svg { color: #666; flex-shrink: 0; }
+
+/* EYE TOGGLE */
+.eye {
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.eye:hover { color: var(--gold); }
+
+/* PASSWORD ROW */
+.password-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.password-row label { margin-bottom: 0; }
+.forgot {
+  font-size: 12px;
+  color: var(--gold);
+  cursor: pointer;
+}
+.forgot:hover { text-decoration: underline; }
+
+/* REMEMBER */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  text-align: left;
+}
+.remember input { accent-color: var(--gold); cursor: pointer; }
+.remember label { cursor: pointer; color: #ccc; margin: 0; }
+
+/* LOGIN BUTTON */
+.login-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f5a623, #ffcc4d);
+  color: black;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(245,166,35,0.3);
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(245,166,35,0.4);
+}
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* AUTHORIZED */
+.authorized {
+  font-size: 11px;
+  color: #aaa;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== BOTTOM INFO CARDS ===== */
+.admin-bottom {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.mini-card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 16px;
+  width: 200px;
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+.mini-icon { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+.mini-card div { text-align: left; }
+.mini-card strong { font-size: 12px; display: block; margin-bottom: 4px; }
+.mini-card span { font-size: 11px; color: #888; line-height: 1.4; display: block; }
+
+/* PAGE FOOTER */
+.admin-footer {
+  margin-top: 25px;
+  font-size: 11px;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+/*
+ * Responsive rules for this page now live in ONE place:
+ * src/styles/admin-responsive.css
+ *
+ * This file previously had TWO separate "@media (max-width: 500px)"
+ * blocks defined back-to-back — the second one silently overrode
+ * parts of the first, and neither was guaranteed to win depending
+ * on build/minifier ordering. That duplication has been removed.
+ * See admin-responsive.css for the consolidated, single version
+ * of every breakpoint used across all admin pages.
+ */

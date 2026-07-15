@@ -1,0 +1,88 @@
+/* SECTION */
+.london {
+  background: var(--dark);
+  padding: 90px 20px;
+}
+
+/* WRAPPER (important for alignment) */
+.london-container {
+  max-width: var(--container-width);
+  margin: auto;
+  text-align: center;
+}
+
+/* TITLE */
+.london-title {
+  color: var(--gold);
+  font-size: 42px;
+  font-weight: 700;
+  font-family: "DM Serif Display", serif;
+  margin-bottom: 10px;
+}
+
+/* SUBTEXT */
+.london-sub {
+  color: #e4e2dd;
+  margin-bottom: 40px;
+  font-size: 16px;
+  line-height: 1.7;
+  font-family: var(--font-main);
+}
+
+/* GRID */
+.london-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* CARD */
+.london-card {
+  text-align: left;
+  transition: 0.3s;
+}
+
+.london-card:hover {
+  transform: translateY(-6px);
+}
+
+/* IMAGE */
+.london-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* keeps perfect square */
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* TITLE */
+.london-card h4 {
+  color: var(--white);
+  font-size: 17px;
+  font-family: "DM Serif Display", serif;
+  margin-bottom: 4px;
+}
+
+/* PRICE / TAG */
+.london-card p {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .london-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .london-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .london-title {
+    font-size: 30px;
+  }
+}

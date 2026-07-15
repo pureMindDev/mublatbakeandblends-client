@@ -1,0 +1,262 @@
+.sp-page {
+  background: var(--dark);
+  color: white;
+  min-height: 100vh;
+  font-family: var(--font-main);
+}
+
+/* ── HERO ── */
+.sp-hero {
+  text-align: center;
+  padding: 80px 24px 60px;
+  border-bottom: 1px solid #1a1a1a;
+  background: radial-gradient(ellipse at top, rgba(245,166,35,0.06), transparent 60%);
+}
+.sp-badge {
+  display: inline-block;
+  border: 1px solid #3a3000;
+  color: var(--gold);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+.sp-hero h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: 46px;
+  margin-bottom: 16px;
+}
+.sp-hero p {
+  color: #888;
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── CONTAINER ── */
+.sp-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+/* ── INFO CARDS ── */
+.sp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+}
+.sp-info-card {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 14px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s;
+}
+.sp-info-card:hover { border-color: #3a3000; }
+.sp-info-icon {
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.sp-info-card h4  { font-size: 15px; }
+.sp-info-card p   { font-size: 12px; color: #888; }
+.sp-info-card a,
+.sp-info-card span {
+  font-size: 13px;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.sp-info-card a:hover { opacity: 0.75; }
+.sp-info-card span    { color: #ccc; }
+
+/* ── MAIN GRID ── */
+.sp-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* ── FAQ ── */
+.sp-faq-section h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.sp-faq-sub { color: #888; font-size: 14px; margin-bottom: 24px; }
+.sp-faq-list { display: flex; flex-direction: column; gap: 0; }
+
+.sp-faq-item {
+  border-bottom: 1px solid #1a1a1a;
+}
+.sp-faq-item:first-child { border-top: 1px solid #1a1a1a; }
+
+.sp-faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  gap: 12px;
+  transition: color 0.2s;
+  font-family: var(--font-main);
+}
+.sp-faq-q:hover { color: var(--gold); }
+.sp-faq-item.open .sp-faq-q { color: var(--gold); }
+.sp-faq-q svg { flex-shrink: 0; font-size: 16px; }
+
+.sp-faq-a {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.7;
+  padding-bottom: 16px;
+}
+
+/* ── FORM ── */
+.sp-form-section {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 16px;
+  padding: 32px;
+}
+.sp-form-section h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.sp-form-sub { color: #888; font-size: 13px; margin-bottom: 24px; }
+
+.sp-form { display: flex; flex-direction: column; gap: 18px; }
+
+.sp-field { display: flex; flex-direction: column; gap: 6px; }
+.sp-field label {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: flex;
+  justify-content: space-between;
+}
+.sp-char-count { font-size: 11px; color: #555; font-weight: 400; }
+
+.sp-field input,
+.sp-field textarea,
+.sp-field select {
+  background: #0e0e0e;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: var(--font-main);
+  width: 100%;
+  box-sizing: border-box;
+}
+.sp-field input:focus,
+.sp-field textarea:focus,
+.sp-field select:focus   { border-color: var(--gold); }
+.sp-field input::placeholder,
+.sp-field textarea::placeholder { color: #444; }
+.sp-field textarea { min-height: 110px; resize: vertical; }
+.sp-field select { cursor: pointer; }
+.sp-select-placeholder { color: #444; }
+
+.sp-error {
+  display: block;
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.sp-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f5a623, #ffcc4d);
+  color: black;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245,166,35,0.3);
+  transition: all 0.2s;
+  font-family: var(--font-main);
+}
+.sp-submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,166,35,0.4); }
+.sp-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── SUBMITTED ── */
+.sp-submitted {
+  background: #0e2419;
+  border: 1px solid #2e7a56;
+  border-radius: 14px;
+  padding: 36px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.sp-submitted-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(76,175,130,0.15);
+  border: 2px solid #4caf82;
+  color: #4caf82;
+  font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sp-submitted h3    { color: #4caf82; font-size: 18px; }
+.sp-submitted p     { color: #888; font-size: 14px; line-height: 1.6; }
+.sp-submitted strong { color: white; }
+.sp-reset-btn {
+  background: none;
+  border: 1px solid #2e7a56;
+  color: #4caf82;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-main);
+  margin-top: 4px;
+}
+.sp-reset-btn:hover { background: rgba(76,175,130,0.08); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .sp-info-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .sp-main-grid { grid-template-columns: 1fr; }
+  .sp-hero h1   { font-size: 34px; }
+}
+
+@media (max-width: 600px) {
+  .sp-info-grid     { grid-template-columns: 1fr; }
+  .sp-form-section  { padding: 22px 18px; }
+  .sp-hero          { padding: 60px 20px 40px; }
+  .sp-hero h1       { font-size: 28px; }
+  .sp-container     { padding: 40px 16px; }
+}

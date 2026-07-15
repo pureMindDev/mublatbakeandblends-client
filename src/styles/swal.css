@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════
+   SweetAlert2 — Mublat Dark Theme
+═══════════════════════════════════ */
+
+/* POPUP */
+.swal-mublat-popup {
+  background:    #161616 !important;
+  border:        1px solid #2a2a2a !important;
+  border-radius: 16px !important;
+  box-shadow:    0 20px 60px rgba(0,0,0,0.7) !important;
+  font-family:   var(--font-main, "Poppins", sans-serif) !important;
+  padding:       32px 28px !important;
+}
+
+/* TITLE */
+.swal-mublat-title {
+  color:        #ffffff !important;
+  font-family:  "DM Serif Display", serif !important;
+  font-size:    20px !important;
+  font-weight:  400 !important;
+  margin-bottom: 8px !important;
+}
+
+/* HTML / TEXT */
+.swal-mublat-text {
+  color:       #aaa !important;
+  font-size:   14px !important;
+  line-height: 1.6 !important;
+}
+
+/* ICON */
+.swal-mublat-icon {
+  border-color: #2a2a2a !important;
+  margin-bottom: 16px !important;
+}
+
+/* CONFIRM BUTTON — gold */
+.swal-mublat-confirm {
+  background:    linear-gradient(135deg, #f5a623, #ffcc4d) !important;
+  color:         #000 !important;
+  border:        none !important;
+  border-radius: 9px !important;
+  padding:       11px 22px !important;
+  font-size:     14px !important;
+  font-weight:   700 !important;
+  cursor:        pointer !important;
+  box-shadow:    0 6px 20px rgba(245,166,35,0.3) !important;
+  transition:    all 0.2s !important;
+  font-family:   var(--font-main, "Poppins", sans-serif) !important;
+}
+.swal-mublat-confirm:hover {
+  transform:  translateY(-1px) !important;
+  box-shadow: 0 8px 24px rgba(245,166,35,0.45) !important;
+}
+
+/* DANGER CONFIRM — red */
+.swal-mublat-danger {
+  background:    #c0392b !important;
+  color:         #fff !important;
+  box-shadow:    0 6px 20px rgba(192,57,43,0.3) !important;
+}
+.swal-mublat-danger:hover {
+  background:    #e04030 !important;
+  box-shadow:    0 8px 24px rgba(192,57,43,0.4) !important;
+}
+
+/* CANCEL BUTTON */
+.swal-mublat-cancel {
+  background:    #1e1e1e !important;
+  color:         #ccc !important;
+  border:        1px solid #2a2a2a !important;
+  border-radius: 9px !important;
+  padding:       11px 22px !important;
+  font-size:     14px !important;
+  cursor:        pointer !important;
+  transition:    background 0.2s !important;
+  font-family:   var(--font-main, "Poppins", sans-serif) !important;
+}
+.swal-mublat-cancel:hover {
+  background: #2a2a2a !important;
+  color:      #fff !important;
+}
+
+/* SHOW/HIDE ANIMATIONS */
+.swal-mublat-show {
+  animation: swalMublatIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+.swal-mublat-hide {
+  animation: swalMublatOut 0.18s ease-in !important;
+}
+@keyframes swalMublatIn {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+@keyframes swalMublatOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.94); }
+}
+
+/* ═══════════════════════════════════
+   TOAST OVERRIDES
+═══════════════════════════════════ */
+.swal-toast-popup {
+  border:        1px solid #2a2a2a !important;
+  border-radius: 10px !important;
+  padding:       12px 16px !important;
+  font-family:   var(--font-main, "Poppins", sans-serif) !important;
+  font-size:     14px !important;
+  box-shadow:    0 8px 24px rgba(0,0,0,0.5) !important;
+}
+
+/* Progress bar colour by type */
+.swal2-success .swal-toast-bar { background: #4caf82 !important; }
+.swal2-error   .swal-toast-bar { background: #e05555 !important; }
+.swal2-warning .swal-toast-bar { background: #f5a623 !important; }
+.swal2-info    .swal-toast-bar { background: #80b4f5 !important; }
+
+/* Border accent by type */
+.swal2-toast.swal2-success { border-color: #2e7a56 !important; }
+.swal2-toast.swal2-error   { border-color: #5a1f1f !important; }
+.swal2-toast.swal2-warning { border-color: #6a4500 !important; }
+.swal2-toast.swal2-info    { border-color: #1a4080 !important; }

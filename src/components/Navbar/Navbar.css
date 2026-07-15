@@ -1,0 +1,260 @@
+/* ===== NAVBAR ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background-color: var(--dark);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 18px 40px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+/* ===== LEFT ===== */
+.nav-left { justify-self: start; }
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links a {
+  color: var(--white);
+  font-size: 14px;
+  letter-spacing: 1px;
+  position: relative;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: var(--gold);
+  left: 0;
+  bottom: -6px;
+  transition: 0.3s ease;
+}
+
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ===== CENTER LOGO ===== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: center;
+  text-decoration: none;
+}
+
+.logoicon {
+  border: 1px solid var(--gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diamond-icon { color: var(--gold); font-size: 18px; }
+
+.brand-main {
+  color: var(--gold);
+  font-size: 22px;
+  font-family: "DM Serif Display", serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ===== RIGHT ===== */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  justify-self: end;
+}
+
+/* ===== CART ===== */
+.cart-link {
+  color: var(--white);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: 0.3s;
+}
+.cart-link:hover { color: var(--gold); }
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--gold);
+  color: black;
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* ===== ADMIN BUTTON ===== */
+.adminbtn {
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+}
+.adminbtn:hover {
+  background-color: var(--gold);
+  color: black;
+  border-color: var(--gold);
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: white;
+  font-size: 20px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  line-height: 1;
+}
+.hamburger:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ===== MOBILE OVERLAY ===== */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 998;
+  backdrop-filter: blur(2px);
+}
+
+/* ===== MOBILE DRAWER ===== */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background: #0d0d0d;
+  border-left: 1px solid #1e1e1e;
+  z-index: 999;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: drawerIn 0.25s ease;
+}
+
+@keyframes drawerIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+.mobile-drawer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold);
+  font-family: "DM Serif Display", serif;
+  font-size: 20px;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-nav-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ccc;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.mobile-nav-links a:hover {
+  background: #1a1a1a;
+  color: var(--gold);
+}
+
+.mobile-cart-badge {
+  background: var(--gold);
+  color: black;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-admin-btn {
+  display: block;
+  text-align: center;
+  background: linear-gradient(135deg, #f5a623, #ffcc4d);
+  color: black;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  margin-top: auto;
+  transition: 0.2s;
+}
+.mobile-admin-btn:hover { opacity: 0.88; color: black; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .navbar {
+    grid-template-columns: auto 1fr;
+    padding: 14px 20px;
+    gap: 0;
+  }
+
+  .nav-left  { display: none; }
+  .hamburger { display: flex; }
+
+  .logo {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .brand-main { font-size: 16px; }
+
+  .nav-right {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .adminbtn { display: none; }
+}

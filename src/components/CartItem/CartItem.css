@@ -1,0 +1,115 @@
+/* CartItem shares styles defined in Cart.css (.cart-card, .cart-img,
+   .cart-info, .cart-qty, .cart-right, .price, .remove-btn, .tag).
+   Only component-specific overrides go here. */
+
+.cart-card {
+  display: flex;
+  align-items: center;
+  padding: 18px;
+  min-height: 152px;
+  width: 100%;
+}
+
+.cart-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.cart-info { flex: 1; }
+
+.cart-info h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-family: "DM Serif Display", serif;
+  color: #FBFAF9FF;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #665F52FF;
+  color: #E4E2DDFF;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.cart-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid #665F52FF;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  width: 128px;
+  height: 40px;
+}
+
+.cart-qty button {
+  background: transparent;
+  border: none;
+  width: 43px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #FBFAF9FF;
+}
+
+.cart-qty span {
+  width: 40px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+  font-weight: 600;
+}
+
+.cart-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.price {
+  font-weight: 700;
+  color: #FBFAF9FF;
+  font-size: 18px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #E4E2DDFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .cart-card {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    gap: 15px;
+  }
+  .cart-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

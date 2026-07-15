@@ -1,0 +1,212 @@
+@import "./swal.css";
+@import "./admin-responsive.css";
+@import "./variables.css";
+
+/* ===============================
+   RESET
+================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   BODY STYLING
+================================ */
+
+body {
+  font-family: var(--font-main);
+
+  background-color: var(--cream);
+
+  color: var(--primary-black);
+
+  line-height: 1.6;
+
+  overflow-x: hidden;
+}
+
+/* ===============================
+   HEADINGS
+================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Luxury hero titles */
+
+h1 {
+  font-size: 3rem;
+}
+
+/* ===============================
+   LINKS
+================================ */
+
+a {
+  text-decoration: none;
+  color: inherit;
+
+  transition: 0.3s ease;
+}
+
+a:hover {
+  color: var(--gold);
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+
+button {
+  cursor: pointer;
+  border: none;
+
+  font-family: inherit;
+
+  transition: 0.3s ease;
+}
+
+/* Primary Button (Gold) */
+
+.primary-btn {
+  background-color: var(--gold);
+
+  color: black;
+
+  padding: 12px 28px;
+
+  font-weight: 600;
+
+  border-radius: 6px;
+
+  box-shadow: var(--shadow-light);
+  /* box-shadow: 0px 16px 32px #00000014, 0px 0px 0px #171a1f00; */
+}
+
+.primary-btn:hover {
+  background-color: #b8962e;
+
+  transform: translateY(-2px);
+}
+
+
+
+/* Secondary Button */
+
+.secondary-btn {
+  background-color: white;
+
+  color: black;
+  
+
+  padding: 12px 28px;
+
+  font-weight: 600;
+
+  border-radius: 6px;
+
+  box-shadow: var(--shadow-light);
+}
+
+.secondary-btn:hover {
+  background-color: #000000FF;
+
+  color: #FBFAF9FF;
+
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   CONTAINER
+================================ */
+
+.container {
+  max-width: var(--container-width);
+
+  margin: auto;
+
+  /* padding: 0 25px; */
+}
+
+/* ===============================
+   SECTION SPACING
+================================ */
+
+section {
+  padding: 80px 0;
+}
+
+/* ===============================
+   IMAGES
+================================ */
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+
+  border-radius: 8px;
+}
+
+/* ===============================
+   CARDS (Used for products)
+================================ */
+
+.card {
+  background: white;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow-light);
+
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* ===============================
+   DARK SECTIONS
+================================ */
+
+.dark-section {
+  background-color: var(--primary-black);
+
+  color: white;
+}
+
+/* ===============================
+   GOLD TEXT
+================================ */
+
+.gold-text {
+  color: var(--gold);
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  section {
+    padding: 60px 0;
+  }
+
+}

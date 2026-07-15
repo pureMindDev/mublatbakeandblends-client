@@ -1,0 +1,189 @@
+.dash-page {
+  display: flex; min-height: 100vh;
+  background: #0a0a0a; color: white; font-family: var(--font-main);
+}
+
+/* SIDEBAR */
+.dash-sidebar {
+  width: 230px; background: #111009; border-right: 1px solid #1e1c14;
+  padding: 30px 20px; display: flex; flex-direction: column;
+  justify-content: space-between; flex-shrink: 0;
+}
+.dash-sidebar-label { font-size: 11px; color: #666; letter-spacing: 1px; margin-bottom: 16px; font-weight: 600; }
+.dash-sidebar-nav   { display: flex; flex-direction: column; gap: 6px; }
+.dash-nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+  border-radius: 8px; background: transparent; border: none; color: #888;
+  cursor: pointer; font-size: 14px; transition: all 0.2s; text-align: left; width: 100%;
+}
+.dash-nav-item:hover  { background: #1e1a10; color: #ccc; }
+.dash-nav-item.active { background: #2b2310; color: white; }
+.dash-logout {
+  display: flex; align-items: center; gap: 8px; background: none; border: none;
+  color: #e05555; cursor: pointer; font-size: 14px; padding: 10px 14px;
+  border-radius: 8px; transition: background 0.2s;
+}
+.dash-logout:hover { background: rgba(224,85,85,0.08); }
+
+/* MAIN */
+.dash-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* TOP NAV */
+.dash-topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 30px; border-bottom: 1px solid #1a1a1a; background: #0d0d0d;
+}
+.dash-topnav-links { display: flex; gap: 24px; }
+.dash-topnav-links a { color: #aaa; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.dash-topnav-links a:hover { color: white; }
+.dash-topnav-logo {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--gold); font-family: "DM Serif Display", serif; font-size: 18px;
+}
+.dash-topnav-logo svg { border: 1.5px solid var(--gold); border-radius: 50%; padding: 3px; font-size: 20px; }
+.dash-topnav-right { display: flex; align-items: center; gap: 14px; color: #aaa; }
+.dash-dash-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: #1e1e1e; border: 1px solid #2a2a2a; color: white;
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer;
+}
+.dash-dash-btn.active { background: #2b2310; border-color: #5a3c00; color: var(--gold); }
+
+/* PAGE HEADER */
+.dash-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 28px 30px 0; flex-wrap: wrap; gap: 10px;
+}
+.dash-header h1 { font-family: "DM Serif Display", serif; font-size: 30px; margin-bottom: 4px; }
+.dash-header p  { color: #888; font-size: 14px; }
+.dash-date      { font-size: 13px; color: #666; padding-top: 6px; }
+
+/* STATS */
+.dash-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; padding: 24px 30px;
+}
+.dash-stat {
+  background: #141414; border: 1px solid #222; border-radius: 14px;
+  padding: 22px; display: flex; align-items: flex-start; gap: 16px;
+}
+.dash-stat-gold { background: linear-gradient(135deg, #4a3000, #2e1e00); border-color: #5a3c00; }
+.dash-stat-icon {
+  background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px;
+  font-size: 22px; color: #aaa; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.dash-stat-gold .dash-stat-icon { background: rgba(245,166,35,0.12); color: var(--gold); }
+.dash-stat p    { font-size: 11px; color: #aaa; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 6px; }
+.dash-stat h2   { font-size: 26px; font-family: "DM Serif Display", serif; margin-bottom: 4px; }
+.dash-stat span { font-size: 12px; color: #888; }
+.dash-stat .green { color: #4caf82; }
+.dash-stat .red   { color: #e05555; }
+
+/* SECTIONS */
+.dash-section { margin: 0 30px 30px; }
+.dash-section h3 { font-size: 17px; margin-bottom: 16px; }
+.dash-section-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+}
+.dash-view-all {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: 1px solid #2a2a2a; color: #aaa;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: 0.2s;
+}
+.dash-view-all:hover { color: white; background: #1a1a1a; }
+
+/* ORDERS LIST */
+.dash-orders-list {
+  background: #131313; border: 1px solid #1e1e1e; border-radius: 14px; overflow: hidden;
+}
+.dash-order-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px; border-bottom: 1px solid #1a1a1a; transition: background 0.15s;
+}
+.dash-order-row:last-child { border-bottom: none; }
+.dash-order-row:hover { background: #161616; }
+.dash-order-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, #3a2d00, #6a5000);
+  border: 1.5px solid #5a4000; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; font-weight: 700; color: var(--gold); flex-shrink: 0;
+}
+.dash-order-info { flex: 1; }
+.dash-order-info p    { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.dash-order-info span { font-size: 12px; color: #888; }
+.dash-order-amount    { font-size: 15px; font-weight: 700; color: white; }
+
+.dash-status {
+  display: inline-block; padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.dash-status-pending   { border: 1px solid #666; color: #ccc; }
+.dash-status-preparing { border: 1px solid #888; color: #ddd; }
+.dash-status-out       { background: rgba(255,140,0,0.12); border: 1px solid #a06000; color: #f5a623; }
+.dash-status-delivered { background: rgba(76,175,130,0.12); border: 1px solid #2e7a56; color: #4caf82; }
+
+/* QUICK ACTIONS */
+.dash-quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.dash-action-card {
+  background: #141414; border: 1px solid #222; border-radius: 14px;
+  padding: 24px; display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer; text-align: left; transition: all 0.2s;
+}
+.dash-action-card:hover { border-color: var(--gold); background: #1a1500; }
+.dash-action-icon { font-size: 24px; color: var(--gold); margin-bottom: 4px; }
+.dash-action-card strong { font-size: 15px; }
+.dash-action-card span   { font-size: 13px; color: #888; }
+
+/* ── Header right ── */
+.dash-header-right {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.dash-refresh-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid #2a2a2a; background: #1a1a1a; color: #888;
+  cursor: pointer; font-size: 15px; transition: all 0.2s;
+}
+.dash-refresh-btn:hover { background: #222; color: white; border-color: var(--gold); }
+
+/* ── API error ── */
+.dash-api-error {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 16px; padding: 60px 20px; text-align: center; color: #888;
+}
+.dash-api-error p { font-size: 15px; }
+.dash-api-error button {
+  display: flex; align-items: center; gap: 6px;
+  background: #1a1a1a; border: 1px solid #2a2a2a; color: white;
+  padding: 9px 18px; border-radius: 8px; font-size: 13px; cursor: pointer;
+}
+.dash-api-error button:hover { background: #222; }
+
+/* ── Empty orders ── */
+.dash-empty-orders {
+  background: #131313; border: 1px solid #1e1e1e; border-radius: 14px;
+  padding: 40px; text-align: center; color: #555;
+}
+
+/* ── Last updated ── */
+.dash-last-updated {
+  font-size: 12px; color: #555; text-align: right;
+  padding: 0 30px 20px;
+}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+
+/*
+ * Responsive rules for this page now live in ONE place:
+ * src/styles/admin-responsive.css
+ *
+ * This file previously defined @media (max-width: 900px) TWICE —
+ * a small stray block right after .dash-action-card, and a second,
+ * fuller one further down inside a "RESPONSIVE" section. The two
+ * disagreed on .dash-quick-actions (1 column vs 2 columns), and
+ * because the second block came later in the cascade it silently
+ * won regardless of which made more sense for the screen width
+ * actually being tested. That duplication is now gone — see
+ * admin-responsive.css for the single, correct version.
+ */

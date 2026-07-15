@@ -1,0 +1,20 @@
+:root {
+
+  /* COLORS */
+  --gold: #F9B11FFF;
+  --dark: #000000FF;
+  --dark-2: #121212;
+  --gray: #565D6DFF;
+  --white: #ffffff;
+
+  /* Aliases used across the app */
+  --cream: #FBFAF9FF;
+  --primary-black: #000000FF;
+  --shadow-light: 0px 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* Layout */
+  --container-width: 1200px;
+
+  /* Fonts */
+  --font-main: "Poppins", sans-serif;
+}

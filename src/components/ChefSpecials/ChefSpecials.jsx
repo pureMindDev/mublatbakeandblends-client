@@ -1,0 +1,74 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "./ChefSpecials.css";
+import { fetchProducts } from "../../services/productService";
+import { products as localProducts } from "../../data/products";
+
+// Normalise DB product to the same shape as local products
+const normalise = (p) => ({
+  id:          p._id || p.id,
+  name:        p.name,
+  description: p.description || "",
+  category:    p.category    || "Pastries",
+  image:       p.images?.[0] || p.image || "",
+  price:       p.options?.[0]?.price ?? p.price ?? 0,
+});
+
+function ChefSpecials() {
+  const [specials, setSpecials] = useState(
+    localProducts.slice(0, 3)   // render immediately from local data
+  );
+
+  useEffect(() => {
+    fetchProducts({ active: true, limit: 3 })
+      .then(res => {
+        const db = res.products?.map(normalise) || [];
+        if (db.length > 0) setSpecials(db.slice(0, 3));
+      })
+      .catch(() => { /* keep local fallback */ });
+  }, []);
+
+  return (
+    <section className="chef">
+      <div className="container">
+
+        <h2 className="chef-title">Chef Specials</h2>
+
+        <p className="chef-sub">
+          Explore our irresistible artisanal creations, handcrafted every
+          morning using the world's finest ingredients.
+        </p>
+
+        <nav className="line"></nav>
+
+        <div className="chef-grid">
+          {specials.map(item => (
+            <div className="chef-card" key={item.id}>
+
+              <span className="chef-tag">{item.category}</span>
+
+              <img src={item.image} alt={item.name} />
+
+              <div className="chef-content">
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+                <h4>£{Number(item.price).toFixed(2)}</h4>
+                <Link to={`/product/${item.id}`} className="chef-btn">
+                  View Details
+                </Link>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+        <div className="chef-view">
+          <Link to="/menu" className="view-btn">View Full Menu</Link>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+export default ChefSpecials;

@@ -1,0 +1,134 @@
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  background: url("../../assets/images/hero.jpg") center/cover no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== OVERLAY (FULL COVERAGE + DEPTH) ===== */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.85) 0%,
+    rgba(0,0,0,0.65) 50%,
+    rgba(0,0,0,0.85) 100%
+  );
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* ===== BADGE ===== */
+.hero-badge {
+  border: 1px solid #2a2a2a;
+  color: var(--white);
+
+  font-size: 11px;
+  letter-spacing: 1.5px;
+
+  padding: 6px 16px;
+  border-radius: 20px;
+
+  margin-bottom: 12px;
+}
+
+/* ===== TITLE ===== */
+.hero-title {
+  font-size: clamp(48px, 8vw, 90px);
+  font-family: "DM Serif Display", serif;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+/* ===== DESCRIPTION ===== */
+.hero-description {
+  max-width: 600px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e4e2dd;
+  margin-bottom: 30px;
+}
+
+/* ===== BUTTON GROUP ===== */
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* PRIMARY BUTTON */
+.primary-btn {
+  min-width: 170px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--gold);
+  color: black;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  border-radius: 10px;
+  border: none;
+
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* SECONDARY BUTTON */
+.secondary-btn {
+  min-width: 190px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  color: var(--white);
+
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+
+.secondary-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+}
