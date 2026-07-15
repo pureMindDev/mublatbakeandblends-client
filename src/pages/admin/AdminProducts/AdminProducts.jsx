@@ -2,7 +2,7 @@ import "./AdminProducts.css";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { stagger, staggerItem, scaleIn, fadeIn, pageTransition } from "../../../utils/motion";
+import { stagger, staggerItem, scaleIn, fadeIn } from "../../../utils/motion";
 import {
   toastSuccess, toastError, toastWarning,
   confirmDanger, confirmDiscard,

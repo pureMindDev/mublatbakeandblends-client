@@ -7,7 +7,6 @@ import { LuShieldCheck, LuRefreshCw } from "react-icons/lu";
 function PaymentCancelled() {
 
   const { cartItems } = useContext(CartContext);
-  const [searchParams] = useSearchParams();
 
   /* Stripe passes session_id even on cancel in some flows */
   // const sessionId = searchParams.get("session_id");
