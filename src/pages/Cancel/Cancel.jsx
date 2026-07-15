@@ -10,10 +10,10 @@ function PaymentCancelled() {
   const [searchParams] = useSearchParams();
 
   /* Stripe passes session_id even on cancel in some flows */
-  const sessionId = searchParams.get("session_id");
+  // const sessionId = searchParams.get("session_id");
 
   const itemCount = cartItems.reduce((t, i) => t + i.quantity, 0);
-  const subtotal  = cartItems.reduce((t, i) => t + i.price * i.quantity, 0);
+  const subtotal = cartItems.reduce((t, i) => t + i.price * i.quantity, 0);
 
   return (
     <section className="cancel-page">

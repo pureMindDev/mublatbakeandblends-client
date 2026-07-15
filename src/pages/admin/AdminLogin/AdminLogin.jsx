@@ -2,7 +2,7 @@ import "./AdminLogin.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { fadeUp, scaleIn, stagger, staggerItem } from "../../../utils/motion";
+import { scaleIn, stagger, staggerItem } from "../../../utils/motion";
 import { toastError } from "../../../utils/swal";
 import { useAuth } from "../../../context/AuthContext";
 import {
@@ -14,12 +14,12 @@ function AdminLogin() {
 
   const { login } = useAuth();
 
-  const [email,    setEmail]    = useState("admin@mublat.com");
+  const [email, setEmail] = useState("admin@mublat.com");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error,    setError]    = useState("");
-  const [loading,  setLoading]  = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setError("");
@@ -63,7 +63,7 @@ function AdminLogin() {
     >
 
       {/* BACK LINK */}
-      <motion.div initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.1 }}>
+      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
         <Link to="/" className="back-link">← Return to Storefront</Link>
       </motion.div>
 
@@ -95,9 +95,9 @@ function AdminLogin() {
         {error && (
           <motion.div
             className="login-error"
-            initial={{ opacity:0, y:-8, height:0 }}
-            animate={{ opacity:1, y:0, height:"auto" }}
-            exit={{ opacity:0, height:0 }}
+            initial={{ opacity: 0, y: -8, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
           >
             {error}
           </motion.div>

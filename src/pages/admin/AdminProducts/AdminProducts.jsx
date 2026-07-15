@@ -2,7 +2,7 @@ import "./AdminProducts.css";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { fadeUp, stagger, staggerItem, scaleIn, fadeIn, pageTransition } from "../../../utils/motion";
+import { stagger, staggerItem, scaleIn, fadeIn, pageTransition } from "../../../utils/motion";
 import {
   toastSuccess, toastError, toastWarning,
   confirmDanger, confirmDiscard,
@@ -27,75 +27,75 @@ import { MdMoreVert } from "react-icons/md";
 import Loader from "../../../components/Loader/Loader";
 
 const PER_PAGE = 5;
-const CATS     = ["All", "Pastries", "Drinks"];
+const CATS = ["All", "Pastries", "Drinks"];
 const MAX_IMGS = 3;
 const SORT_OPTS = [
-  { value:"default",    label:"Default"         },
-  { value:"name-asc",   label:"Name A→Z"        },
-  { value:"name-desc",  label:"Name Z→A"        },
-  { value:"price-asc",  label:"Price Low→High"  },
-  { value:"price-desc", label:"Price High→Low"  },
-  { value:"newest",     label:"Newest First"    },
+  { value: "default", label: "Default" },
+  { value: "name-asc", label: "Name A→Z" },
+  { value: "name-desc", label: "Name Z→A" },
+  { value: "price-asc", label: "Price Low→High" },
+  { value: "price-desc", label: "Price High→Low" },
+  { value: "newest", label: "Newest First" },
 ];
 
-const now     = () => new Date().toISOString();
+const now = () => new Date().toISOString();
 const fmtDate = iso => new Date(iso).toLocaleDateString("en-GB", {
-  day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit",
+  day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
 });
 
 /* Normalise API product → internal shape */
 const normalise = (p) => ({
-  id:          p._id   || p.id,
-  sku:         p.sku   || `MUB-${String(p._id||p.id).slice(-4).toUpperCase()}`,
-  name:        p.name,
+  id: p._id || p.id,
+  sku: p.sku || `MUB-${String(p._id || p.id).slice(-4).toUpperCase()}`,
+  name: p.name,
   description: p.description,
-  category:    p.category,
-  images:      (p.images||[]).map(src => ({ src, file:null, publicId: null })),
-  options:     (p.options||[]).map(o => ({ label: o.label||o.name, price: o.price })),
-  active:      p.active ?? true,
-  createdAt:   p.createdAt || now(),
-  updatedAt:   p.updatedAt || now(),
+  category: p.category,
+  images: (p.images || []).map(src => ({ src, file: null, publicId: null })),
+  options: (p.options || []).map(o => ({ label: o.label || o.name, price: o.price })),
+  active: p.active ?? true,
+  createdAt: p.createdAt || now(),
+  updatedAt: p.updatedAt || now(),
 });
 
-const blankOption = () => ({ label:"", price:"" });
-const blankForm   = () => ({ name:"", category:"Pastries", description:"", images:[], options:[blankOption()] });
+const blankOption = () => ({ label: "", price: "" });
+const blankForm = () => ({ name: "", category: "Pastries", description: "", images: [], options: [blankOption()] });
 
 /* ── Toast component removed — using SweetAlert2 toasts ── */
 
 function AdminProducts() {
 
-  const { logout }   = useAuth();
+  const { logout } = useAuth();
   const { sidebarOpen, toggleSidebar, closeSidebar } = useAdminSidebar();
-  const navigate     = useNavigate();
+  const navigate = useNavigate();
   const fileInputRef = useRef();
 
   /* ── Data ── */
   const [products, setProducts] = useState([]);
-  const [loading,  setLoading]  = useState(true);
+  const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
 
   /* ── Filters ── */
-  const [search,    setSearch]    = useState("");
+  const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("All");
-  const [sort,      setSort]      = useState("default");
-  const [sortOpen,  setSortOpen]  = useState(false);
-  const [page,      setPage]      = useState(1);
+  const [sort, setSort] = useState("default");
+  const [sortOpen, setSortOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   /* ── Selection ── */
   const [selected, setSelected] = useState(new Set());
 
   /* ── Modals ── */
-  const [modal,        setModal]        = useState("none");
-  const [editTarget,   setEditTarget]   = useState(null);
-  const [previewProd,  setPreviewProd]  = useState(null);
-  const [menuOpen,     setMenuOpen]     = useState(null);
+  const [modal, setModal] = useState("none");
+  const [editTarget, setEditTarget] = useState(null);
+  const [previewProd, setPreviewProd] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
 
   /* ── Form ── */
-  const [form,       setForm]      = useState(blankForm());
-  const [formErr,    setFormErr]   = useState("");
-  const [isDirty,    setIsDirty]   = useState(false);
-  const [saving,     setSaving]    = useState(false);
-  const [uploading,  setUploading] = useState(false);
+  const [form, setForm] = useState(blankForm());
+  const [formErr, setFormErr] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   /* ── Toasts now via SweetAlert2 ── */
   const addToast = useCallback((msg, type = "success") => {
@@ -132,40 +132,40 @@ function AdminProducts() {
     const q = search.toLowerCase();
     let list = products.filter(p => {
       const ms = p.name.toLowerCase().includes(q)
-              || p.description.toLowerCase().includes(q)
-              || p.category.toLowerCase().includes(q)
-              || p.sku.toLowerCase().includes(q);
+        || p.description.toLowerCase().includes(q)
+        || p.category.toLowerCase().includes(q)
+        || p.sku.toLowerCase().includes(q);
       const mc = catFilter === "All" || p.category === catFilter;
       return ms && mc;
     });
     switch (sort) {
-      case "name-asc":   list = [...list].sort((a,b) => a.name.localeCompare(b.name)); break;
-      case "name-desc":  list = [...list].sort((a,b) => b.name.localeCompare(a.name)); break;
-      case "price-asc":  list = [...list].sort((a,b) => (a.options[0]?.price||0) - (b.options[0]?.price||0)); break;
-      case "price-desc": list = [...list].sort((a,b) => (b.options[0]?.price||0) - (a.options[0]?.price||0)); break;
-      case "newest":     list = [...list].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+      case "name-asc": list = [...list].sort((a, b) => a.name.localeCompare(b.name)); break;
+      case "name-desc": list = [...list].sort((a, b) => b.name.localeCompare(a.name)); break;
+      case "price-asc": list = [...list].sort((a, b) => (a.options[0]?.price || 0) - (b.options[0]?.price || 0)); break;
+      case "price-desc": list = [...list].sort((a, b) => (b.options[0]?.price || 0) - (a.options[0]?.price || 0)); break;
+      case "newest": list = [...list].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
       default: break;
     }
     return list;
   }, [products, search, catFilter, sort]);
 
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const pageProd   = filtered.slice((page-1)*PER_PAGE, page*PER_PAGE);
-  const pageIds    = pageProd.map(p => p.id);
+  const pageProd = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const pageIds = pageProd.map(p => p.id);
   const allPageSel = pageIds.length > 0 && pageIds.every(id => selected.has(id));
-  const someSel    = pageIds.some(id => selected.has(id));
+  const someSel = pageIds.some(id => selected.has(id));
 
   /* ── Stats ── */
-  const totalActive   = products.filter(p => p.active).length;
+  const totalActive = products.filter(p => p.active).length;
   const totalInactive = products.filter(p => !p.active).length;
   const totalPastries = products.filter(p => p.category === "Pastries").length;
-  const totalDrinks   = products.filter(p => p.category === "Drinks").length;
+  const totalDrinks = products.filter(p => p.category === "Drinks").length;
 
   /* ── Selection ── */
-  const toggleOne  = id => setSelected(prev => { const n=new Set(prev); n.has(id)?n.delete(id):n.add(id); return n; });
+  const toggleOne = id => setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
   const togglePage = () => {
-    if (allPageSel) setSelected(prev => { const n=new Set(prev); pageIds.forEach(id=>n.delete(id)); return n; });
-    else            setSelected(prev => { const n=new Set(prev); pageIds.forEach(id=>n.add(id));    return n; });
+    if (allPageSel) setSelected(prev => { const n = new Set(prev); pageIds.forEach(id => n.delete(id)); return n; });
+    else setSelected(prev => { const n = new Set(prev); pageIds.forEach(id => n.add(id)); return n; });
   };
   const clearSel = () => setSelected(new Set());
 
@@ -179,7 +179,7 @@ function AdminProducts() {
         const updated = new Map(results.map(p => [p._id || p.id, p]));
         return prev.map(p => updated.has(p.id) ? { ...p, ...normalise(updated.get(p.id)), id: p.id } : p);
       });
-      addToast(`${selected.size} product${selected.size>1?"s":""} activated.`);
+      addToast(`${selected.size} product${selected.size > 1 ? "s" : ""} activated.`);
       clearSel();
     } catch (e) {
       addToast("Bulk activate failed: " + (e.response?.data?.message || e.message), "error");
@@ -194,7 +194,7 @@ function AdminProducts() {
         const updated = new Map(results.map(p => [p._id || p.id, p]));
         return prev.map(p => updated.has(p.id) ? { ...p, ...normalise(updated.get(p.id)), id: p.id } : p);
       });
-      addToast(`${selected.size} product${selected.size>1?"s":""} deactivated.`, "warning");
+      addToast(`${selected.size} product${selected.size > 1 ? "s" : ""} deactivated.`, "warning");
       clearSel();
     } catch (e) {
       addToast("Bulk deactivate failed: " + (e.response?.data?.message || e.message), "error");
@@ -203,27 +203,27 @@ function AdminProducts() {
   const bulkDeleteDo = async () => {
     const count = selected.size;
     const ok = await confirmDanger({
-      title:       `Delete ${count} Product${count>1?"s":""}`,
-      text:        `You are about to permanently delete <strong style="color:white">${count} product${count>1?"s":""}</strong>. This cannot be undone.`,
-      confirmText: `Delete ${count} Product${count>1?"s":""}`,
+      title: `Delete ${count} Product${count > 1 ? "s" : ""}`,
+      text: `You are about to permanently delete <strong style="color:white">${count} product${count > 1 ? "s" : ""}</strong>. This cannot be undone.`,
+      confirmText: `Delete ${count} Product${count > 1 ? "s" : ""}`,
     });
     if (!ok) return;
     try {
       await Promise.all([...selected].map(id => deleteProduct(id)));
       setProducts(prev => prev.filter(p => !selected.has(p.id)));
-      addToast(`${count} product${count>1?"s":""} deleted.`, "error");
+      addToast(`${count} product${count > 1 ? "s" : ""} deleted.`, "error");
       clearSel(); setModal("none"); setPage(1);
     } catch { addToast("Bulk delete failed.", "error"); }
   };
 
   /* ── Form helpers ── */
-  const setField  = (f, v) => { setForm(p => ({...p,[f]:v})); setFormErr(""); setIsDirty(true); };
+  const setField = (f, v) => { setForm(p => ({ ...p, [f]: v })); setFormErr(""); setIsDirty(true); };
   const setOption = (i, key, val) => {
-    setForm(p => { const opts=[...p.options]; opts[i]={...opts[i],[key]:val}; return {...p,options:opts}; });
+    setForm(p => { const opts = [...p.options]; opts[i] = { ...opts[i], [key]: val }; return { ...p, options: opts }; });
     setIsDirty(true);
   };
-  const addOption    = () => { setForm(f => ({...f,options:[...f.options,blankOption()]})); setIsDirty(true); };
-  const removeOption = i  => { setForm(f => ({...f,options:f.options.length===1?f.options:f.options.filter((_,idx)=>idx!==i)})); setIsDirty(true); };
+  const addOption = () => { setForm(f => ({ ...f, options: [...f.options, blankOption()] })); setIsDirty(true); };
+  const removeOption = i => { setForm(f => ({ ...f, options: f.options.length === 1 ? f.options : f.options.filter((_, idx) => idx !== i) })); setIsDirty(true); };
 
   /* ── Image upload via API ── */
   const handleImageFiles = async (files) => {
@@ -239,7 +239,7 @@ function AdminProducts() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const newImgs = data.urls.map(url => ({ src: url, file: null, publicId: null }));
-      setForm(f => ({...f, images:[...f.images,...newImgs]}));
+      setForm(f => ({ ...f, images: [...f.images, ...newImgs] }));
       setIsDirty(true);
     } catch {
       /* Fallback: use local base64 preview if backend upload fails */
@@ -251,7 +251,7 @@ function AdminProducts() {
           return { src, file, publicId: null };
         })
       );
-      setForm(f => ({...f, images:[...f.images,...newImgs]}));
+      setForm(f => ({ ...f, images: [...f.images, ...newImgs] }));
       setIsDirty(true);
       addToast("Images saved locally (upload to server when backend is ready).", "warning");
     } finally {
@@ -259,16 +259,16 @@ function AdminProducts() {
     }
   };
 
-  const removeImage    = idx => { setForm(f => ({...f,images:f.images.filter((_,i)=>i!==idx)})); setIsDirty(true); };
-  const moveImageLeft  = idx => {
-    if (idx===0) return;
-    setForm(f => { const imgs=[...f.images]; [imgs[idx-1],imgs[idx]]=[imgs[idx],imgs[idx-1]]; return {...f,images:imgs}; });
+  const removeImage = idx => { setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) })); setIsDirty(true); };
+  const moveImageLeft = idx => {
+    if (idx === 0) return;
+    setForm(f => { const imgs = [...f.images];[imgs[idx - 1], imgs[idx]] = [imgs[idx], imgs[idx - 1]]; return { ...f, images: imgs }; });
     setIsDirty(true);
   };
   const moveImageRight = idx => {
     setForm(f => {
-      if (idx>=f.images.length-1) return f;
-      const imgs=[...f.images]; [imgs[idx],imgs[idx+1]]=[imgs[idx+1],imgs[idx]]; return {...f,images:imgs};
+      if (idx >= f.images.length - 1) return f;
+      const imgs = [...f.images];[imgs[idx], imgs[idx + 1]] = [imgs[idx + 1], imgs[idx]]; return { ...f, images: imgs };
     });
     setIsDirty(true);
   };
@@ -276,27 +276,29 @@ function AdminProducts() {
 
   /* ── Validation ── */
   const validate = () => {
-    if (!form.name.trim())        return "Product name is required.";
-    if (form.name.trim().length<2) return "Name must be at least 2 characters.";
+    if (!form.name.trim()) return "Product name is required.";
+    if (form.name.trim().length < 2) return "Name must be at least 2 characters.";
     if (!form.description.trim()) return "Description is required.";
     for (const o of form.options) {
       if (!o.label.trim()) return "All option labels are required.";
-      if (o.price===""||isNaN(Number(o.price))||Number(o.price)<0) return "All option prices must be valid non-negative numbers.";
+      if (o.price === "" || isNaN(Number(o.price)) || Number(o.price) < 0) return "All option prices must be valid non-negative numbers.";
     }
     return "";
   };
 
   /* ── Open modals ── */
-  const openAdd  = () => { setForm(blankForm()); setFormErr(""); setIsDirty(false); setModal("add"); };
-  const openEdit = p  => {
+  const openAdd = () => { setForm(blankForm()); setFormErr(""); setIsDirty(false); setModal("add"); };
+  const openEdit = p => {
     setEditTarget(p);
-    setForm({ name:p.name, category:p.category, description:p.description,
-              images:p.images.map(img=>({src:img.src,file:null,publicId:img.publicId||null})),
-              options:p.options.map(o=>({label:o.label,price:String(o.price)})) });
+    setForm({
+      name: p.name, category: p.category, description: p.description,
+      images: p.images.map(img => ({ src: img.src, file: null, publicId: img.publicId || null })),
+      options: p.options.map(o => ({ label: o.label, price: String(o.price) }))
+    });
     setFormErr(""); setIsDirty(false); setMenuOpen(null); setModal("edit");
   };
   const closeModal = async () => {
-    if (isDirty && (modal==="add"||modal==="edit")) {
+    if (isDirty && (modal === "add" || modal === "edit")) {
       const discard = await confirmDiscard();
       if (!discard) return;
     }
@@ -309,12 +311,12 @@ function AdminProducts() {
     setSaving(true);
     try {
       const payload = {
-        name:        form.name.trim(),
+        name: form.name.trim(),
         description: form.description.trim(),
-        category:    form.category,
-        images:      form.images.map(i => i.src),
-        options:     form.options.map(o => ({ label:o.label.trim(), price:Number(o.price) })),
-        active:      true,
+        category: form.category,
+        images: form.images.map(i => i.src),
+        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price) })),
+        active: true,
       };
       const created = normalise(await createProduct(payload));
       setProducts(prev => [created, ...prev]);
@@ -333,14 +335,14 @@ function AdminProducts() {
     setSaving(true);
     try {
       const payload = {
-        name:        form.name.trim(),
+        name: form.name.trim(),
         description: form.description.trim(),
-        category:    form.category,
-        images:      form.images.map(i => i.src),
-        options:     form.options.map(o => ({ label:o.label.trim(), price:Number(o.price) })),
+        category: form.category,
+        images: form.images.map(i => i.src),
+        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price) })),
       };
       const updated = normalise(await updateProduct(editTarget.id, payload));
-      setProducts(prev => prev.map(p => p.id===editTarget.id ? updated : p));
+      setProducts(prev => prev.map(p => p.id === editTarget.id ? updated : p));
       setModal("none"); setEditTarget(null); setIsDirty(false);
       addToast(`"${updated.name}" updated successfully.`);
     } catch (e) {
@@ -354,14 +356,14 @@ function AdminProducts() {
   const duplicate = async (p) => {
     try {
       const payload = {
-        name:            `${p.name} (Copy)`,
-        description:     p.description,
+        name: `${p.name} (Copy)`,
+        description: p.description,
         fullDescription: p.fullDescription || p.description,
-        category:        p.category,
-        images:          p.images.map(i => i.src),
-        ingredients:     p.ingredients || [],
-        options:         p.options.map(o => ({ label: o.label, price: o.price })),
-        active:          false,
+        category: p.category,
+        images: p.images.map(i => i.src),
+        ingredients: p.ingredients || [],
+        options: p.options.map(o => ({ label: o.label, price: o.price })),
+        active: false,
       };
       const created = normalise(await createProduct(payload));
       setProducts(prev => [created, ...prev]);
@@ -376,8 +378,8 @@ function AdminProducts() {
   /* ── Single delete ── */
   const handleDeleteClick = async (prod) => {
     const ok = await confirmDanger({
-      title:       "Delete Product",
-      text:        `Are you sure you want to delete <strong style="color:white">${prod.name}</strong>? This cannot be undone.`,
+      title: "Delete Product",
+      text: `Are you sure you want to delete <strong style="color:white">${prod.name}</strong>? This cannot be undone.`,
       confirmText: "Delete Product",
     });
     if (!ok) return;
@@ -386,7 +388,7 @@ function AdminProducts() {
       setProducts(prev => prev.filter(p => p.id !== prod.id));
       addToast(`"${prod.name}" deleted.`, "error");
       if (selected.has(prod.id)) {
-        setSelected(prev => { const n=new Set(prev); n.delete(prod.id); return n; });
+        setSelected(prev => { const n = new Set(prev); n.delete(prod.id); return n; });
       }
     } catch { addToast("Delete failed.", "error"); }
   };
@@ -395,18 +397,18 @@ function AdminProducts() {
   const handleToggle = async (id, name, current) => {
     try {
       const updated = normalise(await toggleProduct(id));
-      setProducts(prev => prev.map(p => p.id===id ? updated : p));
-      addToast(`"${name}" ${updated.active?"activated":"deactivated"}.`, updated.active?"success":"warning");
+      setProducts(prev => prev.map(p => p.id === id ? updated : p));
+      addToast(`"${name}" ${updated.active ? "activated" : "deactivated"}.`, updated.active ? "success" : "warning");
     } catch { addToast("Toggle failed.", "error"); }
   };
 
   const priceLabel = prod => {
     const prices = prod.options.map(o => Number(o.price));
-    const mn=Math.min(...prices), mx=Math.max(...prices);
-    return mn===mx ? `£${mn.toFixed(2)}` : `£${mn.toFixed(2)} – £${mx.toFixed(2)}`;
+    const mn = Math.min(...prices), mx = Math.max(...prices);
+    return mn === mx ? `£${mn.toFixed(2)}` : `£${mn.toFixed(2)} – £${mx.toFixed(2)}`;
   };
 
-  const isFormOpen = modal==="add"||modal==="edit";
+  const isFormOpen = modal === "add" || modal === "edit";
 
   /* ══════════════════════════════════════════════
      RENDER
@@ -423,7 +425,7 @@ function AdminProducts() {
       />
 
       {/* SIDEBAR */}
-      <aside className={`ap-sidebar ${sidebarOpen ? "open" : ""}`} onClick={e=>e.stopPropagation()}>
+      <aside className={`ap-sidebar ${sidebarOpen ? "open" : ""}`} onClick={e => e.stopPropagation()}>
         <div>
           <p className="ap-sidebar-label">ADMIN PORTAL</p>
           <nav className="ap-sidebar-nav">
@@ -464,7 +466,7 @@ function AdminProducts() {
             <h1>Product Management</h1>
             <p>Manage your luxury catalog of pastries and drinks.</p>
           </div>
-          <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             <button className="ap-refresh-btn" onClick={loadProducts} title="Refresh"><LuRefreshCw /></button>
             <button className="ap-add-btn" onClick={openAdd}><LuPlus /> Add New Product</button>
           </div>
@@ -490,17 +492,17 @@ function AdminProducts() {
           <div className="ap-filter-right">
             <div className="ap-cat-filters">
               {CATS.map(c => (
-                <button key={c} className={catFilter===c?"active":""} onClick={() => { setCatFilter(c); setPage(1); setSelected(new Set()); }}>{c}</button>
+                <button key={c} className={catFilter === c ? "active" : ""} onClick={() => { setCatFilter(c); setPage(1); setSelected(new Set()); }}>{c}</button>
               ))}
             </div>
-            <div className="ap-sort-wrap" onClick={e=>e.stopPropagation()}>
-              <button className="ap-sort-btn" onClick={() => setSortOpen(o=>!o)}>
-                <LuArrowUpDown />{SORT_OPTS.find(o=>o.value===sort)?.label}<LuChevronDown className={sortOpen?"rotated":""} />
+            <div className="ap-sort-wrap" onClick={e => e.stopPropagation()}>
+              <button className="ap-sort-btn" onClick={() => setSortOpen(o => !o)}>
+                <LuArrowUpDown />{SORT_OPTS.find(o => o.value === sort)?.label}<LuChevronDown className={sortOpen ? "rotated" : ""} />
               </button>
               {sortOpen && (
                 <div className="ap-sort-dropdown">
                   {SORT_OPTS.map(o => (
-                    <button key={o.value} className={sort===o.value?"active":""} onClick={() => { setSort(o.value); setSortOpen(false); setPage(1); }}>{o.label}</button>
+                    <button key={o.value} className={sort === o.value ? "active" : ""} onClick={() => { setSort(o.value); setSortOpen(false); setPage(1); }}>{o.label}</button>
                   ))}
                 </div>
               )}
@@ -510,26 +512,26 @@ function AdminProducts() {
 
         {/* BULK BAR */}
         <AnimatePresence>
-        {selected.size > 0 && (
-          <motion.div
-            className="ap-bulk-bar"
-            initial={{ opacity:0, height:0, marginBottom:0 }}
-            animate={{ opacity:1, height:"auto", marginBottom:10 }}
-            exit={{ opacity:0, height:0, marginBottom:0 }}
-            transition={{ duration:0.2 }}
-          >
-            <div className="ap-bulk-info">
-              <LuCheckCheck />
-              <span>{selected.size} product{selected.size>1?"s":""} selected</span>
-              <button className="ap-bulk-clear" onClick={clearSel}>Clear</button>
-            </div>
-            <div className="ap-bulk-actions">
-              <button className="ap-bulk-btn activate" onClick={bulkActivate}><LuToggleRight /> Activate</button>
-              <button className="ap-bulk-btn deactivate" onClick={bulkDeactivate}><LuToggleLeft /> Deactivate</button>
-              <button className="ap-bulk-btn delete" onClick={bulkDeleteDo}><LuTrash2 /> Delete ({selected.size})</button>
-            </div>
-          </motion.div>
-        )}
+          {selected.size > 0 && (
+            <motion.div
+              className="ap-bulk-bar"
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: "auto", marginBottom: 10 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="ap-bulk-info">
+                <LuCheckCheck />
+                <span>{selected.size} product{selected.size > 1 ? "s" : ""} selected</span>
+                <button className="ap-bulk-clear" onClick={clearSel}>Clear</button>
+              </div>
+              <div className="ap-bulk-actions">
+                <button className="ap-bulk-btn activate" onClick={bulkActivate}><LuToggleRight /> Activate</button>
+                <button className="ap-bulk-btn deactivate" onClick={bulkDeactivate}><LuToggleLeft /> Deactivate</button>
+                <button className="ap-bulk-btn delete" onClick={bulkDeleteDo}><LuTrash2 /> Delete ({selected.size})</button>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {/* TABLE */}
@@ -557,92 +559,92 @@ function AdminProducts() {
                 </thead>
                 <tbody>
                   <AnimatePresence mode="popLayout">
-                  {pageProd.length === 0 ? (
-                    <motion.tr key="empty" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}>
-                      <td colSpan={7} className="ap-empty">
-                        <LuPackage className="ap-empty-icon" />
-                        <p>No products found{search?` for "${search}"`:""}.</p>
-                        {search && <button onClick={() => setSearch("")}>Clear search</button>}
-                      </td>
-                    </motion.tr>
-                  ) : (
-                    pageProd.map((prod, i) => (
-                      <motion.tr
-                        key={prod.id}
-                        className={selected.has(prod.id)?"ap-row-selected":""}
-                        initial={{ opacity:0, y:12 }}
-                        animate={{ opacity:1, y:0 }}
-                        exit={{ opacity:0, x:-20 }}
-                        transition={{ duration:0.25, delay: i * 0.04 }}
-                      >
-                        <td><input type="checkbox" className="ap-checkbox" checked={selected.has(prod.id)} onChange={() => toggleOne(prod.id)} /></td>
-
-                        <td>
-                          <div className="ap-prod-cell">
-                            <div className="ap-prod-img">
-                              {prod.images.length>0 ? <img src={prod.images[0].src} alt={prod.name} /> : <LuImage />}
-                            </div>
-                            <div>
-                              <p className="ap-prod-name">{prod.name}</p>
-                              <span className="ap-prod-sku">{prod.sku}</span>
-                              <span className="ap-prod-desc">{prod.description}</span>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td><span className={`ap-cat-badge ${prod.category==="Pastries"?"pastry":"drink"}`}>{prod.category}</span></td>
-
-                        <td>
-                          <div className={`ap-status-toggle ${prod.active?"active":""}`} onClick={() => handleToggle(prod.id,prod.name,prod.active)} title="Click to toggle">
-                            <div className="ap-status-dot" />
-                            {prod.active?"Active":"Inactive"}
-                          </div>
-                        </td>
-
-                        <td>
-                          <p className="ap-price">{priceLabel(prod)}</p>
-                          {prod.options.length>1 && <span className="ap-options-count">{prod.options.length} OPTIONS</span>}
-                        </td>
-
-                        <td className="ap-updated">{fmtDate(prod.updatedAt)}</td>
-
-                        <td>
-                          <div className="ap-action-btns" onClick={e=>e.stopPropagation()}>
-                            <button className="ap-icon-btn" title="Preview" onClick={() => { setPreviewProd(prod); setModal("preview"); }}><LuEye /></button>
-                            <button className="ap-icon-btn" title="Edit" onClick={() => openEdit(prod)}><LuPencil /></button>
-                            <button className="ap-icon-btn danger" title="Delete" onClick={() => handleDeleteClick(prod)}><LuTrash2 /></button>
-                            <div className="ap-kebab-wrap">
-                              <button className="ap-icon-btn" onClick={() => setMenuOpen(menuOpen===prod.id?null:prod.id)}><MdMoreVert /></button>
-                              {menuOpen===prod.id && (
-                                <div className="ap-kebab-menu">
-                                  <button onClick={() => { setPreviewProd(prod); setModal("preview"); setMenuOpen(null); }}><LuEye /> Preview</button>
-                                  <button onClick={() => openEdit(prod)}><LuPencil /> Edit</button>
-                                  <button onClick={() => duplicate(prod)}><LuCopy /> Duplicate</button>
-                                  <button onClick={() => { handleToggle(prod.id,prod.name,prod.active); setMenuOpen(null); }}>
-                                    {prod.active?<><LuToggleLeft /> Deactivate</>:<><LuToggleRight /> Activate</>}
-                                  </button>
-                                  <button className="danger" onClick={() => { setMenuOpen(null); handleDeleteClick(prod); }}><LuTrash2 /> Delete</button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                    {pageProd.length === 0 ? (
+                      <motion.tr key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                        <td colSpan={7} className="ap-empty">
+                          <LuPackage className="ap-empty-icon" />
+                          <p>No products found{search ? ` for "${search}"` : ""}.</p>
+                          {search && <button onClick={() => setSearch("")}>Clear search</button>}
                         </td>
                       </motion.tr>
-                    ))
-                  )}
+                    ) : (
+                      pageProd.map((prod, i) => (
+                        <motion.tr
+                          key={prod.id}
+                          className={selected.has(prod.id) ? "ap-row-selected" : ""}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.25, delay: i * 0.04 }}
+                        >
+                          <td><input type="checkbox" className="ap-checkbox" checked={selected.has(prod.id)} onChange={() => toggleOne(prod.id)} /></td>
+
+                          <td>
+                            <div className="ap-prod-cell">
+                              <div className="ap-prod-img">
+                                {prod.images.length > 0 ? <img src={prod.images[0].src} alt={prod.name} /> : <LuImage />}
+                              </div>
+                              <div>
+                                <p className="ap-prod-name">{prod.name}</p>
+                                <span className="ap-prod-sku">{prod.sku}</span>
+                                <span className="ap-prod-desc">{prod.description}</span>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td><span className={`ap-cat-badge ${prod.category === "Pastries" ? "pastry" : "drink"}`}>{prod.category}</span></td>
+
+                          <td>
+                            <div className={`ap-status-toggle ${prod.active ? "active" : ""}`} onClick={() => handleToggle(prod.id, prod.name, prod.active)} title="Click to toggle">
+                              <div className="ap-status-dot" />
+                              {prod.active ? "Active" : "Inactive"}
+                            </div>
+                          </td>
+
+                          <td>
+                            <p className="ap-price">{priceLabel(prod)}</p>
+                            {prod.options.length > 1 && <span className="ap-options-count">{prod.options.length} OPTIONS</span>}
+                          </td>
+
+                          <td className="ap-updated">{fmtDate(prod.updatedAt)}</td>
+
+                          <td>
+                            <div className="ap-action-btns" onClick={e => e.stopPropagation()}>
+                              <button className="ap-icon-btn" title="Preview" onClick={() => { setPreviewProd(prod); setModal("preview"); }}><LuEye /></button>
+                              <button className="ap-icon-btn" title="Edit" onClick={() => openEdit(prod)}><LuPencil /></button>
+                              <button className="ap-icon-btn danger" title="Delete" onClick={() => handleDeleteClick(prod)}><LuTrash2 /></button>
+                              <div className="ap-kebab-wrap">
+                                <button className="ap-icon-btn" onClick={() => setMenuOpen(menuOpen === prod.id ? null : prod.id)}><MdMoreVert /></button>
+                                {menuOpen === prod.id && (
+                                  <div className="ap-kebab-menu">
+                                    <button onClick={() => { setPreviewProd(prod); setModal("preview"); setMenuOpen(null); }}><LuEye /> Preview</button>
+                                    <button onClick={() => openEdit(prod)}><LuPencil /> Edit</button>
+                                    <button onClick={() => duplicate(prod)}><LuCopy /> Duplicate</button>
+                                    <button onClick={() => { handleToggle(prod.id, prod.name, prod.active); setMenuOpen(null); }}>
+                                      {prod.active ? <><LuToggleLeft /> Deactivate</> : <><LuToggleRight /> Activate</>}
+                                    </button>
+                                    <button className="danger" onClick={() => { setMenuOpen(null); handleDeleteClick(prod); }}><LuTrash2 /> Delete</button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))
+                    )}
                   </AnimatePresence>
                 </tbody>
               </table>
 
               {/* PAGINATION */}
               <div className="ap-pagination">
-                <span>{filtered.length===0?"No products":`Showing ${(page-1)*PER_PAGE+1}–${Math.min(page*PER_PAGE,filtered.length)} of ${filtered.length} products`}</span>
+                <span>{filtered.length === 0 ? "No products" : `Showing ${(page - 1) * PER_PAGE + 1}–${Math.min(page * PER_PAGE, filtered.length)} of ${filtered.length} products`}</span>
                 <div className="ap-page-btns">
-                  <button onClick={() => setPage(p=>Math.max(1,p-1))} disabled={page===1}><LuChevronLeft /> Previous</button>
-                  {Array.from({length:totalPages},(_,i)=>i+1).map(n => (
-                    <button key={n} className={`ap-page-num ${page===n?"active":""}`} onClick={() => setPage(n)}>{n}</button>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}><LuChevronLeft /> Previous</button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                    <button key={n} className={`ap-page-num ${page === n ? "active" : ""}`} onClick={() => setPage(n)}>{n}</button>
                   ))}
-                  <button onClick={() => setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages||totalPages===0}>Next <LuChevronRight /></button>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages || totalPages === 0}>Next <LuChevronRight /></button>
                 </div>
               </div>
             </>
@@ -652,160 +654,160 @@ function AdminProducts() {
 
       {/* ══ ADD / EDIT MODAL ══ */}
       <AnimatePresence>
-      {isFormOpen && (
-        <motion.div
-          className="ap-modal-overlay"
-          variants={fadeIn} initial="hidden" animate="visible" exit="exit"
-          onClick={closeModal}
-        >
+        {isFormOpen && (
           <motion.div
-            className="ap-modal"
-            variants={scaleIn} initial="hidden" animate="visible" exit="exit"
-            onClick={e=>e.stopPropagation()}
+            className="ap-modal-overlay"
+            variants={fadeIn} initial="hidden" animate="visible" exit="exit"
+            onClick={closeModal}
           >
-            <div className="ap-modal-header">
-              <div>
-                <h3>{modal==="add"?"Add New Product":`Edit: ${editTarget?.name}`}</h3>
-                {modal==="edit"&&editTarget && <p className="ap-modal-meta">SKU: {editTarget.sku} · Created {fmtDate(editTarget.createdAt)}</p>}
-                {modal==="add" && <p>Enter the details for the new luxury product.</p>}
-              </div>
-              <button className="ap-modal-close" onClick={closeModal}><LuX /></button>
-            </div>
-            <div className="ap-modal-body">
-              {formErr && <div className="ap-form-err">⚠ {formErr}</div>}
-
-              <div className="ap-form-row">
-                <label>Name <span className="ap-req">*</span><span className="ap-char-count">{form.name.length}/60</span></label>
-                <input className="ap-input" placeholder="e.g. Saffron Brioche" maxLength={60} value={form.name} onChange={e=>setField("name",e.target.value)} />
-              </div>
-
-              <div className="ap-form-row ap-form-row-inline">
-                <label>Category <span className="ap-req">*</span></label>
-                <div className="ap-cat-toggle">
-                  {["Pastries","Drinks"].map(c => (
-                    <button key={c} className={form.category===c?"active":""} onClick={() => setField("category",c)}>{c==="Pastries"?"Pastry":"Drink"}</button>
-                  ))}
+            <motion.div
+              className="ap-modal"
+              variants={scaleIn} initial="hidden" animate="visible" exit="exit"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="ap-modal-header">
+                <div>
+                  <h3>{modal === "add" ? "Add New Product" : `Edit: ${editTarget?.name}`}</h3>
+                  {modal === "edit" && editTarget && <p className="ap-modal-meta">SKU: {editTarget.sku} · Created {fmtDate(editTarget.createdAt)}</p>}
+                  {modal === "add" && <p>Enter the details for the new luxury product.</p>}
                 </div>
+                <button className="ap-modal-close" onClick={closeModal}><LuX /></button>
               </div>
+              <div className="ap-modal-body">
+                {formErr && <div className="ap-form-err">⚠ {formErr}</div>}
 
-              <div className="ap-form-row">
-                <label>Description <span className="ap-req">*</span><span className="ap-char-count">{form.description.length}/200</span></label>
-                <textarea className="ap-textarea" placeholder="Describe the exquisite taste profile..." maxLength={200} value={form.description} onChange={e=>setField("description",e.target.value)} />
-              </div>
-
-              {/* IMAGES */}
-              <div className="ap-form-row">
-                <div className="ap-img-header">
-                  <label className="ap-section-label">PRODUCT IMAGES <span className="ap-optional">(optional, max {MAX_IMGS})</span></label>
-                  <span className="ap-img-hint">{form.images.length}/{MAX_IMGS} {uploading?"· Uploading…":""}</span>
+                <div className="ap-form-row">
+                  <label>Name <span className="ap-req">*</span><span className="ap-char-count">{form.name.length}/60</span></label>
+                  <input className="ap-input" placeholder="e.g. Saffron Brioche" maxLength={60} value={form.name} onChange={e => setField("name", e.target.value)} />
                 </div>
-                {form.images.length > 0 && (
-                  <div className="ap-img-previews">
-                    {form.images.map((img, i) => (
-                      <div key={i} className="ap-img-thumb">
-                        <img src={img.src} alt={`img-${i}`} />
-                        {i===0 && <span className="ap-img-main-badge">Main</span>}
-                        <button className="ap-img-remove" onClick={() => removeImage(i)} title="Remove"><LuX /></button>
-                        <div className="ap-img-reorder">
-                          <button onClick={() => moveImageLeft(i)}  disabled={i===0}                    title="Move left"><LuArrowLeft /></button>
-                          <button onClick={() => moveImageRight(i)} disabled={i===form.images.length-1} title="Move right"><LuArrowRight /></button>
-                        </div>
-                      </div>
+
+                <div className="ap-form-row ap-form-row-inline">
+                  <label>Category <span className="ap-req">*</span></label>
+                  <div className="ap-cat-toggle">
+                    {["Pastries", "Drinks"].map(c => (
+                      <button key={c} className={form.category === c ? "active" : ""} onClick={() => setField("category", c)}>{c === "Pastries" ? "Pastry" : "Drink"}</button>
                     ))}
                   </div>
-                )}
-                {form.images.length < MAX_IMGS && (
-                  <div className={`ap-dropzone ${uploading?"ap-dropzone-loading":""}`} onDragOver={e=>e.preventDefault()} onDrop={onDrop} onClick={() => !uploading && fileInputRef.current.click()}>
-                    <LuImagePlus className="ap-dropzone-icon" />
-                    <p>{uploading?"Uploading to Cloudinary…" : <>Drag & drop or <span>click to browse</span></>}</p>
-                    <small>PNG · JPG · WEBP — up to {MAX_IMGS-form.images.length} more image{MAX_IMGS-form.images.length>1?"s":""}</small>
-                    <input ref={fileInputRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={e=>handleImageFiles(e.target.files)} />
-                  </div>
-                )}
-              </div>
-
-              {/* OPTIONS */}
-              <div className="ap-form-row">
-                <div className="ap-options-header">
-                  <label className="ap-section-label">PRICE OPTIONS <span className="ap-req">*</span></label>
-                  <button className="ap-add-option" onClick={addOption} disabled={form.options.length>=5}><LuPlus /> Add Option</button>
                 </div>
-                {form.options.map((opt, i) => (
-                  <div key={i} className="ap-option-row">
-                    <input className="ap-option-label" placeholder={`Option ${i+1} (e.g. Regular)`} value={opt.label} onChange={e=>setOption(i,"label",e.target.value)} />
-                    <div className="ap-option-price">
-                      <span>£</span>
-                      <input type="number" min="0" step="0.01" placeholder="0.00" value={opt.price} onChange={e=>setOption(i,"price",e.target.value)} />
-                    </div>
-                    <button className="ap-remove-option" onClick={() => removeOption(i)} disabled={form.options.length===1} title="Remove option"><LuX /></button>
+
+                <div className="ap-form-row">
+                  <label>Description <span className="ap-req">*</span><span className="ap-char-count">{form.description.length}/200</span></label>
+                  <textarea className="ap-textarea" placeholder="Describe the exquisite taste profile..." maxLength={200} value={form.description} onChange={e => setField("description", e.target.value)} />
+                </div>
+
+                {/* IMAGES */}
+                <div className="ap-form-row">
+                  <div className="ap-img-header">
+                    <label className="ap-section-label">PRODUCT IMAGES <span className="ap-optional">(optional, max {MAX_IMGS})</span></label>
+                    <span className="ap-img-hint">{form.images.length}/{MAX_IMGS} {uploading ? "· Uploading…" : ""}</span>
                   </div>
-                ))}
-              </div>
-
-              {isDirty && <p className="ap-dirty-notice">● Unsaved changes</p>}
-
-              <div className="ap-modal-actions">
-                <button className="ap-cancel-btn" onClick={closeModal}>Cancel</button>
-                <button className="ap-save-btn" onClick={modal==="add"?saveAdd:saveEdit} disabled={saving}>
-                  {saving ? "Saving…" : modal==="add" ? "Create Product" : "Save Changes"}
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-      </AnimatePresence>
-      <AnimatePresence>
-      {modal==="preview" && previewProd && (
-        <motion.div
-          className="ap-modal-overlay"
-          variants={fadeIn} initial="hidden" animate="visible" exit="exit"
-          onClick={() => setModal("none")}
-        >
-          <motion.div
-            className="ap-modal ap-preview-modal"
-            variants={scaleIn} initial="hidden" animate="visible" exit="exit"
-            onClick={e=>e.stopPropagation()}
-          >
-            <div className="ap-modal-header">
-              <div><h3>{previewProd.name}</h3><p>{previewProd.sku} · {previewProd.category}</p></div>
-              <div className="ap-preview-header-right">
-                <button className="ap-icon-btn" title="Edit" onClick={() => { setModal("none"); openEdit(previewProd); }}><LuPencil /></button>
-                <button className="ap-modal-close" onClick={() => setModal("none")}><LuX /></button>
-              </div>
-            </div>
-            <div className="ap-preview-body">
-              {previewProd.images.length > 0 ? (
-                <div className="ap-preview-images">
-                  <div className="ap-preview-main-img"><img src={previewProd.images[0].src} alt={previewProd.name} /></div>
-                  {previewProd.images.length>1 && (
-                    <div className="ap-preview-thumbs">{previewProd.images.map((img,i) => <img key={i} src={img.src} alt="" />)}</div>
+                  {form.images.length > 0 && (
+                    <div className="ap-img-previews">
+                      {form.images.map((img, i) => (
+                        <div key={i} className="ap-img-thumb">
+                          <img src={img.src} alt={`img-${i}`} />
+                          {i === 0 && <span className="ap-img-main-badge">Main</span>}
+                          <button className="ap-img-remove" onClick={() => removeImage(i)} title="Remove"><LuX /></button>
+                          <div className="ap-img-reorder">
+                            <button onClick={() => moveImageLeft(i)} disabled={i === 0} title="Move left"><LuArrowLeft /></button>
+                            <button onClick={() => moveImageRight(i)} disabled={i === form.images.length - 1} title="Move right"><LuArrowRight /></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {form.images.length < MAX_IMGS && (
+                    <div className={`ap-dropzone ${uploading ? "ap-dropzone-loading" : ""}`} onDragOver={e => e.preventDefault()} onDrop={onDrop} onClick={() => !uploading && fileInputRef.current.click()}>
+                      <LuImagePlus className="ap-dropzone-icon" />
+                      <p>{uploading ? "Uploading to Cloudinary…" : <>Drag & drop or <span>click to browse</span></>}</p>
+                      <small>PNG · JPG · WEBP — up to {MAX_IMGS - form.images.length} more image{MAX_IMGS - form.images.length > 1 ? "s" : ""}</small>
+                      <input ref={fileInputRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={e => handleImageFiles(e.target.files)} />
+                    </div>
                   )}
                 </div>
-              ) : (
-                <div className="ap-preview-no-img"><LuImage /><span>No images uploaded</span></div>
-              )}
-              <div className="ap-preview-info">
-                <p className="ap-preview-desc">{previewProd.description}</p>
-                <div className="ap-preview-badges">
-                  <span className={`ap-cat-badge ${previewProd.category==="Pastries"?"pastry":"drink"}`}>{previewProd.category}</span>
-                  <span className={`ap-status-badge ${previewProd.active?"active":""}`}>{previewProd.active?"Active":"Inactive"}</span>
-                </div>
-                <div className="ap-preview-options">
-                  <p className="ap-section-label">PRICE OPTIONS</p>
-                  {previewProd.options.map((o,i) => (
-                    <div key={i} className="ap-preview-opt"><span>{o.label}</span><strong>£{Number(o.price).toFixed(2)}</strong></div>
+
+                {/* OPTIONS */}
+                <div className="ap-form-row">
+                  <div className="ap-options-header">
+                    <label className="ap-section-label">PRICE OPTIONS <span className="ap-req">*</span></label>
+                    <button className="ap-add-option" onClick={addOption} disabled={form.options.length >= 5}><LuPlus /> Add Option</button>
+                  </div>
+                  {form.options.map((opt, i) => (
+                    <div key={i} className="ap-option-row">
+                      <input className="ap-option-label" placeholder={`Option ${i + 1} (e.g. Regular)`} value={opt.label} onChange={e => setOption(i, "label", e.target.value)} />
+                      <div className="ap-option-price">
+                        <span>£</span>
+                        <input type="number" min="0" step="0.01" placeholder="0.00" value={opt.price} onChange={e => setOption(i, "price", e.target.value)} />
+                      </div>
+                      <button className="ap-remove-option" onClick={() => removeOption(i)} disabled={form.options.length === 1} title="Remove option"><LuX /></button>
+                    </div>
                   ))}
                 </div>
-                <div className="ap-preview-meta">
-                  <span>Created: {fmtDate(previewProd.createdAt)}</span>
-                  <span>Updated: {fmtDate(previewProd.updatedAt)}</span>
+
+                {isDirty && <p className="ap-dirty-notice">● Unsaved changes</p>}
+
+                <div className="ap-modal-actions">
+                  <button className="ap-cancel-btn" onClick={closeModal}>Cancel</button>
+                  <button className="ap-save-btn" onClick={modal === "add" ? saveAdd : saveEdit} disabled={saving}>
+                    {saving ? "Saving…" : modal === "add" ? "Create Product" : "Save Changes"}
+                  </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {modal === "preview" && previewProd && (
+          <motion.div
+            className="ap-modal-overlay"
+            variants={fadeIn} initial="hidden" animate="visible" exit="exit"
+            onClick={() => setModal("none")}
+          >
+            <motion.div
+              className="ap-modal ap-preview-modal"
+              variants={scaleIn} initial="hidden" animate="visible" exit="exit"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="ap-modal-header">
+                <div><h3>{previewProd.name}</h3><p>{previewProd.sku} · {previewProd.category}</p></div>
+                <div className="ap-preview-header-right">
+                  <button className="ap-icon-btn" title="Edit" onClick={() => { setModal("none"); openEdit(previewProd); }}><LuPencil /></button>
+                  <button className="ap-modal-close" onClick={() => setModal("none")}><LuX /></button>
+                </div>
+              </div>
+              <div className="ap-preview-body">
+                {previewProd.images.length > 0 ? (
+                  <div className="ap-preview-images">
+                    <div className="ap-preview-main-img"><img src={previewProd.images[0].src} alt={previewProd.name} /></div>
+                    {previewProd.images.length > 1 && (
+                      <div className="ap-preview-thumbs">{previewProd.images.map((img, i) => <img key={i} src={img.src} alt="" />)}</div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="ap-preview-no-img"><LuImage /><span>No images uploaded</span></div>
+                )}
+                <div className="ap-preview-info">
+                  <p className="ap-preview-desc">{previewProd.description}</p>
+                  <div className="ap-preview-badges">
+                    <span className={`ap-cat-badge ${previewProd.category === "Pastries" ? "pastry" : "drink"}`}>{previewProd.category}</span>
+                    <span className={`ap-status-badge ${previewProd.active ? "active" : ""}`}>{previewProd.active ? "Active" : "Inactive"}</span>
+                  </div>
+                  <div className="ap-preview-options">
+                    <p className="ap-section-label">PRICE OPTIONS</p>
+                    {previewProd.options.map((o, i) => (
+                      <div key={i} className="ap-preview-opt"><span>{o.label}</span><strong>£{Number(o.price).toFixed(2)}</strong></div>
+                    ))}
+                  </div>
+                  <div className="ap-preview-meta">
+                    <span>Created: {fmtDate(previewProd.createdAt)}</span>
+                    <span>Updated: {fmtDate(previewProd.updatedAt)}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
     </div>

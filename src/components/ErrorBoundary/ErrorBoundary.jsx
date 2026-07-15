@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./ErrorBoundary.css";
 
 class ErrorBoundary extends React.Component {

@@ -14,14 +14,14 @@ import Loader from "../../components/Loader/Loader";
 /* Normalise a product regardless of whether it came from
    the API (MongoDB) or the local products.js fallback */
 const normalise = (p) => ({
-  id:          p._id || p.id,
-  name:        p.name,
+  id: p._id || p.id,
+  name: p.name,
   description: p.description,
-  category:    p.category,
+  category: p.category,
   /* API returns images array; local file uses .image */
-  image:       p.images?.[0] || p.image || "",
-  price:       p.options?.[0]?.price ?? p.price ?? 0,
-  options:     p.options || [],
+  image: p.images?.[0] || p.image || "",
+  price: p.options?.[0]?.price ?? p.price ?? 0,
+  options: p.options || [],
 });
 
 function Menu() {
@@ -29,13 +29,13 @@ function Menu() {
   const { addToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
-  const [loading,  setLoading]  = useState(true);
-  const [error,    setError]    = useState("");
-  const [usingLocal, setUsingLocal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [, setUsingLocal] = useState(false);
 
   const [category, setCategory] = useState("All");
-  const [search,   setSearch]   = useState("");
-  const [sort,     setSort]     = useState("default");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("default");
 
   /* ── Load products ── */
   const loadProducts = useCallback(async () => {
@@ -58,15 +58,15 @@ function Menu() {
 
   /* ── Filter ── */
   let filtered = products.filter(p => {
-    const matchCat    = category === "All" || p.category === category;
+    const matchCat = category === "All" || p.category === category;
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-                        p.description.toLowerCase().includes(search.toLowerCase());
+      p.description.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
 
   /* ── Sort ── */
-  if (sort === "price-asc")  filtered = [...filtered].sort((a,b) => a.price - b.price);
-  if (sort === "price-desc") filtered = [...filtered].sort((a,b) => b.price - a.price);
+  if (sort === "price-asc") filtered = [...filtered].sort((a, b) => a.price - b.price);
+  if (sort === "price-desc") filtered = [...filtered].sort((a, b) => b.price - a.price);
 
   return (
     <section className="menu-page">
@@ -86,7 +86,7 @@ function Menu() {
         {/* Filters */}
         <div className="menu-filters">
           <nav className="filter-buttons">
-            {["All","Pastries","Drinks"].map(cat => (
+            {["All", "Pastries", "Drinks"].map(cat => (
               <button
                 key={cat}
                 className={category === cat ? "active" : ""}
@@ -172,12 +172,12 @@ function Menu() {
                       <button
                         className="menu-card-plus"
                         onClick={() => addToCart({
-                          id:         product.id,
-                          name:       product.name,
-                          image:      product.image,
+                          id: product.id,
+                          name: product.name,
+                          image: product.image,
                           optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
-                          price:      product.options?.[0]?.price || product.price,
-                          quantity:   1,
+                          price: product.options?.[0]?.price || product.price,
+                          quantity: 1,
                         })}
                       >
                         <LuPlus />

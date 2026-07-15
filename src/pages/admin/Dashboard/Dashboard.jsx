@@ -7,34 +7,34 @@ import { fetchOrderStats, fetchOrders } from "../../../services/orderService";
 import { fetchProducts } from "../../../services/productService";
 import {
   LuPackage, LuShoppingBag, LuLogOut, LuDiamond,
-  LuLayoutDashboard, LuTrendingUp, LuUsers, LuBanknote,
+  LuLayoutDashboard, LuTrendingUp, LuBanknote,
   LuArrowRight, LuRefreshCw, LuMenu,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import Loader from "../../../components/Loader/Loader";
 
 const statusClass = s => ({
-  "Pending":          "dash-status-pending",
-  "Preparing":        "dash-status-preparing",
+  "Pending": "dash-status-pending",
+  "Preparing": "dash-status-preparing",
   "Out for Delivery": "dash-status-out",
-  "Delivered":        "dash-status-delivered",
+  "Delivered": "dash-status-delivered",
 }[s] || "");
 
 const initials = name =>
-  name.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase();
+  name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
 
 function Dashboard() {
 
   const { logout, admin } = useAuth();
   const { sidebarOpen, toggleSidebar, closeSidebar } = useAdminSidebar();
-  const navigate          = useNavigate();
+  const navigate = useNavigate();
 
-  const [stats,         setStats]         = useState(null);
-  const [recentOrders,  setRecentOrders]  = useState([]);
-  const [productCount,  setProductCount]  = useState(null);
-  const [loading,       setLoading]       = useState(true);
-  const [apiError,      setApiError]      = useState("");
-  const [lastUpdated,   setLastUpdated]   = useState(null);
+  const [stats, setStats] = useState(null);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [productCount, setProductCount] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -47,12 +47,12 @@ function Dashboard() {
       ]);
       setStats(statsRes);
       setRecentOrders(ordersRes.orders.map(o => ({
-        id:     o.orderId || o._id,
-        _id:    o._id,
-        name:   o.customerName,
+        id: o.orderId || o._id,
+        _id: o._id,
+        name: o.customerName,
         amount: o.totalAmount,
         status: o.status,
-        time:   new Date(o.createdAt).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}),
+        time: new Date(o.createdAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
       })));
       setProductCount(productsRes.total);
       setLastUpdated(new Date());
@@ -121,7 +121,7 @@ function Dashboard() {
           </div>
           <div className="dash-header-right">
             <span className="dash-date">
-              {new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+              {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
             <button className="dash-refresh-btn" onClick={loadAll} title="Refresh data"><LuRefreshCw /></button>
           </div>
@@ -158,34 +158,34 @@ function Dashboard() {
               </div>
 
               <div className="dash-stat">
-                <div className="dash-stat-icon" style={{color:"#f5a623"}}><MdOutlineDeliveryDining /></div>
+                <div className="dash-stat-icon" style={{ color: "#f5a623" }}><MdOutlineDeliveryDining /></div>
                 <div>
                   <p>OUT FOR DELIVERY</p>
                   <h2>{stats?.outForDelivery ?? 0}</h2>
-                  <span style={{color:"#f5a623"}}>En route now</span>
+                  <span style={{ color: "#f5a623" }}>En route now</span>
                 </div>
               </div>
 
               <div className="dash-stat">
-                <div className="dash-stat-icon" style={{color:"#ccc"}}><LuPackage /></div>
+                <div className="dash-stat-icon" style={{ color: "#ccc" }}><LuPackage /></div>
                 <div>
                   <p>PENDING ORDERS</p>
                   <h2>{stats?.pending ?? 0}</h2>
-                  <span style={{color:"#ccc"}}>Awaiting prep</span>
+                  <span style={{ color: "#ccc" }}>Awaiting prep</span>
                 </div>
               </div>
 
               <div className="dash-stat">
-                <div className="dash-stat-icon" style={{color:"#4caf82"}}><LuPackage /></div>
+                <div className="dash-stat-icon" style={{ color: "#4caf82" }}><LuPackage /></div>
                 <div>
                   <p>ACTIVE PRODUCTS</p>
                   <h2>{productCount ?? "—"}</h2>
-                  <span style={{color:"#888"}}>In catalog</span>
+                  <span style={{ color: "#888" }}>In catalog</span>
                 </div>
               </div>
 
               <div className="dash-stat">
-                <div className="dash-stat-icon" style={{color:"#4caf82"}}><LuTrendingUp /></div>
+                <div className="dash-stat-icon" style={{ color: "#4caf82" }}><LuTrendingUp /></div>
                 <div>
                   <p>TOTAL DELIVERED</p>
                   <h2>{stats?.delivered ?? 0}</h2>
