@@ -3,17 +3,17 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn, scaleIn, stagger, staggerItem } from "../../../utils/motion";
-import { toastSuccess, toastError } from "../../../utils/swal";
+import { toastSuccess, toastError, confirmAction } from "../../../utils/swal";
 import { useAuth } from "../../../context/AuthContext";
 import { useAdminSidebar } from "../../../hooks/useAdminSidebar";
 import {
-  fetchOrders, fetchOrderStats, updateOrderStatus, createOrder,
+  fetchOrders, fetchOrderStats, updateOrderStatus, createOrder, markOrderAsPaid,
 } from "../../../services/orderService";
 import {
   LuSearch, LuFilter, LuShoppingBag, LuLayoutDashboard,
   LuPackage, LuLogOut, LuEye, LuX, LuChevronLeft,
   LuChevronRight, LuDiamond, LuPlus, LuBanknote, LuRefreshCw,
-  LuMenu,
+  LuMenu, LuCheck,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { TbShoppingBagCheck } from "react-icons/tb";
@@ -47,6 +47,8 @@ const normalise = (o) => ({
   method: o.method,
   amount: o.totalAmount,
   status: o.status,
+  paymentMethod: o.paymentMethod || "Bank Transfer",
+  paymentStatus: o.paymentStatus || (o.isPaid ? "Paid" : "Pending"),
   time: new Date(o.createdAt).toLocaleString("en-GB", {
     day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
   }),
@@ -80,6 +82,7 @@ function AdminOrders() {
 
   /* ── Status update loading ── */
   const [updatingId, setUpdatingId] = useState(null);
+  const [markingPaidId, setMarkingPaidId] = useState(null);
 
   /* ── Load orders + stats ── */
   const loadAll = useCallback(async () => {
@@ -128,6 +131,31 @@ function AdminOrders() {
       toastError("Failed to update status. Please try again.");
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  /* ── Mark payment as received (bank transfer) ──
+   * The ONLY place a payment can be confirmed. This is a one-way action
+   * (Pending → Paid) — the customer never has access to this, and admins
+   * can't undo it here by design (matches the backend guard). */
+  const handleMarkPaid = async (order) => {
+    const ok = await confirmAction({
+      title: "Confirm payment received?",
+      text: `This will mark order <strong>${order.id}</strong> as <strong>Paid</strong> and email the customer a payment confirmation. This can't be undone from here.`,
+      confirmText: "Mark as Paid",
+    });
+    if (!ok) return;
+
+    setMarkingPaidId(order.id);
+    try {
+      await markOrderAsPaid(order._id);
+      setOrders(prev => prev.map(o => o.id === order.id ? { ...o, paymentStatus: "Paid" } : o));
+      if (selected?.id === order.id) setSelected(s => ({ ...s, paymentStatus: "Paid" }));
+      toastSuccess(`Order ${order.id} marked as Paid. Customer has been notified.`);
+    } catch (e) {
+      toastError(e.response?.data?.message || "Failed to mark order as paid. Please try again.");
+    } finally {
+      setMarkingPaidId(null);
     }
   };
 
@@ -337,14 +365,14 @@ function AdminOrders() {
                 <thead>
                   <tr>
                     <th>Order ID</th><th>Customer</th><th>Method</th>
-                    <th>Total Amount</th><th>Status</th><th>Date & Time</th><th>Action</th>
+                    <th>Total Amount</th><th>Status</th><th>Payment</th><th>Date & Time</th><th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   <AnimatePresence mode="popLayout">
                     {pageOrders.length === 0 ? (
                       <motion.tr key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                        <td colSpan={7} className="ao-empty">No orders match your search.</td>
+                        <td colSpan={8} className="ao-empty">No orders match your search.</td>
                       </motion.tr>
                     ) : (
                       pageOrders.map((order, i) => (
@@ -370,6 +398,11 @@ function AdminOrders() {
                           </td>
                           <td className="ao-amount">£{order.amount.toFixed(2)}</td>
                           <td><span className={`ao-status ${statusClass(order.status)}`}>{order.status}</span></td>
+                          <td>
+                            <span className={order.paymentStatus === "Paid" ? "ao-status status-delivered" : "ao-status status-pending"}>
+                              {order.paymentStatus === "Paid" ? "Paid" : "Pending"}
+                            </span>
+                          </td>
                           <td className="ao-time">{order.time}</td>
                           <td>
                             <button className="ao-view-btn" onClick={() => setSelected(order)}>
@@ -427,6 +460,31 @@ function AdminOrders() {
                   <span>Status</span>
                   <span className={`ao-status ${statusClass(selected.status)}`}>{selected.status}</span>
                 </div>
+                <div className="ao-modal-row">
+                  <span>Payment Method</span>
+                  <strong>{selected.paymentMethod}</strong>
+                </div>
+                <div className="ao-modal-row">
+                  <span>Payment Status</span>
+                  <span className={selected.paymentStatus === "Paid" ? "ao-status status-delivered" : "ao-status status-pending"}>
+                    {selected.paymentStatus === "Paid" ? "Paid" : "Pending"}
+                  </span>
+                </div>
+
+                {selected.paymentStatus !== "Paid" && (
+                  <div className="ao-modal-actions">
+                    <p className="ao-modal-label">Payment</p>
+                    <button
+                      className="ao-status-update-btn active"
+                      disabled={markingPaidId === selected.id}
+                      onClick={() => handleMarkPaid(selected)}
+                    >
+                      <LuCheck style={{ marginRight: 4 }} />
+                      {markingPaidId === selected.id ? "Confirming…" : "Mark as Paid (Bank Transfer Received)"}
+                    </button>
+                  </div>
+                )}
+
                 <div className="ao-modal-actions">
                   <p className="ao-modal-label">Update Status {updatingId === selected.id && "…"}</p>
                   <div className="ao-modal-status-btns">

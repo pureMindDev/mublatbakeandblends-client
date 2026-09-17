@@ -1,11 +1,23 @@
 import api from "./api";
 
 /**
- * POST /api/orders — called from Checkout when Stripe is not yet set up
- * (fallback direct order creation)
+ * POST /api/orders — called from Checkout for the bank-transfer flow.
+ * Backend generates the order number, sets paymentStatus: "Pending", and
+ * sends the order-received + admin-notification emails.
  */
 export const createOrder = async (orderData) => {
   const { data } = await api.post("/orders", orderData);
+  return data.order;
+};
+
+/**
+ * GET /api/orders/track/:orderId — PUBLIC.
+ * Used by the Success page to fetch the authoritative order (number, total,
+ * payment status, bank transfer state) from the server, instead of trusting
+ * whatever was passed through client-side navigation state.
+ */
+export const fetchOrderByOrderId = async (orderId) => {
+  const { data } = await api.get(`/orders/track/${encodeURIComponent(orderId)}`);
   return data.order;
 };
 
@@ -39,6 +51,16 @@ export const fetchOrderById = async (id) => {
  */
 export const updateOrderStatus = async (id, status) => {
   const { data } = await api.patch(`/orders/${id}/status`, { status });
+  return data.order;
+};
+
+/**
+ * PATCH /api/orders/:id/payment  (admin only)
+ * The ONLY way to move an order's paymentStatus from "Pending" to "Paid".
+ * Triggers the payment-confirmation email on the backend.
+ */
+export const markOrderAsPaid = async (id) => {
+  const { data } = await api.patch(`/orders/${id}/payment`, { paymentStatus: "Paid" });
   return data.order;
 };
 
