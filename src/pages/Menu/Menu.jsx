@@ -3,6 +3,7 @@ import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { fetchProducts } from "../../services/productService";
 import { products as localProducts } from "../../data/products";
+import { toastSuccess } from "../../utils/swal";
 
 import "./Menu.css";
 
@@ -171,14 +172,17 @@ function Menu() {
 
                       <button
                         className="menu-card-plus"
-                        onClick={() => addToCart({
-                          id: product.id,
-                          name: product.name,
-                          image: product.image,
-                          optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
-                          price: product.options?.[0]?.price || product.price,
-                          quantity: 1,
-                        })}
+                        onClick={() => {
+                          addToCart({
+                            id: product.id,
+                            name: product.name,
+                            image: product.image,
+                            optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
+                            price: product.options?.[0]?.price || product.price,
+                            quantity: 1,
+                          });
+                          toastSuccess(`${product.name} added to cart!`);
+                        }}
                       >
                         <LuPlus />
                       </button>

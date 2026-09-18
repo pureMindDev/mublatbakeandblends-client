@@ -1,10 +1,16 @@
 import React, { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { LuPlus, LuMinus, LuTrash } from "react-icons/lu";
+import { toastError } from "../../utils/swal";
 import "./CartItem.css";
 
 function CartItem({ item }) {
   const { increaseQty, decreaseQty, removeFromCart } = useContext(CartContext);
+
+  const handleRemove = () => {
+    removeFromCart(item.id, item.optionName);
+    toastError(`${item.name} removed from cart.`);
+  };
 
   return (
     <div className="cart-card">
@@ -32,7 +38,7 @@ function CartItem({ item }) {
         </span>
         <button
           className="remove-btn"
-          onClick={() => removeFromCart(item.id, item.optionName)}
+          onClick={handleRemove}
         >
           <LuTrash /> Remove
         </button>
