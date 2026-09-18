@@ -61,7 +61,7 @@ function Footer() {
 
       {/* BOTTOM */}
       <div className="footer-bottom">
-        <p>© 2026 Mublat Pastries & Drinks. All rights reserved.</p>
+        <p>© 2026 Mublat Bake & Blends. All rights reserved.</p>
         <div className="footer-bottom-links">
           <Link to="/support">Privacy Policy</Link>
           <Link to="/support">Terms of Service</Link>

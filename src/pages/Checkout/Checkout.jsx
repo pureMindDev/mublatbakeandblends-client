@@ -193,7 +193,7 @@ function Checkout() {
               {deliveryMethod === "pickup" && (
                 <div className="pickup-info">
                   <h4>Pickup Location</h4>
-                  <p>Mublat Pastries & Drinks<br />12 Mayfair Square<br />London W1J 8AJ</p>
+                  <p>Mublat Bake & Blends<br />12 Mayfair Square<br />London W1J 8AJ</p>
                 </div>
               )}
 

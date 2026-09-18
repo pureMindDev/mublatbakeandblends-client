@@ -75,6 +75,76 @@ button {
   transition: 0.3s ease;
 }
 
+/*
+ * Site-wide button safety net.
+ * Most buttons in this app are plain `<button className="...">` elements
+ * (some styled as <Link>/<a>), often containing an icon + text
+ * (e.g. <FiLock /> Checkout). The browser default (inline-block) does NOT
+ * center that content or keep icon+text aligned on one baseline — this is
+ * what causes "icon not centered" / "text not centered" bugs. This block
+ * fixes that everywhere by targeting any element whose class name contains
+ * "btn" (covers .primary-btn, .pay-btn, .nf-btn, .adminbtn, .browse-btn,
+ * .track-btn, etc. — virtually every button/button-like link in this app),
+ * plus real <button> elements and .btn. It also guards against buttons
+ * overflowing their container or the viewport on small screens.
+ * Page-specific button classes keep their own colors/sizing — this only
+ * adds layout safety, so it never overrides anything more specific.
+ */
+button,
+.btn,
+a.button-like,
+[class*="btn"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  max-width: 100%;
+  box-sizing: border-box;
+
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+
+  line-height: 1.3;
+}
+
+/* Buttons meant to fill their container (most "full width" CTAs) stay
+   centered instead of left-aligned when they wrap onto two lines. */
+button[class*="full"],
+button[style*="width: 100%"],
+button[style*="width:100%"] {
+  text-align: center;
+}
+
+/* Icons inside buttons/links: keep them from shrinking, stretching, or
+   sitting a few pixels off the text baseline (a very common react-icons
+   quirk when a button isn't a flex container). */
+button svg,
+.btn svg,
+a.button-like svg,
+[class*="btn"] svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* A few classes that match "btn" above are actually *groups* of buttons
+   (button-row containers), not buttons themselves — restore their
+   original layout instead of the shrink-wrapped, centered single-button
+   styling used for individual buttons. */
+.ao-page-btns          { display: flex; gap: 8px; max-width: none; justify-content: flex-start; }
+.ao-modal-status-btns  { display: flex; flex-wrap: wrap; gap: 8px; max-width: none; justify-content: flex-start; }
+.ap-page-btns          { display: flex; gap: 6px; align-items: center; max-width: none; justify-content: flex-start; }
+.ap-action-btns        { display: flex; align-items: center; gap: 5px; max-width: none; justify-content: flex-start; }
+
+/* .mobile-admin-btn relies on `display: block` (no explicit width) to fill
+   the mobile nav drawer — pin it explicitly so it can't get shrink-wrapped
+   by the inline-flex default above, regardless of stylesheet load order. */
+.mobile-admin-btn {
+  display: flex;
+  width: 100%;
+}
+
 /* Primary Button (Gold) */
 
 .primary-btn {
@@ -209,4 +279,48 @@ img {
     padding: 60px 0;
   }
 
+  /* Safety padding for any page relying only on the plain .container
+     class (some pages don't set their own page-level horizontal padding),
+     so content and buttons don't sit flush against the screen edge. */
+  .container {
+    padding: 0 20px;
+  }
+
+  /* Button groups (rows of 2+ buttons) are common across this app
+     (hero CTAs, delivery/payment option cards, admin filter bars). Let
+     them wrap onto their own lines instead of squeezing/overflowing. */
+  .btn-group,
+  .hero-buttons,
+  .cta-group {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  section {
+    padding: 44px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  /* On very small screens, oversized button padding is a common cause of
+     text overflow/wrapping badly — trim it back a little globally while
+     letting each page's own class (.pay-btn, .primary-btn, etc.) still
+     control color/weight/radius. */
+  .primary-btn,
+  .secondary-btn {
+    padding: 12px 20px;
+    width: 100%;
+  }
 }

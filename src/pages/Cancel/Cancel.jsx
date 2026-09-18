@@ -80,8 +80,8 @@ function PaymentCancelled() {
           If you continue to have trouble with payments, please visit our{" "}
           <Link to="/support" className="cancel-support-link">support page</Link>{" "}
           or email us at{" "}
-          <a href="mailto:support@mublat.com" className="cancel-support-link">
-            support@mublat.com
+          <a href="mailto:mublatbakeandblends@gmail.com" className="cancel-support-link">
+            mublatbakeandblends@gmail.com
           </a>
         </p>
       </div>

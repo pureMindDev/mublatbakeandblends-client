@@ -193,7 +193,7 @@ function AdminLogin() {
 
       {/* PAGE FOOTER */}
       <p className="admin-footer">
-        © 2026 MUBLAT PASTRIES & DRINKS • INTERNAL SYSTEMS
+        © 2026 MUBLAT BAKE & BLENDS • INTERNAL SYSTEMS
       </p>
 
     </motion.section>

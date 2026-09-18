@@ -9,7 +9,7 @@ import api from "../../services/api";
 const FAQS = [
   { q: "How long does delivery take?", a: "We deliver within 30–45 minutes for most areas in London. You'll receive a text update when your order is being prepared and when it's on the way." },
   { q: "What areas do you deliver to?", a: "We currently deliver across central and greater London. Enter your postcode at checkout to confirm your area is covered. If not, you're welcome to use our boutique pickup option." },
-  { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at support@mublat.com." },
+  { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at mublatbakeandblends@gmail.com." },
   { q: "Are your pastries freshly made?", a: "Yes — all pastries are baked fresh daily in small batches. We never use frozen ingredients. Our drinks are also prepared fresh with no artificial preservatives." },
   { q: "Do you cater for events or large orders?", a: "Absolutely. We offer catering for events, corporate orders, and large gatherings. Contact us at least 48 hours in advance via email or phone and we'll prepare a custom quote." },
   { q: "What payment methods do you accept?", a: "We accept all major credit and debit cards (Visa, Mastercard, Amex) through our secure Stripe payment system. We do not currently accept cash for online orders." },
@@ -82,7 +82,7 @@ function SupportPage() {
     } catch (err) {
       setApiError(
         err.response?.data?.message ||
-        "Failed to send your message. Please try emailing us directly at support@mublat.com."
+        "Failed to send your message. Please try emailing us directly at mublatbakeandblends@gmail.com."
       );
     } finally {
       setSending(false);
@@ -105,7 +105,7 @@ function SupportPage() {
             <div className="sp-info-icon"><LuMail /></div>
             <h4>Email Us</h4>
             <p>For all enquiries and non-urgent issues</p>
-            <a href="mailto:support@mublat.com">support@mublat.com</a>
+            <a href="mailto:mublatbakeandblends@gmail.com">mublatbakeandblends@gmail.com</a>
           </div>
           <div className="sp-info-card">
             <div className="sp-info-icon"><LuPhone /></div>
