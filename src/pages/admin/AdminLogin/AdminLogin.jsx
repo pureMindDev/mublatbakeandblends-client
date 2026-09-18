@@ -14,7 +14,7 @@ function AdminLogin() {
 
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("mublatbakeandblends@gmail.com");
+  const [email, setEmail] = useState("admin@mublat.com");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -109,7 +109,7 @@ function AdminLogin() {
           <LuMail />
           <input
             type="email"
-            placeholder="mublatbakeandblends@gmail.com"
+            placeholder="admin@mublat.com"
             value={email}
             onChange={e => { setEmail(e.target.value); setError(""); }}
             onKeyDown={handleKeyDown}

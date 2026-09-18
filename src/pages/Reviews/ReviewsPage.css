@@ -199,6 +199,13 @@
 @media (max-width: 600px) {
   .rp-hero h1  { font-size: 32px; }
   .rp-grid     { grid-template-columns: 1fr; }
+  .rp-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: calc(100vw - 32px);
+    text-align: center;
+  }
 }
 
 /* ── New review highlight ── */

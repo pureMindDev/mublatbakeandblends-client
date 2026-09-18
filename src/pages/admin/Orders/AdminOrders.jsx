@@ -383,28 +383,28 @@ function AdminOrders() {
                           exit={{ opacity: 0, x: -20 }}
                           transition={{ duration: 0.25, delay: i * 0.04 }}
                         >
-                          <td className="ao-order-id" data-label="Order ID">{order.id}</td>
-                          <td data-label="Customer">
+                          <td className="ao-order-id">{order.id}</td>
+                          <td>
                             <div className="ao-customer">
                               <div className="ao-avatar">{initials(order.name)}</div>
                               <div><p>{order.name}</p><span>{order.phone}</span></div>
                             </div>
                           </td>
-                          <td data-label="Method">
+                          <td>
                             <div className="ao-method">
                               {order.method === "Delivery" ? <MdOutlineDeliveryDining /> : <TbShoppingBagCheck />}
                               {order.method}
                             </div>
                           </td>
-                          <td className="ao-amount" data-label="Total Amount">£{order.amount.toFixed(2)}</td>
-                          <td data-label="Status"><span className={`ao-status ${statusClass(order.status)}`}>{order.status}</span></td>
-                          <td data-label="Payment">
+                          <td className="ao-amount">£{order.amount.toFixed(2)}</td>
+                          <td><span className={`ao-status ${statusClass(order.status)}`}>{order.status}</span></td>
+                          <td>
                             <span className={order.paymentStatus === "Paid" ? "ao-status status-delivered" : "ao-status status-pending"}>
                               {order.paymentStatus === "Paid" ? "Paid" : "Pending"}
                             </span>
                           </td>
-                          <td className="ao-time" data-label="Date & Time">{order.time}</td>
-                          <td data-label="Action">
+                          <td className="ao-time">{order.time}</td>
+                          <td>
                             <button className="ao-view-btn" onClick={() => setSelected(order)}>
                               <LuEye /> View Detail
                             </button>

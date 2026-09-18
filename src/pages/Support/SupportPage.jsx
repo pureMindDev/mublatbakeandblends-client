@@ -111,7 +111,7 @@ function SupportPage() {
             <div className="sp-info-icon"><LuPhone /></div>
             <h4>Call Us</h4>
             <p>Speak directly to our team</p>
-            <a href="tel:+447587911097">+44 7587 911097</a>
+            <a href="tel:+442071234567">+44 (0)20 7123 4567</a>
           </div>
           <div className="sp-info-card">
             <div className="sp-info-icon"><LuMapPin /></div>

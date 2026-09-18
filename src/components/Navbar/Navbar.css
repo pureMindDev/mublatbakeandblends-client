@@ -175,6 +175,7 @@
   top: 0;
   right: 0;
   width: 280px;
+  max-width: 85vw;
   height: 100vh;
   background: #0d0d0d;
   border-left: 1px solid #1e1e1e;
@@ -303,12 +304,7 @@
     justify-self: end;
   }
 
-/* Prefixed with `body` to guarantee this wins over the generic
-   [class*="btn"] flex-centering rule in global.css regardless of
-   stylesheet load order (same technique used in admin-responsive.css) —
-   otherwise the Admin link could reappear on mobile with its text
-   wrapping letter-by-letter instead of staying hidden. */
-body .adminbtn {
+  .adminbtn {
     display: none;
   }
 }

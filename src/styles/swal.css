@@ -98,16 +98,6 @@
 }
 
 /* ═══════════════════════════════════
-   STACKING SAFETY
-═══════════════════════════════════ */
-/* Belt-and-braces: make sure alerts/toasts always render above our own
-   fixed elements (sticky navbar z-index:999, mobile drawer z-index:999),
-   regardless of where in the document SweetAlert2's container ends up. */
-.swal2-container {
-  z-index: 99999 !important;
-}
-
-/* ═══════════════════════════════════
    TOAST OVERRIDES
 ═══════════════════════════════════ */
 .swal-toast-popup {

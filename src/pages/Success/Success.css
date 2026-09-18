@@ -159,7 +159,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0; /* lets long item names wrap/truncate instead of pushing the price off-screen */
 }
 
 .item-left img {
@@ -223,7 +222,7 @@
   flex: 1;
   min-width: 280px;
   max-width: 412px;
-  min-height: 204px;
+  height: 204px;
   border-radius: 12px;
   padding: 20px;
   text-align: center;
@@ -326,61 +325,25 @@
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .success-page {
-    padding: 44px 16px;
-  }
+@media (max-width: 600px) {
+  .success-page h1 { font-size: 34px; }
+  .success-icon-wrapper { width: 90px; height: 90px; }
+  .success-icon { font-size: 46px; }
 
-  /* 48px was overflowing narrow screens on longer titles
-     ("Thank You for Your Order" etc.) — scale with viewport instead. */
-  .success-page h1 {
-    font-size: clamp(28px, 7vw, 40px);
-  }
-
-  .success-subtext {
-    font-size: 16px;
-    max-width: 100%;
-  }
-
-  .info-boxes {
-    min-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #F9B11F1A;
-  }
-
-  .info-boxes:last-child {
-    border-bottom: none;
-  }
-
-  .success-summary {
-    padding: 18px;
-  }
-
-  /* Long item names + price on the same row is the #1 overflow cause on
-     narrow screens — let the row wrap instead of squeezing the price off
-     the edge or forcing horizontal scroll. */
   .summary-row {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
   }
 
   .item-right {
-    margin-left: auto;
+    text-align: left;
+    margin-left: 76px;
   }
 
   .track-box,
   .browse-box {
-    min-width: 100%;
-  }
-}
-
-@media (max-width: 380px) {
-  .success-icon-wrapper {
-    width: 90px;
-    height: 90px;
-  }
-
-  .success-icon {
-    font-size: 46px;
+    height: auto;
+    min-height: 170px;
+    padding: 24px 20px;
   }
 }

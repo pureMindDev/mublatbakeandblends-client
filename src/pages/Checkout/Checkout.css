@@ -302,8 +302,7 @@ input:focus {
   color: var(--gray);
   margin-top: 10px;
   /* width: 224px; */
-  min-height: 34px;
-  padding: 6px 10px;
+  height: 34px;
   border-radius: 12px;
   background: #00000080;
   border: 1px dashed #3C382FFF;
@@ -311,7 +310,6 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
 
 /* ===== CONCIERGE BOX ===== */
@@ -319,11 +317,11 @@ input:focus {
   margin-top: 15px;
   border: 1px solid #3C382FFF;
   border-radius: 14px;
-  padding: 10px;
+  padding: 0 10px;
   text-align: center;
   background: #00000000;
   /* width: 439px; */
-  min-height: 74px;
+  height: 74px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,52 +357,58 @@ input:focus {
 
 }
 
-@media (max-width: 640px) {
-  .checkout-page {
-    padding: 40px 12px;
-  }
-
-  .checkout-form,
-  .checkout-summary {
-    padding: 18px;
-  }
-
-  .checkout-header h1 {
-    font-size: 26px;
-  }
-
-  /* Three contact fields side by side (Full Name / Email / Phone) was the
-     main "breaking down" spot on mobile — stack them instead of squeezing
-     each into ~1/3 of a phone screen. */
+@media (max-width: 560px) {
+  /* Side-by-side inputs (name/city/postcode etc.) stack instead of
+     squeezing down to unusable width */
   .form-row {
     flex-direction: column;
     gap: 0;
   }
 
   .phone-input {
-    flex-direction: row; /* country code + number stays inline, it's short */
+    flex-wrap: wrap;
   }
 
+  .phone-input .code {
+    width: 90px;
+  }
+
+  /* Payment/delivery option cards stack on narrow phones */
   .delivery-options {
     flex-direction: column;
+  }
+
+  /* Long bank details wrap instead of overflowing the card */
+  .bank-row,
+  .details-summary-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .details-summary-row strong {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  /* Step indicator labels shrink so the whole bar fits without
+     overflowing the viewport */
+  .checkout-steps {
+    gap: 6px;
+  }
+
+  .checkout-step {
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .checkout-step-divider {
+    max-width: 20px;
   }
 
   .checkout-footer {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-  }
-
-  .payment-icons {
-    flex-wrap: wrap;
-  }
-
-  .details-summary-row {
-    flex-wrap: wrap;
-  }
-
-  .details-summary-row strong {
-    max-width: 100%;
   }
 }
 
