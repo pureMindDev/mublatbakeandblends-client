@@ -24,7 +24,24 @@ body {
   color: var(--primary-black);
 
   line-height: 1.6;
+}
 
+/*
+ * This used to be `overflow-x: hidden` on body — but SweetAlert2 (our
+ * toast/alert library) appends its container directly to <body>, as a
+ * SIBLING of #root, not inside it. Several mobile browsers (notably
+ * Safari/WebKit on iOS) have a long-standing bug where ANY `overflow`
+ * value on an ancestor makes `position: fixed` descendants behave like
+ * `position: absolute` instead — relative to the document, not the
+ * viewport. That's exactly what was making success/error toasts render
+ * off-screen on mobile: the moment the page was scrolled at all, the
+ * "fixed" toast popped up somewhere in the document flow instead of
+ * pinned to the visible viewport.
+ * Scoping the rule to #root instead keeps our own horizontal-overflow
+ * protection (it still wraps the whole app) while leaving SweetAlert2's
+ * container — a sibling of #root — completely unaffected.
+ */
+#root {
   overflow-x: hidden;
 }
 
