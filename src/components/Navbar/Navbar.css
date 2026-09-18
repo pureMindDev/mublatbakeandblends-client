@@ -303,7 +303,12 @@
     justify-self: end;
   }
 
-  .adminbtn {
+/* Prefixed with `body` to guarantee this wins over the generic
+   [class*="btn"] flex-centering rule in global.css regardless of
+   stylesheet load order (same technique used in admin-responsive.css) —
+   otherwise the Admin link could reappear on mobile with its text
+   wrapping letter-by-letter instead of staying hidden. */
+body .adminbtn {
     display: none;
   }
 }
