@@ -206,6 +206,11 @@
 /* ========================= */
 
 .add-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   background: linear-gradient(
     135deg,
     #f5b942,
@@ -222,11 +227,18 @@
   cursor: pointer;
   margin-bottom: 25px;
 
-  transition: 0.2s;
+  transition: all 0.25s;
 }
 
 .add-cart-btn:hover {
   transform: scale(1.02);
+}
+
+.add-cart-btn.added {
+  background: #1a4a2e !important;
+  border: 1px solid #2e7a56 !important;
+  color: #4caf82 !important;
+  cursor: default;
 }
 
 /* ========================= */
@@ -502,18 +514,3 @@
 .star-filled { color: var(--gold); font-size: 15px; }
 .star-empty  { color: #444;       font-size: 15px; }
 .rating-text { font-size: 13px; color: #888; }
-
-/* ===== ADD TO CART BUTTON ===== */
-.add-cart-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.25s;
-}
-.add-cart-btn.added {
-  background: #1a4a2e !important;
-  border: 1px solid #2e7a56 !important;
-  color: #4caf82 !important;
-  cursor: default;
-}
