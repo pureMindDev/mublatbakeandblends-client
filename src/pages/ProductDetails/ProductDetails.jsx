@@ -89,7 +89,7 @@ function ProductDetails() {
     <section className="product-details">
       <div className="container" style={{ textAlign:"center", padding:"80px 0" }}>
         <h2 style={{ color:"white", marginBottom:20 }}>{error || "Product not found"}</h2>
-        <Link to="/menu" className="add-cart-btn" style={{ display:"inline-block", textDecoration:"none" }}>Back to Menu</Link>
+        <Link to="/menu" className="add-cart-btn" style={{ textDecoration:"none" }}>Back to Menu</Link>
       </div>
     </section>
   );

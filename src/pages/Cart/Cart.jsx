@@ -4,6 +4,7 @@ import "./Cart.css";
 
 import { LuTruck } from "react-icons/lu";
 import { AiOutlineShop } from "react-icons/ai";
+import { TiArrowRight } from "react-icons/ti";
 
 import { CartContext } from "../../context/CartContext";
 import CartItem from "../../components/CartItem/CartItem";
@@ -39,8 +40,8 @@ function Cart() {
             {cartItems.length === 0 ? (
               <div className="empty-cart-state">
                 <p>Your cart is empty.</p>
-                <Link to="/menu" className="checkout-btn" style={{ display: "inline-block", textAlign: "center" }}>
-                  Browse Menu
+                <Link to="/menu" className="checkout-btn">
+                  Browse Menu <TiArrowRight className="arrow" />
                 </Link>
               </div>
             ) : (

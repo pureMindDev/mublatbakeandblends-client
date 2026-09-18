@@ -71,10 +71,3 @@
   color: #ccc;
 }
 .nf-btn.secondary:hover { background: #1a1a1a; color: white; }
-
-@media (max-width: 480px) {
-  .nf-code { font-size: 84px; }
-  .nf-content h1 { font-size: 26px; }
-  .nf-actions { flex-direction: column; width: 100%; }
-  .nf-btn { width: 100%; }
-}
