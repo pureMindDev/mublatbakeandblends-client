@@ -37,6 +37,11 @@ function Menu() {
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
+  // Product ids whose image URL failed to load — shown with the same
+  // clean placeholder as products with no image at all, instead of the
+  // browser's small default "broken image" icon (which is what was
+  // making those product images look "shrunk").
+  const [brokenImages, setBrokenImages] = useState(() => new Set());
 
   /* ── Load products ── */
   const loadProducts = useCallback(async () => {
@@ -146,8 +151,16 @@ function Menu() {
                 <div key={product.id} className="menu-card">
 
                   <div className="menu-card-image">
-                    {product.image
-                      ? <img src={product.image} alt={product.name} />
+                    {product.image && !brokenImages.has(product.id)
+                      ? (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          onError={() => {
+                            setBrokenImages(prev => new Set(prev).add(product.id));
+                          }}
+                        />
+                      )
                       : <div className="menu-card-no-img" />
                     }
                   </div>

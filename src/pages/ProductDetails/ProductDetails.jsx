@@ -149,6 +149,7 @@ function ProductDetails() {
                   animate={{ opacity:1, scale:1 }}
                   exit={{ opacity:0 }}
                   transition={{ duration:0.25 }}
+                  onError={(e) => { e.currentTarget.style.opacity = 0; }}
                 />
               )}
             </AnimatePresence>
@@ -160,6 +161,7 @@ function ProductDetails() {
                   key={i} src={img} alt=""
                   className={mainImage===img?"thumb active":"thumb"}
                   onClick={() => setMainImage(img)}
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                 />
@@ -244,7 +246,7 @@ function ProductDetails() {
           <motion.div className="paired-grid" variants={stagger} initial="hidden" whileInView="visible" viewport={{ once:true }}>
             {paired.map(item => (
               <motion.div key={item.id} className="paired-card" variants={staggerItem} whileHover={{ y: -4 }}>
-                <div className="paired-image"><img src={item.images[0]||""} alt={item.name} /></div>
+                <div className="paired-image"><img src={item.images[0]||""} alt={item.name} onError={(e) => { e.currentTarget.style.display = "none"; }} /></div>
                 <div className="paired-content">
                   <h4>{item.name}</h4>
                   <p>£{item.price.toFixed(2)}</p>

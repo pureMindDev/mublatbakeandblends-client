@@ -15,17 +15,24 @@ const normalise = (p) => ({
 });
 
 function ChefSpecials() {
-  const [specials, setSpecials] = useState(
-    localProducts.slice(0, 3)   // render immediately from local data
-  );
+  // Start empty rather than pre-filling with the bundled placeholder
+  // products — seeding with local data here is what caused the old
+  // "wrong products flash for a moment on every refresh" bug, since
+  // this state briefly rendered before the real DB fetch replaced it.
+  const [specials, setSpecials] = useState([]);
+  const [loaded, setLoaded]     = useState(false);
 
   useEffect(() => {
     fetchProducts({ active: true, limit: 3 })
       .then(res => {
         const db = res.products?.map(normalise) || [];
-        if (db.length > 0) setSpecials(db.slice(0, 3));
+        setSpecials(db.length > 0 ? db.slice(0, 3) : localProducts.slice(0, 3));
       })
-      .catch(() => { /* keep local fallback */ });
+      .catch(() => {
+        // Only fall back to local/bundled data if the real fetch failed.
+        setSpecials(localProducts.slice(0, 3));
+      })
+      .finally(() => setLoaded(true));
   }, []);
 
   return (
@@ -42,12 +49,16 @@ function ChefSpecials() {
         <nav className="line"></nav>
 
         <div className="chef-grid">
-          {specials.map(item => (
+          {loaded && specials.map(item => (
             <div className="chef-card" key={item.id}>
 
               <span className="chef-tag">{item.category}</span>
 
-              <img src={item.image} alt={item.name} />
+              <img
+                src={item.image}
+                alt={item.name}
+                onError={(e) => { e.currentTarget.style.display = "none"; }}
+              />
 
               <div className="chef-content">
                 <h3>{item.name}</h3>
