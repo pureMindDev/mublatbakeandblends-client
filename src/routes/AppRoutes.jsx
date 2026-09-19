@@ -13,6 +13,8 @@ import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import ReviewsPage    from "../pages/Reviews/ReviewsPage";
 import SupportPage    from "../pages/Support/SupportPage";
 import OrderTracking  from "../pages/OrderTracking/OrderTracking";
+import PrivacyPolicy  from "../pages/Legal/PrivacyPolicy";
+import TermsOfService from "../pages/Legal/TermsOfService";
 import NotFound       from "../pages/NotFound/NotFound";
 
 /* Admin pages */
@@ -48,6 +50,8 @@ function AppRoutes() {
       <Route path="/reviews"     element={<ReviewsPage />} />
       <Route path="/support"     element={<SupportPage />} />
       <Route path="/track"       element={<OrderTracking />} />
+      <Route path="/privacy-policy"    element={<PrivacyPolicy />} />
+      <Route path="/terms-of-service"  element={<TermsOfService />} />
       <Route path="/cart"        element={<Cart />} />
       <Route path="/checkout"    element={<Checkout />} />
       <Route path="/success"     element={<Success />} />
