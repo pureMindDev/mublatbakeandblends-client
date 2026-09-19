@@ -134,19 +134,8 @@
   transform: translateY(-3px);
 }
 
-/* Bottom */
-
-.footer-bottom {
-  border-top: 1px solid #222;
-
-  text-align: center;
-
-  padding: 18px 0;
-
-  font-size: 13px;
-
-  color: #aaa;
-}
+/* Bottom bar styling now lives in the "BOTTOM LINKS" section below,
+   which also handles the container-style horizontal padding. */
 
 /* Responsive */
 
@@ -177,11 +166,33 @@
 }
 /* ===== BOTTOM LINKS ===== */
 .footer-bottom {
+  border-top: 1px solid #222;
+  padding: 18px 0;
+  font-size: 13px;
+  color: #aaa;
+}
+.footer-bottom-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  /* Explicit horizontal padding here (not relying only on the mobile-only
+     .container safety net) since this row is the outermost, full-width
+     element in the footer and sits flush against the viewport edges. */
+  padding: 0 25px;
+}
+@media (max-width: 768px) {
+  .footer-bottom-inner {
+    padding: 0 20px;
+    justify-content: center;
+    text-align: center;
+  }
+}
+@media (max-width: 480px) {
+  .footer-bottom-inner {
+    padding: 0 16px;
+  }
 }
 .footer-bottom-links {
   display: flex;
