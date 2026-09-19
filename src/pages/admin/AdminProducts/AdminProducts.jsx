@@ -15,6 +15,7 @@ import {
   activateProduct, deactivateProduct,
 } from "../../../services/productService";
 import api from "../../../services/api";
+import { compressImage } from "../../../utils/compressImage";
 import {
   LuSearch, LuPlus, LuPencil, LuTrash2,
   LuShoppingBag, LuPackage, LuLogOut, LuX,
@@ -233,8 +234,12 @@ function AdminProducts() {
 
     setUploading(true);
     try {
+      // Shrink each photo before it goes anywhere near the network —
+      // this is what makes the upload feel fast even on a slow connection.
+      const compressed = await Promise.all(toAdd.map(f => compressImage(f)));
+
       const fd = new FormData();
-      toAdd.forEach(f => fd.append("images", f));
+      compressed.forEach(f => fd.append("images", f));
       const { data } = await api.post("/upload/images", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -245,10 +250,11 @@ function AdminProducts() {
       /* Fallback: use local base64 preview if backend upload fails */
       const newImgs = await Promise.all(
         toAdd.map(async file => {
+          const compact = await compressImage(file);
           const src = await new Promise(res => {
-            const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file);
+            const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(compact);
           });
-          return { src, file, publicId: null };
+          return { src, file: compact, publicId: null };
         })
       );
       setForm(f => ({ ...f, images: [...f.images, ...newImgs] }));
