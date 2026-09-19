@@ -3,20 +3,6 @@ import "./ReviewsPage.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import api from "../../services/api";
 
-import review1 from "../../assets/images/review1.jpg";
-import review2 from "../../assets/images/review2.jpg";
-import review3 from "../../assets/images/review3.jpg";
-
-// Seed reviews shown immediately — replaced by DB data once loaded
-const SEED_REVIEWS = [
-  { _id: 1, name: "Aisha Khan",     role: "Verified Customer", image: review1, rating: 5, createdAt: "2026-06-12", text: "The pastries were absolutely delicious and arrived fresh. The packaging was beautiful and the meat pie had the perfect flaky crust. Highly recommended!" },
-  { _id: 2, name: "David Smith",    role: "Verified Customer", image: review2, rating: 5, createdAt: "2026-06-10", text: "Loved the puff puff and tiger nut drink combo. Perfect for family gatherings. Everyone at the table was impressed by the quality and taste." },
-  { _id: 3, name: "Fatima Bello",   role: "Verified Customer", image: review3, rating: 5, createdAt: "2026-06-08", text: "Beautiful presentation and amazing taste. The zobo drink was refreshing and natural. Will definitely order again for my next event." },
-  { _id: 4, name: "James Okafor",   role: "Loyal Member",      image: review1, rating: 5, createdAt: "2026-06-05", text: "Mublat has set the gold standard for Nigerian pastries in London. The fish roll is a must-try — tender filling inside a perfectly baked crust." },
-  { _id: 5, name: "Sarah Williams", role: "Verified Customer", image: review2, rating: 4, createdAt: "2026-06-01", text: "Really impressed by the quality. Delivery was on time and the food was still warm. The tigernut drink is genuinely the best I've ever had." },
-  { _id: 6, name: "Emeka Eze",      role: "Verified Customer", image: review3, rating: 5, createdAt: "2026-05-28", text: "Outstanding experience from order to delivery. The Grand Dozen box is incredible value. Already placed my second order!" },
-];
-
 const blankForm   = () => ({ name: "", rating: 0, text: "" });
 const getInitials = name => name.trim().split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
 const fmtDate     = iso => new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
@@ -59,24 +45,21 @@ function StarPicker({ value, onChange }) {
 }
 
 function ReviewsPage() {
-  const [reviews,  setReviews]  = useState(SEED_REVIEWS);
+  const [reviews,  setReviews]  = useState([]);
   const [form,     setForm]     = useState(blankForm());
   const [errors,   setErrors]   = useState({});
   const [toast,    setToast]    = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState("");
 
-  // Fix #7: load persisted reviews from backend on mount
+  // Load real, customer-submitted reviews from the backend
   useEffect(() => {
     api.get("/reviews")
       .then(({ data }) => {
-        if (data.reviews?.length > 0) {
-          setReviews(data.reviews);
-        }
-        // If API returns empty, keep seed reviews showing
+        setReviews(data.reviews || []);
       })
       .catch(() => {
-        // Backend unavailable — seed reviews remain
+        // Backend unavailable — reviews list stays empty
       });
   }, []);
 
@@ -125,7 +108,9 @@ function ReviewsPage() {
     }
   };
 
-  const avgRating = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+  const avgRating = reviews.length
+    ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+    : "0.0";
 
   return (
     <div className="rp-page">
@@ -134,13 +119,15 @@ function ReviewsPage() {
         <span className="rp-badge">Customer Reviews</span>
         <h1>The Mublat Experience</h1>
         <p>Don't just take our word for it. Join the thousands of Londoners who have discovered the gold standard of pastries.</p>
-        <div className="rp-summary">
-          <div className="rp-summary-score">
-            <strong>{avgRating}</strong>
-            <StarDisplay rating={Math.round(Number(avgRating))} />
-            <span>Based on {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+        {reviews.length > 0 && (
+          <div className="rp-summary">
+            <div className="rp-summary-score">
+              <strong>{avgRating}</strong>
+              <StarDisplay rating={Math.round(Number(avgRating))} />
+              <span>Based on {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {toast && <div className="rp-toast">✓ Your review has been posted! Thank you.</div>}
@@ -148,6 +135,11 @@ function ReviewsPage() {
       <div className="rp-container">
 
         <div id="rp-grid-anchor" style={{ scrollMarginTop: "80px" }} />
+        {reviews.length === 0 && (
+          <p style={{ textAlign: "center", color: "#888", margin: "20px 0 40px" }}>
+            No reviews yet — be the first to share your Mublat experience below!
+          </p>
+        )}
         <div className="rp-grid">
           {reviews.map(r => (
             <div key={r._id} className="rp-card">

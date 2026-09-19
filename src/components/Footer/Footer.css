@@ -195,6 +195,17 @@
 }
 .footer-bottom-links a:hover { color: var(--gold); }
 
+.footer-credit {
+  font-size: 12px;
+  color: #666;
+}
+.footer-credit a {
+  color: #999;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-credit a:hover { color: var(--gold); }
+
 /* Social links */
 .social-icons a {
   text-decoration: none;

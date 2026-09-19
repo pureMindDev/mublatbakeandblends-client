@@ -66,6 +66,12 @@ function Footer() {
           <Link to="/support">Privacy Policy</Link>
           <Link to="/support">Terms of Service</Link>
         </div>
+        <p className="footer-credit">
+          Website design by{" "}
+          <a href="https://pureminddev.com/" target="_blank" rel="noreferrer">
+            @PureMind
+          </a>
+        </p>
       </div>
 
     </footer>

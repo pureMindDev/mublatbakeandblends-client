@@ -53,6 +53,18 @@
   margin-bottom: 10px;
 }
 
+/* Fallback shown when a review has no photo */
+.review-image-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2620;
+  color: #f5a623;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: "DM Serif Display", serif;
+}
+
 /* Name */
 .review-name {
   color: #FBFAF9FF;

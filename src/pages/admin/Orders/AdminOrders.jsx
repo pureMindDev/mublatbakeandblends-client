@@ -8,12 +8,13 @@ import { useAuth } from "../../../context/AuthContext";
 import { useAdminSidebar } from "../../../hooks/useAdminSidebar";
 import {
   fetchOrders, fetchOrderStats, updateOrderStatus, createOrder, markOrderAsPaid,
+  deleteOrder,
 } from "../../../services/orderService";
 import {
   LuSearch, LuFilter, LuShoppingBag, LuLayoutDashboard,
   LuPackage, LuLogOut, LuEye, LuX, LuChevronLeft,
   LuChevronRight, LuDiamond, LuPlus, LuBanknote, LuRefreshCw,
-  LuMenu, LuCheck,
+  LuMenu, LuCheck, LuTrash2,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { TbShoppingBagCheck } from "react-icons/tb";
@@ -83,6 +84,7 @@ function AdminOrders() {
   /* ── Status update loading ── */
   const [updatingId, setUpdatingId] = useState(null);
   const [markingPaidId, setMarkingPaidId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   /* ── Load orders + stats ── */
   const loadAll = useCallback(async () => {
@@ -156,6 +158,31 @@ function AdminOrders() {
       toastError(e.response?.data?.message || "Failed to mark order as paid. Please try again.");
     } finally {
       setMarkingPaidId(null);
+    }
+  };
+
+  /* ── Delete order ──
+   * Permanently removes the order record. Confirmed with a warning since
+   * this can't be undone, unlike a status change. */
+  const handleDelete = async (order) => {
+    const ok = await confirmAction({
+      title: "Delete this order?",
+      text: `Order <strong>${order.id}</strong> for <strong>${order.name}</strong> will be permanently deleted. This can't be undone.`,
+      confirmText: "Delete Order",
+    });
+    if (!ok) return;
+
+    setDeletingId(order.id);
+    try {
+      await deleteOrder(order._id);
+      setOrders(prev => prev.filter(o => o.id !== order.id));
+      if (selected?.id === order.id) setSelected(null);
+      toastSuccess(`Order ${order.id} deleted.`);
+      fetchOrderStats().then(s => setStats(s)).catch(() => { });
+    } catch (e) {
+      toastError(e.response?.data?.message || "Failed to delete order. Please try again.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -405,9 +432,19 @@ function AdminOrders() {
                           </td>
                           <td className="ao-time" data-label="Date & Time">{order.time}</td>
                           <td data-label="Action">
-                            <button className="ao-view-btn" onClick={() => setSelected(order)}>
-                              <LuEye /> View Detail
-                            </button>
+                            <div className="ao-action-btns">
+                              <button className="ao-view-btn" onClick={() => setSelected(order)}>
+                                <LuEye /> View Detail
+                              </button>
+                              <button
+                                className="ao-delete-btn"
+                                title="Delete order"
+                                disabled={deletingId === order.id}
+                                onClick={() => handleDelete(order)}
+                              >
+                                <LuTrash2 />
+                              </button>
+                            </div>
                           </td>
                         </motion.tr>
                       ))
@@ -497,6 +534,18 @@ function AdminOrders() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="ao-modal-actions">
+                  <p className="ao-modal-label">Danger Zone</p>
+                  <button
+                    className="ao-status-update-btn ao-delete-order-btn"
+                    disabled={deletingId === selected.id}
+                    onClick={() => handleDelete(selected)}
+                  >
+                    <LuTrash2 style={{ marginRight: 4 }} />
+                    {deletingId === selected.id ? "Deleting…" : "Delete Order"}
+                  </button>
                 </div>
               </div>
             </motion.div>
