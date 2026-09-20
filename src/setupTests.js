@@ -13,3 +13,9 @@ if (typeof global.TextEncoder === 'undefined') {
   global.TextEncoder = TextEncoder;
   global.TextDecoder = TextDecoder;
 }
+
+// jsdom doesn't implement scrolling — calling window.scrollTo() (e.g. from
+// the ScrollToTop component) logs a "Not implemented" console error on
+// every test run otherwise. It's harmless (real browsers implement this
+// fine), just noisy — stub it out for tests.
+window.scrollTo = () => {};

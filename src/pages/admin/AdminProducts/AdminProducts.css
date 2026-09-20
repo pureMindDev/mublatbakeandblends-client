@@ -245,6 +245,7 @@
 }
 .ap-cat-badge.pastry { background: rgba(245,166,35,0.12); color: #f5a623; border: 1px solid #5a3c00; }
 .ap-cat-badge.drink  { background: rgba(80,160,255,0.10); color: #80b4f5; border: 1px solid #1a4080; }
+.ap-cat-badge.other  { background: rgba(160,160,160,0.12); color: #b5b5b5; border: 1px solid #3a3a3a; }
 
 /* STATUS TOGGLE */
 .ap-status-toggle {

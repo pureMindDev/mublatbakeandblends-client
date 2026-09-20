@@ -4,6 +4,7 @@ import Navbar        from "./components/Navbar/Navbar";
 import Footer        from "./components/Footer/Footer";
 import AppRoutes     from "./routes/AppRoutes";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import ScrollToTop   from "./components/ScrollToTop/ScrollToTop";
 import "./styles/global.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <ScrollToTop />
       {!isAdminPage && <Navbar />}
       <AppRoutes />
       {!isAdminPage && <Footer />}

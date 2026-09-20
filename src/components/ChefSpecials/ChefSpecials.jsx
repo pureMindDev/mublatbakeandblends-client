@@ -15,24 +15,17 @@ const normalise = (p) => ({
 });
 
 function ChefSpecials() {
-  // Start empty rather than pre-filling with the bundled placeholder
-  // products — seeding with local data here is what caused the old
-  // "wrong products flash for a moment on every refresh" bug, since
-  // this state briefly rendered before the real DB fetch replaced it.
-  const [specials, setSpecials] = useState([]);
-  const [loaded, setLoaded]     = useState(false);
+  const [specials, setSpecials] = useState(
+    localProducts.slice(0, 3)   // render immediately from local data
+  );
 
   useEffect(() => {
     fetchProducts({ active: true, limit: 3 })
       .then(res => {
         const db = res.products?.map(normalise) || [];
-        setSpecials(db.length > 0 ? db.slice(0, 3) : localProducts.slice(0, 3));
+        if (db.length > 0) setSpecials(db.slice(0, 3));
       })
-      .catch(() => {
-        // Only fall back to local/bundled data if the real fetch failed.
-        setSpecials(localProducts.slice(0, 3));
-      })
-      .finally(() => setLoaded(true));
+      .catch(() => { /* keep local fallback */ });
   }, []);
 
   return (
@@ -42,22 +35,19 @@ function ChefSpecials() {
         <h2 className="chef-title">Chef Specials</h2>
 
         <p className="chef-sub">
-          Freshly made drinks, homemade pastries & wholesome treats, crafted with natural ingredients and lots of love.
+          Explore our irresistible artisanal creations, handcrafted every
+          morning using the world's finest ingredients.
         </p>
 
         <nav className="line"></nav>
 
         <div className="chef-grid">
-          {loaded && specials.map(item => (
+          {specials.map(item => (
             <div className="chef-card" key={item.id}>
 
               <span className="chef-tag">{item.category}</span>
 
-              <img
-                src={item.image}
-                alt={item.name}
-                onError={(e) => { e.currentTarget.style.display = "none"; }}
-              />
+              <img src={item.image} alt={item.name} />
 
               <div className="chef-content">
                 <h3>{item.name}</h3>

@@ -1,7 +1,6 @@
 /* ===== HERO SECTION ===== */
 .hero {
   min-height: 100vh;
-  min-height: 100dvh; /* avoids the mobile address-bar jump/resize on scroll */
   background: url("../../assets/images/hero.jpg") center/cover no-repeat;
   position: relative;
   display: flex;
@@ -124,18 +123,6 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
 
-  .hero {
-    /* The source photo is a very wide, low landscape shot. At full-height
-       mobile viewports "cover" has to zoom in so far that only a thin
-       vertical sliver of the photo (mostly plain background, not the
-       bread) ends up visible. Shortening the section — and nudging the
-       focal point down toward the busiest cluster of loaves — shows a
-       much bigger, more appetizing portion of the same image instead. */
-    min-height: 85vh;
-    min-height: 85dvh;
-    background-position: center 62%;
-  }
-
   .hero-description {
     font-size: 15px;
   }
@@ -144,12 +131,4 @@
     flex-direction: column;
   }
 
-}
-
-@media (max-width: 420px) {
-  .hero {
-    min-height: 75vh;
-    min-height: 75dvh;
-    background-position: center 58%;
-  }
 }

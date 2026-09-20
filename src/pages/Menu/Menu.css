@@ -234,25 +234,6 @@
   transition: 0.4s;
 }
 
-/* Shown when a product has no image yet, or its image URL fails to
-   load — a deliberate placeholder instead of a blank/empty box. */
-.menu-card-no-img {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #2a2820, #1c1a15);
-}
-
-.menu-card-no-img::before {
-  content: "";
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 2px dashed #4a4636;
-}
-
 .menu-card:hover img {
   transform: scale(1.05);
 }

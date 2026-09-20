@@ -28,7 +28,7 @@ import { MdMoreVert } from "react-icons/md";
 import Loader from "../../../components/Loader/Loader";
 
 const PER_PAGE = 5;
-const CATS = ["All", "Pastries", "Drinks"];
+const CATS = ["All", "Pastries", "Drinks", "Other"];
 const MAX_IMGS = 3;
 const SORT_OPTS = [
   { value: "default", label: "Default" },
@@ -60,6 +60,10 @@ const normalise = (p) => ({
 
 const blankOption = () => ({ label: "", price: "" });
 const blankForm = () => ({ name: "", category: "Pastries", description: "", images: [], options: [blankOption()] });
+
+/* Category badge styling — "pastry" / "drink" / "other" */
+const catBadgeClass = (category) =>
+  category === "Pastries" ? "pastry" : category === "Drinks" ? "drink" : "other";
 
 /* ── Toast component removed — using SweetAlert2 toasts ── */
 
@@ -598,7 +602,7 @@ function AdminProducts() {
                             </div>
                           </td>
 
-                          <td><span className={`ap-cat-badge ${prod.category === "Pastries" ? "pastry" : "drink"}`}>{prod.category}</span></td>
+                          <td><span className={`ap-cat-badge ${catBadgeClass(prod.category)}`}>{prod.category}</span></td>
 
                           <td>
                             <div className={`ap-status-toggle ${prod.active ? "active" : ""}`} onClick={() => handleToggle(prod.id, prod.name, prod.active)} title="Click to toggle">
@@ -690,8 +694,8 @@ function AdminProducts() {
                 <div className="ap-form-row ap-form-row-inline">
                   <label>Category <span className="ap-req">*</span></label>
                   <div className="ap-cat-toggle">
-                    {["Pastries", "Drinks"].map(c => (
-                      <button key={c} className={form.category === c ? "active" : ""} onClick={() => setField("category", c)}>{c === "Pastries" ? "Pastry" : "Drink"}</button>
+                    {["Pastries", "Drinks", "Other"].map(c => (
+                      <button key={c} className={form.category === c ? "active" : ""} onClick={() => setField("category", c)}>{c === "Pastries" ? "Pastry" : c === "Drinks" ? "Drink" : "Other"}</button>
                     ))}
                   </div>
                 </div>
@@ -796,7 +800,7 @@ function AdminProducts() {
                 <div className="ap-preview-info">
                   <p className="ap-preview-desc">{previewProd.description}</p>
                   <div className="ap-preview-badges">
-                    <span className={`ap-cat-badge ${previewProd.category === "Pastries" ? "pastry" : "drink"}`}>{previewProd.category}</span>
+                    <span className={`ap-cat-badge ${catBadgeClass(previewProd.category)}`}>{previewProd.category}</span>
                     <span className={`ap-status-badge ${previewProd.active ? "active" : ""}`}>{previewProd.active ? "Active" : "Inactive"}</span>
                   </div>
                   <div className="ap-preview-options">

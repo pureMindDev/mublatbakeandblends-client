@@ -19,6 +19,15 @@ const RATINGS = {
   7:{ score:4.9,count:143 }, 8:{ score:4.7,count:67  },
 };
 
+/* Which category to suggest as a pairing for a given product's category.
+ * Pastries <-> Drinks pair with each other; "Other" (or anything else)
+ * falls back to Pastries as a sensible default complement. */
+const getPairedCategory = (category) => {
+  if (category === "Pastries") return "Drinks";
+  if (category === "Drinks") return "Pastries";
+  return "Pastries";
+};
+
 function StarDisplay({ score }) {
   return (
     <div className="rating">
@@ -72,11 +81,11 @@ function ProductDetails() {
       setSelectedOption(prod.options[0] || null);
       setQuantity(1);
       try {
-        const opp = prod.category === "Pastries" ? "Drinks" : "Pastries";
+        const opp = getPairedCategory(prod.category);
         const res = await fetchProducts({ category: opp, limit: 4, active: true });
         setPaired(res.products.map(normalise).slice(0, 4));
       } catch {
-        const opp = prod.category === "Pastries" ? "Drinks" : "Pastries";
+        const opp = getPairedCategory(prod.category);
         setPaired(localProducts.filter(p => p.category === opp && String(p.id) !== String(id)).slice(0,4).map(normalise));
       }
       setLoading(false);
@@ -149,7 +158,6 @@ function ProductDetails() {
                   animate={{ opacity:1, scale:1 }}
                   exit={{ opacity:0 }}
                   transition={{ duration:0.25 }}
-                  onError={(e) => { e.currentTarget.style.opacity = 0; }}
                 />
               )}
             </AnimatePresence>
@@ -161,7 +169,6 @@ function ProductDetails() {
                   key={i} src={img} alt=""
                   className={mainImage===img?"thumb active":"thumb"}
                   onClick={() => setMainImage(img)}
-                  onError={(e) => { e.currentTarget.style.display = "none"; }}
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                 />
@@ -240,13 +247,13 @@ function ProductDetails() {
           <div className="paired-header">
             <div>
               <h2 className="paired-title">Perfectly Paired</h2>
-              <p className="paired-sub">{product.category==="Pastries"?"Exquisite drinks to complement your selection.":"Delicious pastries to complement your drink."}</p>
+              <p className="paired-sub">{getPairedCategory(product.category)==="Drinks"?"Exquisite drinks to complement your selection.":"Delicious pastries to complement your selection."}</p>
             </div>
           </div>
           <motion.div className="paired-grid" variants={stagger} initial="hidden" whileInView="visible" viewport={{ once:true }}>
             {paired.map(item => (
               <motion.div key={item.id} className="paired-card" variants={staggerItem} whileHover={{ y: -4 }}>
-                <div className="paired-image"><img src={item.images[0]||""} alt={item.name} onError={(e) => { e.currentTarget.style.display = "none"; }} /></div>
+                <div className="paired-image"><img src={item.images[0]||""} alt={item.name} /></div>
                 <div className="paired-content">
                   <h4>{item.name}</h4>
                   <p>£{item.price.toFixed(2)}</p>

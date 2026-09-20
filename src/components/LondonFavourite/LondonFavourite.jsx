@@ -12,22 +12,17 @@ const normalise = (p) => ({
 });
 
 function LondonFavorites() {
-  // Same fix as ChefSpecials: don't seed with the bundled placeholder
-  // products, or they'll flash on screen for a moment before the real
-  // fetch replaces them on every page load/refresh.
-  const [items, setItems]   = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [items, setItems] = useState(
+    localProducts.filter(p => p.category === "Pastries").slice(0, 4)
+  );
 
   useEffect(() => {
     fetchProducts({ active: true, category: "Pastries", limit: 4 })
       .then(res => {
         const db = res.products?.map(normalise) || [];
-        setItems(db.length > 0 ? db.slice(0, 4) : localProducts.filter(p => p.category === "Pastries").slice(0, 4));
+        if (db.length > 0) setItems(db.slice(0, 4));
       })
-      .catch(() => {
-        setItems(localProducts.filter(p => p.category === "Pastries").slice(0, 4));
-      })
-      .finally(() => setLoaded(true));
+      .catch(() => { /* keep local fallback */ });
   }, []);
 
   return (
@@ -41,17 +36,13 @@ function LondonFavorites() {
         </p>
 
         <div className="london-grid">
-          {loaded && items.map((item) => (
+          {items.map((item) => (
             <Link
               to={`/product/${item.id}`}
               className="london-card"
               key={item.id}
             >
-              <img
-                src={item.image}
-                alt={item.name}
-                onError={(e) => { e.currentTarget.style.display = "none"; }}
-              />
+              <img src={item.image} alt={item.name} />
               <h4>{item.name}</h4>
               <p>£{Number(item.price).toFixed(2)}</p>
             </Link>
