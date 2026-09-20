@@ -42,8 +42,7 @@ function ChefSpecials() {
         <h2 className="chef-title">Chef Specials</h2>
 
         <p className="chef-sub">
-          Explore our irresistible artisanal creations, handcrafted every
-          morning using the world's finest ingredients.
+          Freshly made drinks, homemade pastries & wholesome treats, crafted with natural ingredients and lots of love.
         </p>
 
         <nav className="line"></nav>
