@@ -468,8 +468,30 @@
 
   .paired-grid {
 
-    grid-template-columns:
-      repeat(2, 1fr);
+    display: flex;
+    grid-template-columns: unset;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 4px;
+    padding: 0 4px 6px;
+    margin: 0 -4px;
+
+  }
+
+  .paired-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .paired-grid {
+    scrollbar-width: none;
+  }
+
+  .paired-card {
+
+    flex: 0 0 46%;
+    scroll-snap-align: start;
 
   }
 
@@ -477,9 +499,9 @@
 
 @media (max-width: 500px) {
 
-  .paired-grid {
+  .paired-card {
 
-    grid-template-columns: 1fr;
+    flex: 0 0 78%;
 
   }
 
