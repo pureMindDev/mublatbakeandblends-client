@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./LondonFavourite.css";
 import { fetchProducts } from "../../services/productService";
-import { products as localProducts } from "../../data/products";
 
 const normalise = (p) => ({
   id:    p._id || p.id,
@@ -12,17 +11,16 @@ const normalise = (p) => ({
 });
 
 function LondonFavorites() {
-  const [items, setItems] = useState(
-    localProducts.filter(p => p.category === "Pastries").slice(0, 4)
-  );
+  const [items, setItems] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchProducts({ active: true, category: "Pastries", limit: 4 })
       .then(res => {
         const db = res.products?.map(normalise) || [];
-        if (db.length > 0) setItems(db.slice(0, 4));
+        setItems(db.slice(0, 4));
       })
-      .catch(() => { /* keep local fallback */ });
+      .catch(() => setError(true));
   }, []);
 
   return (
@@ -35,19 +33,25 @@ function LondonFavorites() {
           The treats that keep the city coming back. Most loved by our community.
         </p>
 
-        <div className="london-grid">
-          {items.map((item) => (
-            <Link
-              to={`/product/${item.id}`}
-              className="london-card"
-              key={item.id}
-            >
-              <img src={item.image} alt={item.name} />
-              <h4>{item.name}</h4>
-              <p>£{Number(item.price).toFixed(2)}</p>
-            </Link>
-          ))}
-        </div>
+        {error ? (
+          <p className="london-sub" style={{ textAlign: "center" }}>
+            Couldn't load favorites right now — please try again shortly.
+          </p>
+        ) : (
+          <div className="london-grid">
+            {items.map((item) => (
+              <Link
+                to={`/product/${item.id}`}
+                className="london-card"
+                key={item.id}
+              >
+                <img src={item.image} alt={item.name} />
+                <h4>{item.name}</h4>
+                <p>£{Number(item.price).toFixed(2)}</p>
+              </Link>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

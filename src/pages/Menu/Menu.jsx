@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useCallback } from "react";
 import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { fetchProducts } from "../../services/productService";
-import { products as localProducts } from "../../data/products";
 import { toastSuccess } from "../../utils/swal";
 
 import "./Menu.css";
@@ -12,14 +11,12 @@ import { CiSearch } from "react-icons/ci";
 import { IoSwapVertical } from "react-icons/io5";
 import Loader from "../../components/Loader/Loader";
 
-/* Normalise a product regardless of whether it came from
-   the API (MongoDB) or the local products.js fallback */
+/* Normalise a product coming back from the API (MongoDB) */
 const normalise = (p) => ({
   id: p._id || p.id,
   name: p.name,
   description: p.description,
   category: p.category,
-  /* API returns images array; local file uses .image */
   image: p.images?.[0] || p.image || "",
   price: p.options?.[0]?.price ?? p.price ?? 0,
   options: p.options || [],
@@ -32,7 +29,6 @@ function Menu() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [, setUsingLocal] = useState(false);
 
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
@@ -45,11 +41,9 @@ function Menu() {
     try {
       const res = await fetchProducts({ active: true, limit: 50 });
       setProducts(res.products.map(normalise));
-      setUsingLocal(false);
     } catch {
-      /* Backend not available — fall back to local data silently */
-      setProducts(localProducts.map(normalise));
-      setUsingLocal(true);
+      setProducts([]);
+      setError("Couldn't load the menu right now — please refresh or try again shortly.");
     } finally {
       setLoading(false);
     }

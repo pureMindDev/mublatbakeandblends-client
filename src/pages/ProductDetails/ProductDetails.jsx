@@ -5,7 +5,6 @@ import { fadeUp, stagger, staggerItem, pageTransition } from "../../utils/motion
 import { toastSuccess } from "../../utils/swal";
 import { CartContext } from "../../context/CartContext";
 import { fetchProductById, fetchProducts } from "../../services/productService";
-import { products as localProducts } from "../../data/products";
 import Loader from "../../components/Loader/Loader";
 
 import { LuPlus, LuMinus, LuShoppingBag, LuCheck } from "react-icons/lu";
@@ -72,9 +71,9 @@ function ProductDetails() {
       try {
         prod = normalise(await fetchProductById(id));
       } catch {
-        const local = localProducts.find(p => String(p.id) === String(id));
-        if (!local) { setError("Product not found."); setLoading(false); return; }
-        prod = normalise(local);
+        setError("Couldn't load this product right now — please try again shortly.");
+        setLoading(false);
+        return;
       }
       setProduct(prod);
       setMainImage(prod.images[0] || "");
@@ -85,8 +84,7 @@ function ProductDetails() {
         const res = await fetchProducts({ category: opp, limit: 4, active: true });
         setPaired(res.products.map(normalise).slice(0, 4));
       } catch {
-        const opp = getPairedCategory(prod.category);
-        setPaired(localProducts.filter(p => p.category === opp && String(p.id) !== String(id)).slice(0,4).map(normalise));
+        setPaired([]);
       }
       setLoading(false);
     };

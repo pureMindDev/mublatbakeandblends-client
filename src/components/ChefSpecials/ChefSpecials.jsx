@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ChefSpecials.css";
 import { fetchProducts } from "../../services/productService";
-import { products as localProducts } from "../../data/products";
 
-// Normalise DB product to the same shape as local products
+// Normalise DB product to a consistent display shape
 const normalise = (p) => ({
   id:          p._id || p.id,
   name:        p.name,
@@ -15,17 +14,16 @@ const normalise = (p) => ({
 });
 
 function ChefSpecials() {
-  const [specials, setSpecials] = useState(
-    localProducts.slice(0, 3)   // render immediately from local data
-  );
+  const [specials, setSpecials] = useState([]);
+  const [error, setError]       = useState(false);
 
   useEffect(() => {
     fetchProducts({ active: true, limit: 3 })
       .then(res => {
         const db = res.products?.map(normalise) || [];
-        if (db.length > 0) setSpecials(db.slice(0, 3));
+        setSpecials(db.slice(0, 3));
       })
-      .catch(() => { /* keep local fallback */ });
+      .catch(() => setError(true));
   }, []);
 
   return (
@@ -41,26 +39,32 @@ function ChefSpecials() {
 
         <nav className="line"></nav>
 
-        <div className="chef-grid">
-          {specials.map(item => (
-            <div className="chef-card" key={item.id}>
+        {error ? (
+          <p className="chef-sub" style={{ textAlign: "center" }}>
+            Couldn't load Chef Specials right now — please try again shortly.
+          </p>
+        ) : (
+          <div className="chef-grid">
+            {specials.map(item => (
+              <div className="chef-card" key={item.id}>
 
-              <span className="chef-tag">{item.category}</span>
+                <span className="chef-tag">{item.category}</span>
 
-              <img src={item.image} alt={item.name} />
+                <img src={item.image} alt={item.name} />
 
-              <div className="chef-content">
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
-                <h4>£{Number(item.price).toFixed(2)}</h4>
-                <Link to={`/product/${item.id}`} className="chef-btn">
-                  View Details
-                </Link>
+                <div className="chef-content">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <h4>£{Number(item.price).toFixed(2)}</h4>
+                  <Link to={`/product/${item.id}`} className="chef-btn">
+                    View Details
+                  </Link>
+                </div>
+
               </div>
-
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="chef-view">
           <Link to="/menu" className="view-btn">View Full Menu</Link>
