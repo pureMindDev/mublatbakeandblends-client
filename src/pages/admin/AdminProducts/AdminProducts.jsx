@@ -1,5 +1,6 @@
 import "./AdminProducts.css";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { stagger, staggerItem, scaleIn, fadeIn } from "../../../utils/motion";
@@ -94,6 +95,7 @@ function AdminProducts() {
   const [editTarget, setEditTarget] = useState(null);
   const [previewProd, setPreviewProd] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
+  const [menuPos, setMenuPos] = useState(null); // { top, right } in viewport px, for the portal-rendered kebab menu
 
   /* ── Form ── */
   const [form, setForm] = useState(blankForm());
@@ -109,11 +111,19 @@ function AdminProducts() {
     else if (type === "warning") toastWarning(msg);
   }, []);
 
-  /* Close dropdowns on outside click */
+  /* Close dropdowns on outside click, scroll, or resize (the kebab menu is
+     portal-rendered at a fixed screen position, so it needs to close rather
+     than drift if the page moves under it) */
   useEffect(() => {
     const h = () => { setMenuOpen(null); setSortOpen(false); };
     document.addEventListener("click", h);
-    return () => document.removeEventListener("click", h);
+    window.addEventListener("scroll", h, true);
+    window.addEventListener("resize", h);
+    return () => {
+      document.removeEventListener("click", h);
+      window.removeEventListener("scroll", h, true);
+      window.removeEventListener("resize", h);
+    };
   }, []);
 
   /* ── Fetch products from API ── */
@@ -624,17 +634,33 @@ function AdminProducts() {
                               <button className="ap-icon-btn" title="Edit" onClick={() => openEdit(prod)}><LuPencil /></button>
                               <button className="ap-icon-btn danger" title="Delete" onClick={() => handleDeleteClick(prod)}><LuTrash2 /></button>
                               <div className="ap-kebab-wrap">
-                                <button className="ap-icon-btn" onClick={() => setMenuOpen(menuOpen === prod.id ? null : prod.id)}><MdMoreVert /></button>
-                                {menuOpen === prod.id && (
-                                  <div className="ap-kebab-menu">
+                                <button
+                                  className="ap-icon-btn"
+                                  onClick={(e) => {
+                                    if (menuOpen === prod.id) {
+                                      setMenuOpen(null);
+                                    } else {
+                                      const rect = e.currentTarget.getBoundingClientRect();
+                                      setMenuPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+                                      setMenuOpen(prod.id);
+                                    }
+                                  }}
+                                ><MdMoreVert /></button>
+                                {menuOpen === prod.id && menuPos && createPortal(
+                                  <div
+                                    className="ap-kebab-menu"
+                                    style={{ top: menuPos.top, right: menuPos.right }}
+                                    onClick={e => e.stopPropagation()}
+                                  >
                                     <button onClick={() => { setPreviewProd(prod); setModal("preview"); setMenuOpen(null); }}><LuEye /> Preview</button>
-                                    <button onClick={() => openEdit(prod)}><LuPencil /> Edit</button>
-                                    <button onClick={() => duplicate(prod)}><LuCopy /> Duplicate</button>
+                                    <button onClick={() => { openEdit(prod); setMenuOpen(null); }}><LuPencil /> Edit</button>
+                                    <button onClick={() => { duplicate(prod); setMenuOpen(null); }}><LuCopy /> Duplicate</button>
                                     <button onClick={() => { handleToggle(prod.id, prod.name, prod.active); setMenuOpen(null); }}>
                                       {prod.active ? <><LuToggleLeft /> Deactivate</> : <><LuToggleRight /> Activate</>}
                                     </button>
                                     <button className="danger" onClick={() => { setMenuOpen(null); handleDeleteClick(prod); }}><LuTrash2 /> Delete</button>
-                                  </div>
+                                  </div>,
+                                  document.body
                                 )}
                               </div>
                             </div>

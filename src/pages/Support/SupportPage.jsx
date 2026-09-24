@@ -7,14 +7,16 @@ import {
 import api from "../../services/api";
 
 const FAQS = [
-  { q: "How long does delivery take?", a: "We deliver within 30–45 minutes for most areas in London. You'll receive a text update when your order is being prepared and when it's on the way." },
-  { q: "What areas do you deliver to?", a: "We currently deliver across central and greater London. Enter your postcode at checkout to confirm your area is covered. If not, you're welcome to use our boutique pickup option." },
-  { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at mublatbakeandblends@gmail.com." },
-  { q: "Are your pastries freshly made?", a: "Yes — all pastries are baked fresh daily in small batches. We never use frozen ingredients. Our drinks are also prepared fresh with no artificial preservatives." },
-  { q: "Do you cater for events or large orders?", a: "Absolutely. We offer catering for events, corporate orders, and large gatherings. Contact us at least 48 hours in advance via email or phone and we'll prepare a custom quote." },
-  { q: "What payment methods do you accept?", a: "We accept all major credit and debit cards (Visa, Mastercard, Amex) through our secure Stripe payment system. We do not currently accept cash for online orders." },
-  { q: "My order arrived incorrect — what should I do?", a: "We sincerely apologise. Please contact us within 1 hour of receiving your order with a photo and your order number. We'll arrange a replacement or full refund immediately." },
-  { q: "Do you offer allergen information?", a: "Yes. All our products contain gluten (wheat flour) and may contain dairy, eggs, fish, and nuts. If you have a specific allergy, please contact us before ordering and we'll advise accordingly." },
+  { q: "Where is Mublat Bakes & Blends based?", a: "We are based in Newry, Northern Ireland, and we deliver our delicious Nigerian drinks and homemade treats across the UK." },
+  { q: "What products do you offer?", a: "We offer authentic Nigerian drinks, tigernut drink, zobo, PinGinger, coconut yoghurt, pastries, puff puff, chinchin, samosa, spring rolls and more." },
+  { q: "How do I place an order?", a: "Simply browse our menu, choose your favourites and place your order through our website or contact us directly." },
+  { q: "When do you dispatch orders?", a: "Orders are prepared and dispatched on Thursdays for delivery by Friday, subject to the delivery location." },
+  { q: "Do you deliver across the UK?", a: "Yes! We offer UK-wide delivery for selected products. Delivery charges depend on your location and order size." },
+  { q: "Can I mix and match my drinks?", a: "Yes, you can mix different flavours and drinks when ordering in packs, subject to availability." },
+  { q: "How should I store the drinks?", a: "Our fresh drinks should be kept refrigerated. Some products, such as our tigernut drink, may require freezing for longer storage. Always check the product label for specific storage instructions." },
+  { q: "Do your drinks contain artificial colours or preservatives?", a: "Our drinks are made with carefully selected ingredients, without artificial colours or preservatives." },
+  { q: "How long do the drinks and pastries last?", a: "Shelf life varies by product. Please check the label on your order for the recommended use-by date and storage instructions." },
+  { q: "Can I order for an event or large gathering?", a: "Absolutely! We welcome bulk and event orders. Please contact us in advance so we can discuss your requirements and availability." },
 ];
 
 const CONTACT_TOPICS = [
