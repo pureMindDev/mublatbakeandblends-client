@@ -67,7 +67,7 @@ function Menu() {
     <section className="menu-page">
       <div className="container">
 
-        <button className="menu-badge">Artisanal Menu</button>
+        <button className="menu-badge">Our Signature Menu</button>
 
         <h1 className="menu-title">
           Crafting Moments of <span> Pure Indulgence</span>

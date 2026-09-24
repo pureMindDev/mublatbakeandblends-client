@@ -27,10 +27,10 @@ function LondonFavorites() {
     <section className="london">
       <div className="container">
 
-        <h2 className="london-title">London's Favorites</h2>
+        <h2 className="london-title">mublat Favorites</h2>
 
         <p className="london-sub">
-          The treats that keep the city coming back. Most loved by our community.
+          Our most loved Nigerian drinks and homemade treats, made fresh and delivered across the UK..
         </p>
 
         {error ? (
