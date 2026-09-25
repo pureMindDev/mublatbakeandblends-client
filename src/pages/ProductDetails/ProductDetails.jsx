@@ -5,6 +5,7 @@ import { fadeUp, stagger, staggerItem, pageTransition } from "../../utils/motion
 import { toastSuccess } from "../../utils/swal";
 import { CartContext } from "../../context/CartContext";
 import { fetchProductById, fetchProducts } from "../../services/productService";
+import { products as localProducts } from "../../data/products";
 import Loader from "../../components/Loader/Loader";
 
 import { LuPlus, LuMinus, LuShoppingBag, LuCheck } from "react-icons/lu";
@@ -71,9 +72,9 @@ function ProductDetails() {
       try {
         prod = normalise(await fetchProductById(id));
       } catch {
-        setError("Couldn't load this product right now — please try again shortly.");
-        setLoading(false);
-        return;
+        const local = localProducts.find(p => String(p.id) === String(id));
+        if (!local) { setError("Product not found."); setLoading(false); return; }
+        prod = normalise(local);
       }
       setProduct(prod);
       setMainImage(prod.images[0] || "");
@@ -84,7 +85,8 @@ function ProductDetails() {
         const res = await fetchProducts({ category: opp, limit: 4, active: true });
         setPaired(res.products.map(normalise).slice(0, 4));
       } catch {
-        setPaired([]);
+        const opp = getPairedCategory(prod.category);
+        setPaired(localProducts.filter(p => p.category === opp && String(p.id) !== String(id)).slice(0,4).map(normalise));
       }
       setLoading(false);
     };
@@ -224,13 +226,6 @@ function ProductDetails() {
               : <><LuShoppingBag /> Add to Cart — £{((selectedOption?.price||product.price)*quantity).toFixed(2)}</>
             }
           </motion.button>
-
-          {product.ingredients.length > 0 && (
-            <div className="ingredients-section">
-              <h3>Craftsmanship & Ingredients</h3>
-              <ul>{product.ingredients.map((item,i) => <li key={i}>{item}</li>)}</ul>
-            </div>
-          )}
         </div>
       </div>
 
