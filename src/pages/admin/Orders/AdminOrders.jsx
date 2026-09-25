@@ -11,7 +11,7 @@ import {
   deleteOrder,
 } from "../../../services/orderService";
 import {
-  LuSearch, LuFilter, LuShoppingBag, LuLayoutDashboard,
+  LuSearch, LuFilter, LuShoppingBag, LuLayoutDashboard, LuStore,
   LuPackage, LuLogOut, LuEye, LuX, LuChevronLeft,
   LuChevronRight, LuDiamond, LuPlus, LuBanknote, LuRefreshCw,
   LuMenu, LuCheck, LuTrash2,
@@ -252,7 +252,7 @@ function AdminOrders() {
         <div>
           <p className="ao-sidebar-label">ADMIN PORTAL</p>
           <nav className="ao-sidebar-nav">
-            <button className="ao-nav-item" onClick={() => navigate("/admin/dashboard")}><LuLayoutDashboard /> Dashboard</button>
+            <button className="ao-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="ao-nav-item" onClick={() => navigate("/admin/products")}><LuPackage /> Products</button>
             <button className="ao-nav-item active"><LuShoppingBag /> Orders</button>
           </nav>

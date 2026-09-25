@@ -7,7 +7,7 @@ import { fetchOrderStats, fetchOrders } from "../../../services/orderService";
 import { fetchProducts } from "../../../services/productService";
 import {
   LuPackage, LuShoppingBag, LuLogOut, LuDiamond,
-  LuLayoutDashboard, LuTrendingUp, LuBanknote,
+  LuLayoutDashboard, LuTrendingUp, LuBanknote, LuStore,
   LuArrowRight, LuRefreshCw, LuMenu,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
@@ -86,7 +86,7 @@ function Dashboard() {
         <div>
           <p className="dash-sidebar-label">ADMIN PORTAL</p>
           <nav className="dash-sidebar-nav">
-            <button className="dash-nav-item active"><LuLayoutDashboard /> Dashboard</button>
+            <button className="dash-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="dash-nav-item" onClick={() => navigate("/admin/products")}><LuPackage /> Products</button>
             <button className="dash-nav-item" onClick={() => navigate("/admin/orders")}><LuShoppingBag /> Orders</button>
           </nav>

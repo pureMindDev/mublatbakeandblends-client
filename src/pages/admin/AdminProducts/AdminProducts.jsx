@@ -1,5 +1,5 @@
 import "./AdminProducts.css";
-import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { useState, useMemo, useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,7 +20,7 @@ import { compressImage } from "../../../utils/compressImage";
 import {
   LuSearch, LuPlus, LuPencil, LuTrash2,
   LuShoppingBag, LuPackage, LuLogOut, LuX,
-  LuLayoutDashboard, LuDiamond, LuChevronLeft, LuChevronRight,
+  LuLayoutDashboard, LuStore, LuDiamond, LuChevronLeft, LuChevronRight,
   LuImagePlus, LuImage, LuCopy, LuEye, LuArrowUpDown,
   LuCheckCheck, LuChevronDown, LuArrowLeft, LuArrowRight,
   LuToggleLeft, LuToggleRight, LuRefreshCw, LuMenu,
@@ -67,6 +67,42 @@ const catBadgeClass = (category) =>
   category === "Pastries" ? "pastry" : category === "Drinks" ? "drink" : "other";
 
 /* ── Toast component removed — using SweetAlert2 toasts ── */
+
+/**
+ * Row-action dropdown, portal-rendered into document.body so it can't be
+ * clipped by .ap-table-wrap's overflow:hidden. `pos` is the toggle button's
+ * own screen position (top/bottom/right from getBoundingClientRect at the
+ * moment it was clicked). On mount, measure the menu's real rendered height
+ * and flip it to open upward instead of downward if it would otherwise
+ * overflow past the bottom of the viewport — e.g. for rows near the bottom
+ * of the table/page.
+ */
+function KebabMenu({ pos, onClose, children }) {
+  const ref = useRef(null);
+  const [style, setStyle] = useState({ top: pos.top, right: pos.right, visibility: "hidden" });
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const margin = 8;
+    const rect = el.getBoundingClientRect();
+    let top = pos.top;
+    if (rect.bottom > window.innerHeight - margin) {
+      // Not enough room below the button — open upward instead, anchored
+      // just above it.
+      top = pos.btnTop - rect.height - 6;
+      if (top < margin) top = margin; // never let it run off the top either
+    }
+    setStyle({ top, right: pos.right, visibility: "visible" });
+  }, [pos]);
+
+  return createPortal(
+    <div ref={ref} className="ap-kebab-menu" style={style} onClick={e => e.stopPropagation()}>
+      {children}
+    </div>,
+    document.body
+  );
+}
 
 function AdminProducts() {
 
@@ -449,7 +485,7 @@ function AdminProducts() {
         <div>
           <p className="ap-sidebar-label">ADMIN PORTAL</p>
           <nav className="ap-sidebar-nav">
-            <button className="ap-nav-item" onClick={() => navigate("/admin/dashboard")}><LuLayoutDashboard /> Dashboard</button>
+            <button className="ap-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="ap-nav-item active"><LuPackage /> Products</button>
             <button className="ap-nav-item" onClick={() => navigate("/admin/orders")}><LuShoppingBag /> Orders</button>
           </nav>
@@ -641,17 +677,17 @@ function AdminProducts() {
                                       setMenuOpen(null);
                                     } else {
                                       const rect = e.currentTarget.getBoundingClientRect();
-                                      setMenuPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+                                      setMenuPos({
+                                        top: rect.bottom + 6,
+                                        right: window.innerWidth - rect.right,
+                                        btnTop: rect.top,
+                                      });
                                       setMenuOpen(prod.id);
                                     }
                                   }}
                                 ><MdMoreVert /></button>
-                                {menuOpen === prod.id && menuPos && createPortal(
-                                  <div
-                                    className="ap-kebab-menu"
-                                    style={{ top: menuPos.top, right: menuPos.right }}
-                                    onClick={e => e.stopPropagation()}
-                                  >
+                                {menuOpen === prod.id && menuPos && (
+                                  <KebabMenu pos={menuPos} onClose={() => setMenuOpen(null)}>
                                     <button onClick={() => { setPreviewProd(prod); setModal("preview"); setMenuOpen(null); }}><LuEye /> Preview</button>
                                     <button onClick={() => { openEdit(prod); setMenuOpen(null); }}><LuPencil /> Edit</button>
                                     <button onClick={() => { duplicate(prod); setMenuOpen(null); }}><LuCopy /> Duplicate</button>
@@ -659,8 +695,7 @@ function AdminProducts() {
                                       {prod.active ? <><LuToggleLeft /> Deactivate</> : <><LuToggleRight /> Activate</>}
                                     </button>
                                     <button className="danger" onClick={() => { setMenuOpen(null); handleDeleteClick(prod); }}><LuTrash2 /> Delete</button>
-                                  </div>,
-                                  document.body
+                                  </KebabMenu>
                                 )}
                               </div>
                             </div>
