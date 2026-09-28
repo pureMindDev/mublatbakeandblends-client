@@ -24,11 +24,11 @@ export const isEmail = (val) =>
     ? null
     : "Enter a valid email address.";
 
-/** UK postcode (e.g. W1J 8AJ) */
+/** UK postcode (e.g. BT35 6DR) */
 export const isUKPostcode = (val) =>
   /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i.test(val?.trim())
     ? null
-    : "Enter a valid UK postcode (e.g. W1J 8AJ).";
+    : "Enter a valid UK postcode (e.g. BT35 6DR).";
 
 /** Phone — at least 7 digits, allows +, spaces, dashes, parens */
 export const isPhone = (val) =>

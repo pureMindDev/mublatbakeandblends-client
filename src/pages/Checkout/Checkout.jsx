@@ -157,7 +157,7 @@ function Checkout() {
                     className={deliveryMethod === "pickup" ? "delivery-card active" : "delivery-card"}
                     onClick={() => { setDeliveryMethod("pickup"); setDeliveryFee(0); }}
                   >
-                    <div><p>Boutique Pickup</p><span>Ready in 15 mins</span></div>
+                    <div><p>Pickup Only</p><span>Ready in 15 mins</span></div>
                     <strong>FREE</strong>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ function Checkout() {
                   <label>HOUSE NUMBER & STREET</label>
                   <input
                     name="street"
-                    placeholder="12–14 Mayfair Square"
+                    placeholder="33 College Garden"
                     value={form.street}
                     onChange={handleChange}
                   />
@@ -183,7 +183,7 @@ function Checkout() {
                     </div>
                     <div>
                       <label>POSTCODE</label>
-                      <input name="postcode" placeholder="W1J 8AJ" value={form.postcode} onChange={handleChange} />
+                      <input name="postcode" placeholder="BT35 6DR" value={form.postcode} onChange={handleChange} />
                       {errors.postcode && <small className="field-error">{errors.postcode}</small>}
                     </div>
                   </div>
@@ -193,7 +193,7 @@ function Checkout() {
               {deliveryMethod === "pickup" && (
                 <div className="pickup-info">
                   <h4>Pickup Location</h4>
-                  <p>Mublat Bake & Blends<br />12 Mayfair Square<br />London W1J 8AJ</p>
+                  <p>Mublat Bake & Blends<br />33 College Garden<br />BT35 6DR</p>
                 </div>
               )}
 

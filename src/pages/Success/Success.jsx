@@ -131,8 +131,8 @@ function PaymentSuccess() {
           <nav className="info-icon"><IoLocationOutline className="in-icon" /></nav>
           <nav className="info-box">
             <span>{displayMethod === "Pickup" ? "PICKUP FROM" : "DELIVERY TO"}</span>
-            <strong>{displayMethod === "Pickup" ? "12 Mayfair Square" : "Your Address"}</strong>
-            <small>{displayMethod === "Pickup" ? "London W1J 8AJ" : (order.address || "Provided at Checkout")}</small>
+            <strong>{displayMethod === "Pickup" ? "33 College Garden" : "Your Address"}</strong>
+            <small>{displayMethod === "Pickup" ? "BT35 6DR" : (order.address || "Provided at Checkout")}</small>
           </nav>
         </div>
 
