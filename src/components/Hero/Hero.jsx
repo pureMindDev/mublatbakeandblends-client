@@ -85,7 +85,8 @@ function Hero() {
 
           {/* Description */}
           <p className="hero-description">
-            From refreshing homemade drinks to delicious Nigerian pastries, we bring you comforting, authentic flavours made with carefully selected ingredients.
+            Where gold-standard ingredients meet artisanal craftsmanship.
+            Delivered fresh to your doorstep.
           </p>
 
           {/* Buttons */}
