@@ -91,14 +91,14 @@ function Hero() {
 
           {/* Buttons */}
           <div className="hero-buttons">
-            <Link to="/menu" className="primary-btn">
+            <Link to="/menu" className="hero-primary-btn">
               Order Now
               <span className="btn-arrow">
                 <ArrowIcon />
               </span>
             </Link>
 
-            <Link to="/menu" className="secondary-btn">
+            <Link to="/menu" className="hero-secondary-btn">
               Explore Menu
             </Link>
           </div>
