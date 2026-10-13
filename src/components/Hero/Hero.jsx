@@ -69,7 +69,8 @@ const ArrowIcon = () => (
 function Hero() {
   return (
     <section className="hero">
-      <div className="hero-overlay">
+      {/* LEFT: text on its own solid panel — no photo behind it */}
+      <div className="hero-text-panel">
         <div className="hero-content">
           {/* Badge */}
           <span className="hero-badge">The Art of Fine Pastry</span>
@@ -136,6 +137,13 @@ function Hero() {
           </ul>
         </div>
       </div>
+
+      {/* RIGHT: the product photo on its own panel */}
+      <div
+        className="hero-image-panel"
+        role="img"
+        aria-label="Mublat pastries and bottled drinks, styled on a wooden table"
+      />
     </section>
   );
 }

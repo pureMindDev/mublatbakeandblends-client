@@ -1,6 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Poppins:wght@400;500;600&display=swap");
 
 /* ===== HERO SECTION ===== */
+/* Two clean panels side by side: text on its own solid background on the
+   left, the product photo filling its own panel on the right. The photo
+   does NOT run behind the text panel — no gradient blend between them,
+   per client feedback (text and product should read as two distinct
+   sides, not text overlaid on top of the photo). */
 .hero {
   --hero-bg: #1a0d06;
   --hero-gold: #e3b574;
@@ -12,43 +17,36 @@
   position: relative;
   min-height: 100vh; /* navbar floats over the hero on the home page */
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   background-color: var(--hero-bg);
-  background-image: url("/images/hero.jpg");
-  background-size: cover;
-  background-position: right center;
-  background-repeat: no-repeat;
 
   font-family: "Poppins", system-ui, sans-serif;
 }
 
-/* ===== OVERLAY: dark on the left for text, clear on the right for product ===== */
-.hero-overlay {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
+/* ===== LEFT PANEL: solid background, holds all the text ===== */
+.hero-text-panel {
+  flex: 1 1 50%;
+  min-width: 0;
   display: flex;
   align-items: center;
   box-sizing: border-box;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(22, 10, 4, 0.96) 0%,
-      rgba(22, 10, 4, 0.82) 32%,
-      rgba(22, 10, 4, 0.35) 55%,
-      rgba(22, 10, 4, 0) 75%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(22, 10, 4, 0.35) 0%,
-      rgba(22, 10, 4, 0) 25%,
-      rgba(22, 10, 4, 0) 75%,
-      rgba(22, 10, 4, 0.5) 100%
-    );
+  background: var(--hero-bg);
+  padding: clamp(150px, 17vh, 190px) clamp(24px, 5vw, 80px) 48px
+    clamp(24px, 6.5vw, 112px);
+}
 
-  padding: clamp(150px, 17vh, 190px) clamp(24px, 6.5vw, 112px) 48px;
+/* ===== RIGHT PANEL: the product photo, nothing else ===== */
+.hero-image-panel {
+  flex: 1 1 50%;
+  min-height: 100vh;
+
+  background-color: var(--hero-bg);
+  background-image: url("/images/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-content {
@@ -263,34 +261,34 @@
   height: 100%;
 }
 
-/* ===== TABLET ===== */
+/* ===== TABLET: keep the two-panel split, just tighten the text side ===== */
 @media (max-width: 1024px) {
-  .hero-overlay {
-    background:
-      linear-gradient(
-        90deg,
-        rgba(22, 10, 4, 0.96) 0%,
-        rgba(22, 10, 4, 0.85) 45%,
-        rgba(22, 10, 4, 0.3) 85%
-      );
+  .hero-text-panel {
+    padding-left: clamp(24px, 5vw, 56px);
+    padding-right: clamp(24px, 4vw, 56px);
   }
 }
 
-/* ===== MOBILE ===== */
+/* ===== MOBILE: stack instead of split — text panel on top (solid
+   background, no photo), product photo panel below it. Still two
+   distinct areas, just arranged vertically instead of side by side. ===== */
 @media (max-width: 768px) {
   .hero {
-    background-position: 70% center;
+    flex-direction: column;
     min-height: auto;
   }
 
-  .hero-overlay {
+  .hero-text-panel {
     min-height: auto;
-    padding: 120px 24px 48px;
-    background: linear-gradient(
-      180deg,
-      rgba(22, 10, 4, 0.82) 0%,
-      rgba(22, 10, 4, 0.88) 100%
-    );
+    padding: 120px 24px 40px;
+  }
+
+  .hero-image-panel {
+    /* Dedicated portrait crop (products lower in frame) instead of
+       cropping the wide desktop photo sideways. */
+    background-image: url("/images/hero-mobile.jpg");
+    background-position: center top;
+    min-height: 420px;
   }
 
   .hero-badge {
