@@ -43,7 +43,7 @@
   min-height: 100vh;
 
   background-color: var(--hero-bg);
-  background-image: url("/images/hero.jpg");
+  background-image: url("../../assets/images/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -286,7 +286,7 @@
   .hero-image-panel {
     /* Dedicated portrait crop (products lower in frame) instead of
        cropping the wide desktop photo sideways. */
-    background-image: url("/images/hero-mobile.jpg");
+    background-image: url("../../assets/images/hero-mobile.jpg");
     background-position: center top;
     min-height: 420px;
   }
