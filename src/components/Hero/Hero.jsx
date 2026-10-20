@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import heroWide from "../../assets/images/hero.jpg";
+import heroPortrait from "../../assets/images/hero-mobile.jpg";
 import "./Hero.css";
 
 /* Small inline icons so no extra dependency is needed */
@@ -69,8 +71,17 @@ const ArrowIcon = () => (
 function Hero() {
   return (
     <section className="hero">
-      {/* LEFT: text on its own solid panel — no photo behind it */}
-      <div className="hero-text-panel">
+      {/* Background scene: one photo across the whole section. Wide shot on
+          desktop/tablet, portrait shot on phones. Purely decorative. */}
+      <picture>
+        <source media="(max-width: 768px)" srcSet={heroPortrait} />
+        <img className="hero-photo" src={heroWide} alt="" aria-hidden="true" />
+      </picture>
+
+      {/* Dark gradient over the whole section so the text stays readable */}
+      <div className="hero-overlay" aria-hidden="true" />
+
+      <div className="hero-inner">
         <div className="hero-content">
           {/* Badge */}
           <span className="hero-badge">The Art of Fine Pastry</span>
@@ -137,13 +148,6 @@ function Hero() {
           </ul>
         </div>
       </div>
-
-      {/* RIGHT: the product photo on its own panel */}
-      <div
-        className="hero-image-panel"
-        role="img"
-        aria-label="Mublat pastries and bottled drinks, styled on a wooden table"
-      />
     </section>
   );
 }
