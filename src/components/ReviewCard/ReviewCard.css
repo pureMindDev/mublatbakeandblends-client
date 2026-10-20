@@ -1,13 +1,13 @@
 .review-card {
   background: #1D1B16FF;
-  padding: 45px 35px;
+  padding: 36px 30px 32px;
   border-radius: 12px;
   border: 0.5px solid rgb(39, 38, 37);
   text-align: center;
   transition: 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start; /* was space-between, which spread the stars, quote, avatar and name apart */
   min-height: 300px;
   box-shadow: 0px 2px 4px #00000014, 0px 0px 0px #171a1f00;
 }
@@ -34,11 +34,22 @@
   font-weight: 300;
   line-height: 29px;
   margin-bottom: 25px;
+
+  /* The quote takes the free space, and very long reviews are trimmed so one
+     long review can't stretch every card. Full text is on the Reviews page. */
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  overflow: hidden;
 }
 
-/* Profile section */
+/* Profile section: avatar + name + role as one group pinned to the bottom */
 .review-profile {
   margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,4 +89,11 @@
 .review-role {
   color: #9ca3af;
   font-size: 13px;
+}
+/* Narrow phone cards wrap to more lines, so allow more before trimming */
+@media (max-width: 600px) {
+  .review-text {
+    -webkit-line-clamp: 10;
+    line-clamp: 10;
+  }
 }

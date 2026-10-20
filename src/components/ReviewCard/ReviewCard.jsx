@@ -27,31 +27,31 @@ function ReviewCard({ review }) {
         "{review.text}"
       </p>
 
-      {/* Profile Image */}
+      {/* Profile: avatar, name and role stay together at the bottom */}
 
-      {review.image ? (
-        <img
-          src={review.image}
-          alt={review.name}
-          className="review-image"
-        />
-      ) : (
-        <div className="review-image review-image-initials">
-          {getInitials(review.name)}
-        </div>
-      )}
+      <div className="review-profile">
 
-      {/* Name */}
+        {review.image ? (
+          <img
+            src={review.image}
+            alt={review.name}
+            className="review-image"
+          />
+        ) : (
+          <div className="review-image review-image-initials">
+            {getInitials(review.name)}
+          </div>
+        )}
 
-      <h4 className="review-name">
-        {review.name}
-      </h4>
+        <h4 className="review-name">
+          {review.name}
+        </h4>
 
-      {/* Role */}
+        <p className="review-role">
+          {review.role}
+        </p>
 
-      <p className="review-role">
-        {review.role}
-      </p>
+      </div>
 
     </div>
 

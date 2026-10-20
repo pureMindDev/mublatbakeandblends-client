@@ -69,13 +69,15 @@
   padding: 60px 24px;
 }
 
-/* GRID */
+/* GRID — masonry columns: each card is only as tall as its own review, so a
+   long review no longer stretches its neighbours into empty boxes */
 .rp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  column-count: 3;
+  column-gap: 20px;
   margin-bottom: 70px;
 }
+@media (max-width: 1000px) { .rp-grid { column-count: 2; } }
+@media (max-width: 640px)  { .rp-grid { column-count: 1; } }
 
 /* CARD */
 .rp-card {
@@ -87,6 +89,8 @@
   flex-direction: column;
   gap: 14px;
   transition: border-color 0.2s;
+  break-inside: avoid;
+  margin-bottom: 20px;
 }
 .rp-card:hover { border-color: #3a3000; }
 
@@ -198,7 +202,6 @@
 
 @media (max-width: 600px) {
   .rp-hero h1  { font-size: 32px; }
-  .rp-grid     { grid-template-columns: 1fr; }
 }
 
 /* ── New review highlight ── */
