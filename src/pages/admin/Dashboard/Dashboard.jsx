@@ -8,7 +8,7 @@ import { fetchProducts } from "../../../services/productService";
 import {
   LuPackage, LuShoppingBag, LuLogOut, LuDiamond,
   LuLayoutDashboard, LuTrendingUp, LuBanknote, LuStore,
-  LuArrowRight, LuRefreshCw, LuMenu,
+  LuArrowRight, LuRefreshCw, LuMenu, LuVideo,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import Loader from "../../../components/Loader/Loader";
@@ -89,6 +89,7 @@ function Dashboard() {
             <button className="dash-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="dash-nav-item" onClick={() => navigate("/admin/products")}><LuPackage /> Products</button>
             <button className="dash-nav-item" onClick={() => navigate("/admin/orders")}><LuShoppingBag /> Orders</button>
+            <button className="dash-nav-item" onClick={() => navigate("/admin/video-reviews")}><LuVideo /> Video Reviews</button>
           </nav>
         </div>
         <button className="dash-logout" onClick={logout}><LuLogOut /> Logout</button>

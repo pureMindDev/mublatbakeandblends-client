@@ -685,3 +685,10 @@ input:focus {
   margin-top: 10px;
   line-height: 1.5;
 }
+
+/* Delivery information */
+.delivery-basket-note { margin: 6px 0 0; font-size: 12px; opacity: 0.75; }
+.delivery-policy-toggle { margin: 0 0 14px; font-size: 13px; }
+.delivery-policy-toggle summary { cursor: pointer; color: var(--gold); font-weight: 600; padding: 4px 0; }
+.delivery-policy-toggle[open] summary { margin-bottom: 8px; }
+.delivery-policy-toggle .dp { font-size: 12.5px; }

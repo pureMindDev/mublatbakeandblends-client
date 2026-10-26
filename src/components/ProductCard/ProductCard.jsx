@@ -18,6 +18,8 @@ function ProductCard({ product }) {
       image:      product.image || "",
       optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
       price:      product.options?.[0]?.price  || product.price || 0,
+      category:   product.category,
+      units:      product.options?.[0]?.units || 1,
       quantity:   1,
     });
 

@@ -8,6 +8,9 @@ import { TiArrowRight } from "react-icons/ti";
 
 import { CartContext } from "../../context/CartContext";
 import CartItem from "../../components/CartItem/CartItem";
+import DeliveryPolicy from "../../components/DeliveryPolicy/DeliveryPolicy";
+import useOrderQuote from "../../hooks/useOrderQuote";
+import { tierLabel } from "../../utils/delivery";
 
 function Cart() {
 
@@ -15,11 +18,12 @@ function Cart() {
 
   const [method, setMethod] = useState("Delivery");
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity, 0
-  );
-  const deliveryFee = method === "Delivery" ? 3.50 : 0;
-  const total = subtotal + deliveryFee;
+  // Subtotal, delivery charge and total all come from one place: the shared
+  // delivery rules, confirmed by the server (the same numbers the order saves).
+  const {
+    subtotal, deliveryFee, deliveryTier, totalAmount: total,
+    pastryUnits, drinkUnits, error: quoteError,
+  } = useOrderQuote(cartItems, method);
 
   return (
     <section className="cart-page">
@@ -97,10 +101,23 @@ function Cart() {
           <div className="summary-row delivery-row">
             <span>
               Delivery Fee
-              <span className="delivery-tag">Standard</span>
+              {tierLabel(deliveryTier) && <span className="delivery-tag">{tierLabel(deliveryTier)}</span>}
             </span>
             <span>{deliveryFee === 0 ? "FREE" : `£${deliveryFee.toFixed(2)}`}</span>
           </div>
+
+          {method === "Delivery" && cartItems.length > 0 && (
+            <p className="delivery-basket-note">
+              Your basket: {pastryUnits} pastry piece{pastryUnits === 1 ? "" : "s"} · {drinkUnits} drink bottle{drinkUnits === 1 ? "" : "s"}
+            </p>
+          )}
+
+          {quoteError && <p className="cart-quote-error" role="alert">{quoteError}</p>}
+
+          <details className="delivery-policy-toggle">
+            <summary>Delivery charges</summary>
+            <DeliveryPolicy heading={false} />
+          </details>
 
           <div className="summary-total">
             <span>Total</span>
@@ -110,7 +127,7 @@ function Cart() {
             </div>
           </div>
 
-          <Link to="/checkout" className="checkout-btn">
+          <Link to="/checkout" state={{ method }} className="checkout-btn">
             Proceed to Checkout <span>→</span>
           </Link>
 

@@ -23,7 +23,7 @@ import {
   LuLayoutDashboard, LuStore, LuDiamond, LuChevronLeft, LuChevronRight,
   LuImagePlus, LuImage, LuCopy, LuEye, LuArrowUpDown,
   LuCheckCheck, LuChevronDown, LuArrowLeft, LuArrowRight,
-  LuToggleLeft, LuToggleRight, LuRefreshCw, LuMenu,
+  LuToggleLeft, LuToggleRight, LuRefreshCw, LuMenu, LuVideo,
 } from "react-icons/lu";
 import { MdMoreVert } from "react-icons/md";
 import Loader from "../../../components/Loader/Loader";
@@ -53,13 +53,13 @@ const normalise = (p) => ({
   description: p.description,
   category: p.category,
   images: (p.images || []).map(src => ({ src, file: null, publicId: null })),
-  options: (p.options || []).map(o => ({ label: o.label || o.name, price: o.price })),
+  options: (p.options || []).map(o => ({ label: o.label || o.name, price: o.price, units: o.units || 1 })),
   active: p.active ?? true,
   createdAt: p.createdAt || now(),
   updatedAt: p.updatedAt || now(),
 });
 
-const blankOption = () => ({ label: "", price: "" });
+const blankOption = () => ({ label: "", price: "", units: "1" });
 const blankForm = () => ({ name: "", category: "Pastries", description: "", images: [], options: [blankOption()] });
 
 /* Category badge styling — "pastry" / "drink" / "other" */
@@ -338,6 +338,7 @@ function AdminProducts() {
     for (const o of form.options) {
       if (!o.label.trim()) return "All option labels are required.";
       if (o.price === "" || isNaN(Number(o.price)) || Number(o.price) < 0) return "All option prices must be valid non-negative numbers.";
+      if (!Number.isInteger(Number(o.units)) || Number(o.units) < 1) return "Units must be a whole number of 1 or more (pieces or bottles per option).";
     }
     return "";
   };
@@ -349,7 +350,7 @@ function AdminProducts() {
     setForm({
       name: p.name, category: p.category, description: p.description,
       images: p.images.map(img => ({ src: img.src, file: null, publicId: img.publicId || null })),
-      options: p.options.map(o => ({ label: o.label, price: String(o.price) }))
+      options: p.options.map(o => ({ label: o.label, price: String(o.price), units: String(o.units || 1) }))
     });
     setFormErr(""); setIsDirty(false); setMenuOpen(null); setModal("edit");
   };
@@ -371,7 +372,7 @@ function AdminProducts() {
         description: form.description.trim(),
         category: form.category,
         images: form.images.map(i => i.src),
-        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price) })),
+        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price), units: Number(o.units) })),
         active: true,
       };
       const created = normalise(await createProduct(payload));
@@ -395,7 +396,7 @@ function AdminProducts() {
         description: form.description.trim(),
         category: form.category,
         images: form.images.map(i => i.src),
-        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price) })),
+        options: form.options.map(o => ({ label: o.label.trim(), price: Number(o.price), units: Number(o.units) })),
       };
       const updated = normalise(await updateProduct(editTarget.id, payload));
       setProducts(prev => prev.map(p => p.id === editTarget.id ? updated : p));
@@ -418,7 +419,7 @@ function AdminProducts() {
         category: p.category,
         images: p.images.map(i => i.src),
         ingredients: p.ingredients || [],
-        options: p.options.map(o => ({ label: o.label, price: o.price })),
+        options: p.options.map(o => ({ label: o.label, price: o.price, units: o.units || 1 })),
         active: false,
       };
       const created = normalise(await createProduct(payload));
@@ -488,6 +489,7 @@ function AdminProducts() {
             <button className="ap-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="ap-nav-item active"><LuPackage /> Products</button>
             <button className="ap-nav-item" onClick={() => navigate("/admin/orders")}><LuShoppingBag /> Orders</button>
+            <button className="ap-nav-item" onClick={() => navigate("/admin/video-reviews")}><LuVideo /> Video Reviews</button>
           </nav>
         </div>
         <button className="ap-logout" onClick={logout}><LuLogOut /> Logout</button>
@@ -801,6 +803,7 @@ function AdminProducts() {
                 <div className="ap-form-row">
                   <div className="ap-options-header">
                     <label className="ap-section-label">PRICE OPTIONS <span className="ap-req">*</span></label>
+                    <span className="ap-optional" style={{ flex: 1, marginLeft: 8 }}>Units = pastry pieces / drink bottles in one (used for delivery charges)</span>
                     <button className="ap-add-option" onClick={addOption} disabled={form.options.length >= 5}><LuPlus /> Add Option</button>
                   </div>
                   {form.options.map((opt, i) => (
@@ -809,6 +812,10 @@ function AdminProducts() {
                       <div className="ap-option-price">
                         <span>£</span>
                         <input type="number" min="0" step="0.01" placeholder="0.00" value={opt.price} onChange={e => setOption(i, "price", e.target.value)} />
+                      </div>
+                      <div className="ap-option-price ap-option-units" title="Pieces or bottles in one of this option, e.g. a box of 12 = 12">
+                        <span>×</span>
+                        <input type="number" min="1" step="1" placeholder="1" aria-label="Units per option" value={opt.units} onChange={e => setOption(i, "units", e.target.value)} />
                       </div>
                       <button className="ap-remove-option" onClick={() => removeOption(i)} disabled={form.options.length === 1} title="Remove option"><LuX /></button>
                     </div>

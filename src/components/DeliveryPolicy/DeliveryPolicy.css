@@ -1,0 +1,19 @@
+.dp { color: #d8d2c4; font-size: 14px; line-height: 1.6; }
+.dp-title { color: var(--gold); font-size: 18px; margin: 0 0 8px; }
+.dp-intro { margin: 0 0 16px; }
+.dp-tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.dp-tier {
+  border: 1px solid rgba(249, 177, 31, 0.35);
+  border-radius: 12px; padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.dp-tier h4 { color: var(--gold); margin: 0 0 6px; font-size: 15px; }
+.dp-tier p { margin: 0 0 4px; }
+.dp-tier ul { margin: 0; padding-left: 18px; }
+.dp-tier li { margin-bottom: 4px; }
+.dp-note { margin: 0 0 6px; }
+.dp-thanks { margin: 0; color: var(--gold); font-style: italic; }
+@media (max-width: 640px) { .dp-tiers { grid-template-columns: 1fr; } }
+
+/* Light variant used on the (light) support page */
+.sp-page .dp { color: inherit; }

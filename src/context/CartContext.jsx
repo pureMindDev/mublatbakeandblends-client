@@ -8,7 +8,7 @@ export const CartContext = createContext();
 
 // ─── localStorage persistence (slim — no base64 images) ─────────────────────
 
-const FIELDS_TO_SAVE = ["id", "name", "optionName", "price", "quantity", "image"];
+const FIELDS_TO_SAVE = ["id", "name", "optionName", "price", "quantity", "image", "category", "units"];
 
 const slimItem = (item) => {
   const slim = {};

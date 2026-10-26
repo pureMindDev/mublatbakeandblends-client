@@ -410,3 +410,28 @@
   color: #888;
   font-size: 16px;
 }
+
+/* Delivery information inside the order summary */
+.delivery-basket-note {
+  margin: -6px 0 10px;
+  font-size: 12px;
+  color: #E4E2DDB3;
+}
+.cart-quote-error {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(220, 70, 70, 0.12);
+  color: #ff9b9b;
+  font-size: 13px;
+}
+.delivery-policy-toggle { margin: 10px 0 4px; font-size: 13px; }
+.delivery-policy-toggle summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: 600;
+  padding: 4px 0;
+}
+.delivery-policy-toggle[open] summary { margin-bottom: 8px; }
+.delivery-policy-toggle .dp { font-size: 12.5px; }
+.delivery-policy-toggle .dp-tiers { grid-template-columns: 1fr; }

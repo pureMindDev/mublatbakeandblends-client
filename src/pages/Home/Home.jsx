@@ -4,6 +4,7 @@ import Hero from "../../components/Hero/Hero";
 import ChefSpecials from "../../components/ChefSpecials/ChefSpecials";
 import LondonFavourite from "../../components/LondonFavourite/LondonFavourite";
 import Reviews from "../../components/Reviews/Reviews";
+import VideoReviews from "../../components/VideoReviews/VideoReviews";
 
 function Home() {
 
@@ -16,6 +17,8 @@ function Home() {
       <ChefSpecials />
 
       <LondonFavourite />
+
+      <VideoReviews variant="home" />
 
       <Reviews />
 

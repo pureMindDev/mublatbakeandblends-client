@@ -36,7 +36,7 @@ function Footer() {
         <div className="footer-column">
           <h3>Support</h3>
           <Link to="/support">Help Centre</Link>
-          <Link to="/support">Delivery Info</Link>
+          <Link to="/support#delivery">Delivery Info</Link>
           <Link to="/support">Contact Us</Link>
           <Link to="/support">FAQs</Link>
         </div>

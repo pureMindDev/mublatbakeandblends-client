@@ -37,7 +37,8 @@ function TermsOfService() {
 
         <h2>Delivery</h2>
         <p>
-          We aim to deliver within the estimated timeframe shown at checkout.
+          Delivery charges depend on the total quantity of products ordered and
+          are confirmed at checkout (see our Delivery Info on the Support page).
           Delivery times are estimates, not guarantees, and can occasionally
           be affected by weather, traffic or high demand. Please make sure
           your delivery address and contact details are accurate — we're not

@@ -1,0 +1,42 @@
+.avr-add, .avr-card { background: #0d0d0d; border: 1px solid #1f1f1f; border-radius: 14px; }
+.avr-add { padding: 20px; margin: 0 0 24px; display: grid; gap: 14px; max-width: 760px; }
+.avr-tabs { display: flex; gap: 8px; }
+.avr-tabs button {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #151515; color: #aaa; border: 1px solid #262626;
+  padding: 8px 14px; border-radius: 10px; cursor: pointer; font: inherit;
+}
+.avr-tabs button.active { color: #fff; border-color: var(--gold); background: #2b2310; }
+.avr-field { display: grid; gap: 6px; font-size: 13px; color: #ccc; }
+.avr-field small { color: #777; }
+.avr-field input {
+  background: #151515; border: 1px solid #262626; color: #fff;
+  padding: 10px 12px; border-radius: 10px; font: inherit; outline: none;
+}
+.avr-field input:focus { border-color: var(--gold); }
+.avr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.avr-primary, .avr-secondary, .avr-danger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer; font: inherit; font-weight: 600;
+}
+.avr-primary { background: var(--gold); color: #000; }
+.avr-secondary { background: #1b1b1b; color: #ddd; border: 1px solid #333; }
+.avr-danger { background: #2a1111; color: #ff8d8d; padding: 10px 12px; }
+.avr-primary:disabled, .avr-secondary:disabled, .avr-danger:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.avr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+.avr-card { overflow: hidden; }
+.avr-card.approved { border-color: rgba(249, 177, 31, 0.5); }
+.avr-card video { width: 100%; aspect-ratio: 9 / 16; background: #000; object-fit: contain; display: block; }
+.avr-card-body { padding: 12px; display: grid; gap: 10px; }
+.avr-badge { font-size: 12px; font-weight: 600; }
+.avr-badge.on { color: #6fd08c; }
+.avr-badge.off { color: #f5a623; }
+.avr-name {
+  background: #151515; border: 1px solid #262626; color: #fff;
+  padding: 8px 10px; border-radius: 8px; font: inherit; font-size: 13px; outline: none;
+}
+.avr-actions { display: flex; gap: 8px; }
+.avr-actions .avr-primary, .avr-actions .avr-secondary { flex: 1; }
+.avr-empty { color: #888; }
+@media (max-width: 600px) { .avr-row { grid-template-columns: 1fr; } }

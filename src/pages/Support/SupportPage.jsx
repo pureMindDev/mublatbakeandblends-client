@@ -5,10 +5,11 @@ import {
   LuChevronDown, LuChevronUp, LuSend, LuCheck,
 } from "react-icons/lu";
 import api from "../../services/api";
+import DeliveryPolicy from "../../components/DeliveryPolicy/DeliveryPolicy";
 
 const FAQS = [
-  { q: "How long does delivery take?", a: "We deliver within 30–45 minutes for most areas in London. You'll receive a text update when your order is being prepared and when it's on the way." },
-  { q: "What areas do you deliver to?", a: "We currently deliver across central and greater London. Enter your postcode at checkout to confirm your area is covered. If not, you're welcome to use our pickup only option." },
+  { q: "How much does delivery cost?", a: "We deliver across the UK. Standard Delivery is £7.99 for orders of up to 15 pieces of pastries and up to 6 bottles of drinks. Large Order Delivery is £9.99 for orders of more than 15 pieces of pastries or more than 6 bottles of drinks. Delivery charges depend on the total quantity of products ordered, and we will confirm the applicable delivery charge at checkout." },
+  { q: "What areas do you deliver to?", a: "We deliver our pastries and drinks across the UK. If you'd rather collect your order, you're welcome to use our pickup option." },
   { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at mublatbakeandblends@gmail.com." },
   { q: "Are your pastries freshly made?", a: "Yes — all pastries are baked fresh daily in small batches. We never use frozen ingredients. Our drinks are also prepared fresh with no artificial preservatives." },
   { q: "Do you cater for events or large orders?", a: "Absolutely. We offer catering for events, corporate orders, and large gatherings. Contact us at least 48 hours in advance via email or phone and we'll prepare a custom quote." },
@@ -125,6 +126,11 @@ function SupportPage() {
             <p>When we're available</p>
             <span>Mon–Sun · 8:00 AM – 9:00 PM</span>
           </div>
+        </div>
+
+        <div id="delivery" className="sp-delivery" style={{ scrollMarginTop: 90 }}>
+          <h2>Delivery Info</h2>
+          <DeliveryPolicy />
         </div>
 
         <div className="sp-main-grid">

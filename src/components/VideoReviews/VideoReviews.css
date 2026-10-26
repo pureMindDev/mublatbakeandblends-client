@@ -1,0 +1,72 @@
+.vr { padding: 80px 0 40px; background: var(--dark); color: var(--cream); }
+.vr-page { padding: 48px 0 8px; }
+.vr-inner { max-width: var(--container-width, 1200px); margin: 0 auto; padding: 0 20px; text-align: center; }
+
+.vr-title {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--gold);
+}
+.vr-sub { color: #E4E2DD; font-family: "Lato", sans-serif; font-weight: 300; font-size: 18px; max-width: 520px; margin: 0 auto 18px; line-height: 1.6; }
+.vr-line { width: 64px; height: 2px; background: var(--gold); margin: 0 auto 36px; border: 0; }
+
+/* Swipeable on mobile; centred when everything fits (desktop) */
+.vr-track {
+  display: flex;
+  gap: 22px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 6px 4px 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  text-align: left;
+}
+.vr-slide { flex: 0 0 min(270px, 74vw); scroll-snap-align: center; }
+
+.vr-card {
+  background: #111;
+  border: 1px solid rgba(249, 177, 31, 0.28);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.vr-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+
+.vr-frame { position: relative; aspect-ratio: 9 / 16; background: #000; }
+.vr-poster, .vr-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border: 0; padding: 0; background: #000; object-fit: cover; cursor: pointer;
+}
+.vr-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vr-poster::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 45%);
+}
+.vr-video { object-fit: contain; cursor: default; }
+
+.vr-play {
+  position: absolute; z-index: 1; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--gold); color: #000; font-size: 26px;
+  box-shadow: 0 0 0 8px rgba(249, 177, 31, 0.25);
+  transition: transform 0.2s ease;
+}
+.vr-play svg { margin-left: 3px; }
+.vr-poster:hover .vr-play { transform: translate(-50%, -50%) scale(1.08); }
+.vr-poster:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+
+.vr-meta { padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 2px; }
+.vr-meta strong { font-size: 14px; color: var(--cream); }
+.vr-meta span { font-size: 12.5px; color: #a9a49a; }
+
+@media (min-width: 900px) { .vr-slide { flex-basis: 280px; } }
+@media (prefers-reduced-motion: reduce) {
+  .vr-card, .vr-play { transition: none; }
+}

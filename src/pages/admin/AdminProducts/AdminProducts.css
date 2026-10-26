@@ -606,3 +606,4 @@
  * positioned cleanly. All of that has been consolidated and fixed
  * in admin-responsive.css.
  */
+.ap-option-units input { width: 44px; }

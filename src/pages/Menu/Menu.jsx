@@ -173,6 +173,8 @@ function Menu() {
                             image: product.image,
                             optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
                             price: product.options?.[0]?.price || product.price,
+                            category: product.category,
+                            units: product.options?.[0]?.units || 1,
                             quantity: 1,
                           });
                           toastSuccess(`${product.name} added to cart!`);

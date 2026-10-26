@@ -20,6 +20,7 @@ import AdminLogin    from "../pages/admin/AdminLogin/AdminLogin";
 import AdminOrders   from "../pages/admin/Orders/AdminOrders";
 import AdminProducts from "../pages/admin/AdminProducts/AdminProducts";
 import Dashboard     from "../pages/admin/Dashboard/Dashboard";
+import AdminVideoReviews from "../pages/admin/VideoReviews/AdminVideoReviews";
 
 /* Loader for auth-check state */
 import Loader from "../components/Loader/Loader";
@@ -68,6 +69,11 @@ function AppRoutes() {
       <Route
         path="/admin/products"
         element={<PrivateRoute><AdminProducts /></PrivateRoute>}
+      />
+
+      <Route
+        path="/admin/video-reviews"
+        element={<PrivateRoute><AdminVideoReviews /></PrivateRoute>}
       />
 
       {/* ── 404 ── */}

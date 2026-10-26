@@ -1,3 +1,4 @@
+import { tierLabel } from "../../../utils/delivery";
 import "./AdminOrders.css";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import {
   LuSearch, LuFilter, LuShoppingBag, LuLayoutDashboard, LuStore,
   LuPackage, LuLogOut, LuEye, LuX, LuChevronLeft,
   LuChevronRight, LuDiamond, LuPlus, LuBanknote, LuRefreshCw,
-  LuMenu, LuCheck, LuTrash2,
+  LuMenu, LuCheck, LuTrash2, LuVideo,
 } from "react-icons/lu";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { TbShoppingBagCheck } from "react-icons/tb";
@@ -36,6 +37,7 @@ const initials = name =>
 const blankOrder = () => ({
   name: "", phone: "", address: "", items: "",
   amount: "", method: "Delivery", status: "Pending",
+  pastryCount: "0", drinkCount: "0",
 });
 
 /* Normalise an API order to a flat display shape */
@@ -47,6 +49,11 @@ const normalise = (o) => ({
   address: o.address || "",
   method: o.method,
   amount: o.totalAmount,
+  deliveryFee: Number(o.deliveryFee || 0),
+  deliveryTier: o.deliveryTier || "",
+  subtotal: o.subtotal ?? (Number(o.totalAmount) - Number(o.deliveryFee || 0)),
+  pastryUnits: o.pastryUnits,
+  drinkUnits: o.drinkUnits,
   status: o.status,
   paymentMethod: o.paymentMethod || "Bank Transfer",
   paymentStatus: o.paymentStatus || (o.isPaid ? "Paid" : "Pending"),
@@ -195,6 +202,10 @@ function AdminOrders() {
     if (cForm.method === "Delivery" && !cForm.address.trim()) return "Delivery address is required.";
     if (!cForm.items.trim()) return "Order items are required.";
     if (!cForm.amount || isNaN(Number(cForm.amount)) || Number(cForm.amount) <= 0) return "Enter a valid amount.";
+    for (const f of ["pastryCount", "drinkCount"]) {
+      const n = Number(cForm[f]);
+      if (!Number.isInteger(n) || n < 0) return "Pastry pieces and drink bottles must be whole numbers (0 or more).";
+    }
     return "";
   };
 
@@ -207,14 +218,17 @@ function AdminOrders() {
         phone: cForm.phone.trim(),
         address: cForm.address.trim(),
         method: cForm.method,
+        // Free-text phone/walk-in order. Price of the items only — the server
+        // adds the delivery charge from the pastry/drink counts below.
         items: [{
+          manual: true,
           name: cForm.items.trim(),
           optionName: "Standard",
           quantity: 1,
           price: Number(cForm.amount),
         }],
-        deliveryFee: cForm.method === "Delivery" ? 3.50 : 0,
-        totalAmount: Number(cForm.amount),
+        pastryCount: Number(cForm.pastryCount),
+        drinkCount: Number(cForm.drinkCount),
         status: cForm.status,
       };
       const res = await createOrder(payload);
@@ -255,6 +269,7 @@ function AdminOrders() {
             <button className="ao-nav-item" onClick={() => navigate("/")}><LuStore /> Store Front</button>
             <button className="ao-nav-item" onClick={() => navigate("/admin/products")}><LuPackage /> Products</button>
             <button className="ao-nav-item active"><LuShoppingBag /> Orders</button>
+            <button className="ao-nav-item" onClick={() => navigate("/admin/video-reviews")}><LuVideo /> Video Reviews</button>
           </nav>
         </div>
         <button className="ao-logout" onClick={logout}><LuLogOut /> Logout</button>
@@ -492,7 +507,17 @@ function AdminOrders() {
                 {selected.address && <div className="ao-modal-row"><span>Address</span><strong>{selected.address}</strong></div>}
                 <div className="ao-modal-row"><span>Method</span><strong>{selected.method}</strong></div>
                 {selected.items && <div className="ao-modal-row"><span>Items</span><strong>{selected.items}</strong></div>}
-                <div className="ao-modal-row"><span>Amount</span><strong>£{selected.amount.toFixed(2)}</strong></div>
+                <div className="ao-modal-row"><span>Subtotal</span><strong>£{Number(selected.subtotal).toFixed(2)}</strong></div>
+                <div className="ao-modal-row">
+                  <span>Delivery</span>
+                  <strong>
+                    {selected.method === "Pickup" ? "Pickup — £0.00" : `${tierLabel(selected.deliveryTier) ? tierLabel(selected.deliveryTier) + " — " : ""}£${selected.deliveryFee.toFixed(2)}`}
+                  </strong>
+                </div>
+                {selected.pastryUnits !== undefined && (
+                  <div className="ao-modal-row"><span>Basket</span><strong>{selected.pastryUnits} pastry pieces · {selected.drinkUnits} drink bottles</strong></div>
+                )}
+                <div className="ao-modal-row"><span>Total</span><strong>£{selected.amount.toFixed(2)}</strong></div>
                 <div className="ao-modal-row">
                   <span>Status</span>
                   <span className={`ao-status ${statusClass(selected.status)}`}>{selected.status}</span>
@@ -602,7 +627,14 @@ function AdminOrders() {
                   <textarea className="ao-textarea" placeholder="e.g. Meat Pie ×3, Tigernut Drink ×2" value={cForm.items} onChange={e => setCField("items", e.target.value)} />
                 </div>
                 <div className="ao-field">
-                  <label>Total Amount (£)</label>
+                  <label>Pastry pieces / Drink bottles <small>(for the delivery charge)</small></label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <input className="ao-input" type="number" min="0" step="1" aria-label="Pastry pieces" placeholder="Pastry pieces" value={cForm.pastryCount} onChange={e => setCField("pastryCount", e.target.value)} />
+                    <input className="ao-input" type="number" min="0" step="1" aria-label="Drink bottles" placeholder="Drink bottles" value={cForm.drinkCount} onChange={e => setCField("drinkCount", e.target.value)} />
+                  </div>
+                </div>
+                <div className="ao-field">
+                  <label>Items Total (£) <small>— delivery is added automatically</small></label>
                   <div className="ao-amount-input">
                     <span>£</span>
                     <input type="number" min="0" step="0.01" placeholder="0.00" value={cForm.amount} onChange={e => setCField("amount", e.target.value)} />

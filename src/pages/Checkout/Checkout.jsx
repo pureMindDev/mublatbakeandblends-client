@@ -1,5 +1,5 @@
 import "./Checkout.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { MdOutlineVerifiedUser, MdAccountBalance } from "react-icons/md";
 import { FiLock } from "react-icons/fi";
@@ -8,6 +8,9 @@ import { validateCheckout } from "../../utils/validators";
 import { createOrder } from "../../services/orderService";
 import { BANK_DETAILS } from "../../utils/bankDetails";
 import { toastError } from "../../utils/swal";
+import DeliveryPolicy from "../../components/DeliveryPolicy/DeliveryPolicy";
+import useOrderQuote from "../../hooks/useOrderQuote";
+import { tierLabel, DELIVERY_RULES } from "../../utils/delivery";
 
 // ─── Main Checkout page ───────────────────────────────────────────────────────
 // Stripe/card payment has been temporarily removed from the active checkout
@@ -18,9 +21,12 @@ import { toastError } from "../../utils/swal";
 function Checkout() {
   const { cartItems, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [deliveryMethod, setDeliveryMethod] = useState("delivery");
-  const [deliveryFee, setDeliveryFee] = useState(3.50);
+  // Keep the Delivery / Pickup choice the customer made in the cart.
+  const [deliveryMethod, setDeliveryMethod] = useState(
+    location.state?.method === "Pickup" ? "pickup" : "delivery"
+  );
   const [form, setForm] = useState({
     fullName: "", email: "", phone: "",
     street: "", city: "", postcode: "",
@@ -28,8 +34,12 @@ function Checkout() {
   const [errors, setErrors] = useState({});
   const [placingOrder, setPlacingOrder] = useState(false);
 
-  const subtotal = cartItems.reduce((t, i) => t + i.price * i.quantity, 0);
-  const total = subtotal + deliveryFee;
+  // Same quantity-based calculation as the cart; the server confirms it and
+  // recalculates again when the order is saved.
+  const {
+    subtotal, deliveryFee, deliveryTier, totalAmount: total,
+    pastryUnits, drinkUnits, error: quoteError,
+  } = useOrderQuote(cartItems, deliveryMethod === "delivery" ? "Delivery" : "Pickup");
 
   const handleChange = (e) => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }));
@@ -60,14 +70,14 @@ function Checkout() {
             : "",
         method: deliveryMethod === "delivery" ? "Delivery" : "Pickup",
         paymentMethod: "Bank Transfer",
-        deliveryFee,
+        // Only WHICH product/option and HOW MANY are sent. Prices, the
+        // delivery charge and the total are calculated by the server.
         items: cartItems.map(i => ({
+          product: i.id,
           name: i.name,
           optionName: i.optionName,
-          price: i.price,
           quantity: i.quantity,
         })),
-        totalAmount: total,
       });
 
       clearCart();
@@ -148,14 +158,17 @@ function Checkout() {
                 <div className="delivery-options">
                   <div
                     className={deliveryMethod === "delivery" ? "delivery-card active" : "delivery-card"}
-                    onClick={() => { setDeliveryMethod("delivery"); setDeliveryFee(3.50); }}
+                    onClick={() => setDeliveryMethod("delivery")}
                   >
-                    <div><p>Premium Delivery</p><span>Doorstep in 30–45 mins</span></div>
-                    <strong>£3.50</strong>
+                    <div>
+                      <p>{tierLabel(deliveryTier) || "UK Delivery"}</p>
+                      <span>Standard £{DELIVERY_RULES.standardFee.toFixed(2)} · Large order £{DELIVERY_RULES.largeFee.toFixed(2)}</span>
+                    </div>
+                    <strong>{cartItems.length > 0 && deliveryMethod === "delivery" ? `£${deliveryFee.toFixed(2)}` : "From £" + DELIVERY_RULES.standardFee.toFixed(2)}</strong>
                   </div>
                   <div
                     className={deliveryMethod === "pickup" ? "delivery-card active" : "delivery-card"}
-                    onClick={() => { setDeliveryMethod("pickup"); setDeliveryFee(0); }}
+                    onClick={() => setDeliveryMethod("pickup")}
                   >
                     <div><p>Pickup Only</p><span>Ready in 15 mins</span></div>
                     <strong>FREE</strong>
@@ -166,6 +179,10 @@ function Checkout() {
               {/* ADDRESS */}
               {deliveryMethod === "delivery" && (
                 <div className="form-section">
+                  <details className="delivery-policy-toggle">
+                    <summary>How is my delivery charge worked out?</summary>
+                    <DeliveryPolicy heading={false} />
+                  </details>
                   <h3>SHIPPING ADDRESS</h3>
                   <label>HOUSE NUMBER & STREET</label>
                   <input
@@ -241,8 +258,17 @@ function Checkout() {
 
               <div className="summary-breakdown">
                 <div><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
-                <div><span>Delivery</span><span>{deliveryFee === 0 ? "FREE" : `£${deliveryFee.toFixed(2)}`}</span></div>
+                <div>
+                  <span>{deliveryMethod === "pickup" ? "Pickup" : `Delivery${tierLabel(deliveryTier) ? ` (${tierLabel(deliveryTier)})` : ""}`}</span>
+                  <span>{deliveryFee === 0 ? "FREE" : `£${deliveryFee.toFixed(2)}`}</span>
+                </div>
               </div>
+              {deliveryMethod === "delivery" && cartItems.length > 0 && (
+                <p className="delivery-basket-note">
+                  Your basket: {pastryUnits} pastry piece{pastryUnits === 1 ? "" : "s"} · {drinkUnits} drink bottle{drinkUnits === 1 ? "" : "s"}
+                </p>
+              )}
+              {quoteError && <p className="field-error" role="alert">{quoteError}</p>}
 
               <div className="total">
                 <span>Total Amount</span>
@@ -265,7 +291,7 @@ function Checkout() {
                   <button
                     className="pay-btn"
                     onClick={handlePlaceOrder}
-                    disabled={placingOrder}
+                    disabled={placingOrder || !!quoteError}
                     style={{ marginTop: 20 }}
                   >
                     <MdAccountBalance style={{ fontSize: 16 }} />

@@ -21,7 +21,7 @@ import { useLocation } from "react-router-dom";
  * (including back/forward) behaves the same predictable way: always top.
  */
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   // Take over scroll restoration from the browser once, on mount.
   useEffect(() => {
@@ -31,9 +31,19 @@ function ScrollToTop() {
   }, []);
 
   // Reset to the top every time the route changes.
+  // …unless the link points at a section (e.g. /support#delivery), in which
+  // case scroll to that section once the page has rendered.
   useEffect(() => {
+    if (hash) {
+      const t = setTimeout(() => {
+        const el = document.getElementById(hash.slice(1));
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.scrollTo(0, 0);
+      }, 80);
+      return () => clearTimeout(t);
+    }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }

@@ -68,7 +68,7 @@ function OrderTracking() {
       <div className="ot-hero">
         <span className="ot-badge">Order Tracking</span>
         <h1>Track Your Order</h1>
-        <p>Enter your order ID to see its current status and estimated delivery time.</p>
+        <p>Enter your order ID to see its current status.</p>
       </div>
 
       <div className="ot-container">
@@ -168,10 +168,10 @@ function OrderTracking() {
                 <p>⏱ Your order is confirmed and will start being prepared shortly.</p>
               )}
               {order.status === "Preparing" && (
-                <p>👨‍🍳 Your items are being freshly prepared. Estimated ready in 15–20 mins.</p>
+                <p>👨‍🍳 Your items are being freshly prepared.</p>
               )}
               {order.status === "Out for Delivery" && (
-                <p>🛵 Your order is on the way! Estimated arrival in 20–30 mins.</p>
+                <p>🛵 Your order is on its way to you!</p>
               )}
               {order.status === "Delivered" && (
                 <p>✅ Your order has been delivered. We hope you enjoyed it!</p>

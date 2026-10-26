@@ -1,3 +1,4 @@
+import { tierLabel } from "../../utils/delivery";
 import "./Success.css";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
@@ -121,9 +122,9 @@ function PaymentSuccess() {
         <div className="info-boxes">
           <nav className="info-icon"><MdAccessTime className="in-icon" /></nav>
           <nav className="info-box">
-            <span>{displayMethod === "Pickup" ? "ESTIMATED PICKUP" : "ESTIMATED DELIVERY"}</span>
-            <strong>{displayMethod === "Pickup" ? "15 Mins" : "45 – 60 Mins"}</strong>
-            <small>Once payment is confirmed</small>
+            <span>{displayMethod === "Pickup" ? "ESTIMATED PICKUP" : "DELIVERY CHARGE"}</span>
+            <strong>{displayMethod === "Pickup" ? "15 Mins" : (tierLabel(order.deliveryTier) || "Delivery")}</strong>
+            <small>{displayMethod === "Pickup" ? "Once payment is confirmed" : `£${Number(order.deliveryFee || 0).toFixed(2)} — we'll be in touch about your delivery`}</small>
           </nav>
         </div>
 
@@ -172,7 +173,7 @@ function PaymentSuccess() {
         <div className="summary-breakdown">
           <div><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
           <div>
-            <span>{displayMethod === "Pickup" ? "Pickup" : "Delivery Fee"}</span>
+            <span>{displayMethod === "Pickup" ? "Pickup" : `Delivery Fee${tierLabel(order.deliveryTier) ? ` (${tierLabel(order.deliveryTier)})` : ""}`}</span>
             <span>{Number(order.deliveryFee || 0) === 0 ? "FREE" : `£${Number(order.deliveryFee).toFixed(2)}`}</span>
           </div>
         </div>
