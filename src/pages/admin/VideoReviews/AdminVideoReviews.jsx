@@ -15,6 +15,12 @@ import {
 } from "react-icons/lu";
 import Loader from "../../../components/Loader/Loader";
 
+/* A 404 here means the live server doesn't have the video-review routes yet. */
+const explain = (e, fallback) =>
+  e.response?.status === 404
+    ? "The server doesn't have the video reviews feature yet — redeploy the backend (server folder) with the latest code."
+    : e.response?.data?.message || e.message || fallback;
+
 function AdminVideoReviews() {
   const { logout } = useAuth();
   const { sidebarOpen, toggleSidebar, closeSidebar } = useAdminSidebar();
@@ -36,7 +42,7 @@ function AdminVideoReviews() {
   const load = useCallback(async () => {
     setLoading(true);
     try { setVideos(await fetchAllVideoReviews()); }
-    catch { toastError("Could not load video reviews."); }
+    catch (e) { toastError(explain(e, "Could not load video reviews.")); }
     finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
@@ -55,7 +61,7 @@ function AdminVideoReviews() {
       resetForm();
       toastSuccess("Video added. It stays hidden until you approve it.");
     } catch (e) {
-      toastError(e.response?.data?.message || "Could not add the video.");
+      toastError(explain(e, "Could not add the video."));
     } finally { setSaving(false); }
   };
 
@@ -116,6 +122,7 @@ function AdminVideoReviews() {
         </div>
 
         {/* ADD */}
+        <div className="avr-body">
         <section className="avr-add">
           <div className="avr-tabs">
             <button className={mode === "upload" ? "active" : ""} onClick={() => setMode("upload")}><LuUpload /> Upload video</button>
@@ -123,7 +130,7 @@ function AdminVideoReviews() {
           </div>
 
           {mode === "upload" ? (
-            <label className="avr-field">Video file <small>(MP4 / MOV, up to 100&nbsp;MB — uploaded to Cloudinary)</small>
+            <label className="avr-field">Video file <small>(MP4 / MOV, up to 100&nbsp;MB — sent straight to Cloudinary)</small>
               <input type="file" accept="video/*" onChange={e => setFile(e.target.files?.[0] || null)} />
             </label>
           ) : (
@@ -183,6 +190,7 @@ function AdminVideoReviews() {
             ))}
           </div>
         )}
+        </div>
       </main>
     </div>
   );

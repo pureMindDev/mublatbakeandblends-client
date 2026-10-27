@@ -1,0 +1,138 @@
+/* ════════════════════════════════════════════════════════════════
+   ADMIN MOBILE CARDS — Orders and Products on phones (≤768px).
+   Loaded after admin-responsive.css, so these rules replace its plain
+   stacked-table look with proper cards. Desktop is untouched.
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ─────────── ORDERS ─────────── */
+  body .ao-table-wrap { background: transparent; border: 0; }
+  body .ao-table-header { padding: 4px 2px 12px; }
+  body .ao-table tbody { display: flex; flex-direction: column; gap: 12px; }
+
+  body .ao-table tbody tr {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr;
+    grid-template-areas:
+      "id    id    id    amount"
+      "cust  cust  cust  cust"
+      "method status pay  ."
+      "time  time  time  time"
+      "act   act   act   act";
+    align-items: center;
+    gap: 10px 8px;
+    padding: 14px;
+    background: #121212;
+    border: 1px solid #232323;
+    border-radius: 16px;
+  }
+  body .ao-table tbody tr:hover td { background: transparent; }
+
+  body .ao-table td { width: auto; padding: 0; font-size: 13px; min-width: 0; }
+  body .ao-table td::before { display: none; }
+
+  body .ao-table td:nth-child(1) { grid-area: id; font-size: 13px; letter-spacing: 0.3px; }
+  body .ao-table td:nth-child(2) { grid-area: cust; }
+  body .ao-table td:nth-child(3) { grid-area: method; }
+  body .ao-table td:nth-child(4) { grid-area: amount; justify-self: end; font-size: 18px; font-weight: 700; color: #fff; }
+  body .ao-table td:nth-child(5) { grid-area: status; }
+  body .ao-table td:nth-child(6) { grid-area: pay; display: block; }   /* re-show (hidden at ≤1100px) */
+  body .ao-table td:nth-child(7) { grid-area: time; }
+  body .ao-table td:nth-child(8) { grid-area: act; }
+
+  body .ao-customer { gap: 12px; }
+  body .ao-avatar { width: 42px; height: 42px; font-size: 13px; }
+  body .ao-customer p { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  body .ao-customer span { font-size: 12.5px; color: #9a9a9a; }
+
+  body .ao-method {
+    padding: 4px 10px; border-radius: 20px; background: #1b1b1b;
+    border: 1px solid #2c2c2c; font-size: 12px; white-space: nowrap;
+  }
+  body .ao-status { padding: 4px 10px; font-size: 12px; }
+  /* Order status and payment status both say "Pending" — label the payment chip */
+  body .ao-table td:nth-child(6) .ao-status::before { content: "Payment: "; opacity: 0.7; }
+  body .ao-time { font-size: 12px; color: #8a8a8a; }
+  body .ao-table td.ao-time::before { display: inline; content: "Placed "; font-size: 12px; color: #666; font-weight: 400; letter-spacing: 0; margin: 0; }
+
+  body .ao-action-btns { gap: 8px; width: 100%; }
+  body .ao-view-btn {
+    flex: 1; justify-content: center; margin: 0; height: 42px;
+    border-radius: 12px; background: rgba(249, 177, 31, 0.12);
+    border: 1px solid rgba(249, 177, 31, 0.35); font-size: 14px; font-weight: 600;
+  }
+  body .ao-delete-btn {
+    width: 42px; height: 42px; border-radius: 12px; font-size: 17px;
+    background: rgba(217, 83, 79, 0.1); border: 1px solid rgba(217, 83, 79, 0.3);
+  }
+  body .ao-empty { text-align: center; padding: 30px 10px; color: #888; }
+
+  /* ─────────── PRODUCTS ─────────── */
+  body .ap-table-wrap { background: transparent; border: 0; }
+  body .ap-table tbody { display: flex; flex-direction: column; gap: 12px; }
+
+  body .ap-table tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "prod    prod"
+      "cat     status"
+      "price   updated"
+      "actions actions";
+    align-items: center;
+    gap: 12px 10px;
+    padding: 14px;
+    background: #121212;
+    border: 1px solid #232323;
+    border-radius: 16px;
+    position: relative;
+  }
+  body .ap-table tbody tr.ap-row-selected { border-color: var(--gold); background: #181308; }
+
+  body .ap-table td { width: auto; padding: 0; min-width: 0; position: static; }
+  body .ap-table td::before { display: none !important; }
+
+  body .ap-table td:nth-child(1) { position: absolute; top: 14px; right: 14px; left: auto; }
+  body .ap-table td:nth-child(2) { grid-area: prod; }
+  body .ap-table td:nth-child(3) { grid-area: cat; }
+  body .ap-table td:nth-child(4) { grid-area: status; justify-self: end; }
+  body .ap-table td:nth-child(5) { grid-area: price; }
+  body .ap-table td:nth-child(6) { grid-area: updated; justify-self: end; }
+  body .ap-table td:nth-child(7) { grid-area: actions; }
+
+  body .ap-checkbox { width: 22px; height: 22px; }
+
+  body .ap-prod-cell { align-items: flex-start; gap: 12px; padding-right: 34px; }
+  body .ap-prod-cell > div:last-child { min-width: 0; flex: 1; }
+  body .ap-prod-img { width: 68px; height: 68px; border-radius: 12px; flex-shrink: 0; }
+  body .ap-prod-name { font-size: 16px; font-weight: 600; line-height: 1.25; }
+  body .ap-prod-sku { font-size: 11.5px; margin-bottom: 4px; }
+  body .ap-prod-desc { font-size: 12.5px; color: #8a8a8a; -webkit-line-clamp: 2; }
+
+  body .ap-price { font-size: 16px; font-weight: 700; color: #fff; }
+  body .ap-options-count { font-size: 11px; }
+  body .ap-updated { font-size: 11.5px; white-space: normal; text-align: right; }
+  body .ap-table td.ap-updated::before { display: inline !important; content: "Updated "; font-size: 11.5px; color: #666; }
+
+  body .ap-status-toggle { padding: 6px 12px; font-size: 12.5px; }
+
+  body .ap-action-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 0; width: 100%; }
+  body .ap-icon-btn { width: 100%; height: 42px; border-radius: 12px; font-size: 17px; }
+  body .ap-kebab-wrap { width: 100%; }
+  body .ap-kebab-wrap .ap-icon-btn { width: 100%; }
+
+  body .ap-empty { text-align: center; padding: 30px 10px; }
+}
+
+@media (max-width: 360px) {
+  body .ao-table tbody tr {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      "id id amount"
+      "cust cust cust"
+      "method status status"
+      "pay pay pay"
+      "time time time"
+      "act act act";
+  }
+}

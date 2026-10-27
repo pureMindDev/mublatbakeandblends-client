@@ -40,3 +40,9 @@
 .avr-actions .avr-primary, .avr-actions .avr-secondary { flex: 1; }
 .avr-empty { color: #888; }
 @media (max-width: 600px) { .avr-row { grid-template-columns: 1fr; } }
+
+/* Page gutters (the dashboard header has its own padding; the body didn't) */
+.avr-body { padding: 8px 24px 48px; }
+@media (max-width: 900px) { .avr-body { padding: 8px 16px 40px; } }
+.avr-add { max-width: 760px; }
+.avr-field input[type="file"] { padding: 8px; font-size: 13px; }
