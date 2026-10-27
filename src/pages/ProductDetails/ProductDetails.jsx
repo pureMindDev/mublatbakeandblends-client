@@ -1,3 +1,4 @@
+import SafeImage from "../../components/SafeImage/SafeImage";
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -249,7 +250,7 @@ function ProductDetails() {
           <motion.div className="paired-grid" variants={stagger} initial="hidden" whileInView="visible" viewport={{ once:true }}>
             {paired.map(item => (
               <motion.div key={item.id} className="paired-card" variants={staggerItem} whileHover={{ y: -4 }}>
-                <div className="paired-image"><img src={item.images[0]||""} alt={item.name} /></div>
+                <div className="paired-image"><SafeImage src={item.images[0]||""} alt={item.name} /></div>
                 <div className="paired-content">
                   <h4>{item.name}</h4>
                   <p>£{item.price.toFixed(2)}</p>

@@ -104,8 +104,12 @@ function AdminOrders() {
       ]);
       setOrders(ordersRes.orders.map(normalise));
       setStats(statsRes);
-    } catch {
-      setApiError("Could not load orders. Check your backend connection.");
+    } catch (e) {
+      setApiError(
+        e.code === "ECONNABORTED"
+          ? "The server took too long to respond (it may be waking up). Please retry in a moment."
+          : "Could not load orders. Check your backend connection."
+      );
     } finally {
       setLoading(false);
     }
@@ -333,7 +337,7 @@ function AdminOrders() {
           <motion.div variants={staggerItem} className={`ao-stat ao-stat-gold ao-stat-clickable ${statusFilter === "All" ? "ao-stat-active" : ""}`}
             onClick={() => filterByStatus("All")}>
             <div className="ao-stat-top">
-              <div><p>TODAY'S ORDERS</p><h2>{todayCount}</h2><span className="green">Total orders today</span></div>
+              <div><p>TODAY'S ORDERS</p><h2>{loading ? "–" : todayCount}</h2><span className="green">Total orders today</span></div>
               <div className="ao-stat-icon"><TbShoppingBagCheck /></div>
             </div>
           </motion.div>
@@ -341,7 +345,7 @@ function AdminOrders() {
           <motion.div variants={staggerItem} className={`ao-stat ao-stat-clickable ${statusFilter === "Pending" ? "ao-stat-active" : ""}`}
             onClick={() => filterByStatus("Pending")}>
             <div className="ao-stat-top">
-              <div><p>PENDING</p><h2>{countOf("Pending")}</h2><span style={{ color: "#ccc" }}>Awaiting preparation</span></div>
+              <div><p>PENDING</p><h2>{loading ? "–" : countOf("Pending")}</h2><span style={{ color: "#ccc" }}>Awaiting preparation</span></div>
               <div className="ao-stat-icon"><LuPackage /></div>
             </div>
           </motion.div>
@@ -349,7 +353,7 @@ function AdminOrders() {
           <motion.div variants={staggerItem} className={`ao-stat ao-stat-clickable ${statusFilter === "Preparing" ? "ao-stat-active" : ""}`}
             onClick={() => filterByStatus("Preparing")}>
             <div className="ao-stat-top">
-              <div><p>PREPARING</p><h2>{countOf("Preparing")}</h2><span style={{ color: "#80b4f5" }}>In the kitchen</span></div>
+              <div><p>PREPARING</p><h2>{loading ? "–" : countOf("Preparing")}</h2><span style={{ color: "#80b4f5" }}>In the kitchen</span></div>
               <div className="ao-stat-icon" style={{ color: "#80b4f5" }}><LuPackage /></div>
             </div>
           </motion.div>
@@ -357,7 +361,7 @@ function AdminOrders() {
           <motion.div variants={staggerItem} className={`ao-stat ao-stat-clickable ${statusFilter === "Out for Delivery" ? "ao-stat-active" : ""}`}
             onClick={() => filterByStatus("Out for Delivery")}>
             <div className="ao-stat-top">
-              <div><p>OUT FOR DELIVERY</p><h2>{countOf("outForDelivery") || countOf("Out for Delivery")}</h2><span style={{ color: "#f5a623" }}>On the way</span></div>
+              <div><p>OUT FOR DELIVERY</p><h2>{loading ? "–" : (countOf("outForDelivery") || countOf("Out for Delivery"))}</h2><span style={{ color: "#f5a623" }}>On the way</span></div>
               <div className="ao-stat-icon" style={{ color: "#f5a623" }}><MdOutlineDeliveryDining /></div>
             </div>
           </motion.div>
@@ -365,14 +369,14 @@ function AdminOrders() {
           <motion.div variants={staggerItem} className={`ao-stat ao-stat-clickable ${statusFilter === "Delivered" ? "ao-stat-active" : ""}`}
             onClick={() => filterByStatus("Delivered")}>
             <div className="ao-stat-top">
-              <div><p>DELIVERED</p><h2>{countOf("Delivered")}</h2><span className="green">Completed</span></div>
+              <div><p>DELIVERED</p><h2>{loading ? "–" : countOf("Delivered")}</h2><span className="green">Completed</span></div>
               <div className="ao-stat-icon" style={{ color: "#4caf82" }}><TbShoppingBagCheck /></div>
             </div>
           </motion.div>
 
           <motion.div variants={staggerItem} className="ao-stat">
             <div className="ao-stat-top">
-              <div><p>REVENUE TODAY</p><h2>£{Number(todayRevenue).toFixed(2)}</h2><span className="green">+8.5% from yesterday</span></div>
+              <div><p>REVENUE TODAY</p><h2>{loading ? "–" : `£${Number(todayRevenue).toFixed(2)}`}</h2><span className="green">+8.5% from yesterday</span></div>
               <div className="ao-stat-icon" style={{ color: "#4caf82" }}><LuBanknote /></div>
             </div>
           </motion.div>

@@ -1,4 +1,4 @@
-import { calculateDelivery, estimateBasket, countCartUnits } from "./delivery";
+import { calculateDelivery, estimateBasket, countCartUnits, DELIVERY_RULES, DELIVERY_POLICY } from "./delivery";
 
 // Parity: the storefront must agree with the backend helper for every basket.
 // eslint-disable-next-line import/no-commonjs
@@ -6,16 +6,32 @@ const server = require("../../server/utils/delivery");
 
 const fee = (p, d, method = "Delivery") => calculateDelivery({ method, pastryCount: p, drinkCount: d });
 
-test("client's example baskets", () => {
-  expect(fee(10, 4).fee).toBe(7.99);
-  expect(fee(15, 6).fee).toBe(7.99);
-  expect(fee(16, 2).fee).toBe(9.99);
-  expect(fee(5, 7).fee).toBe(9.99);
-  expect(fee(16, 7).fee).toBe(9.99);
+test("rules: 30 pastry pieces / 6 bottles, same as the backend", () => {
+  expect(DELIVERY_RULES).toEqual(server.DELIVERY_RULES);
+  expect(DELIVERY_RULES.maxPastriesStandard).toBe(30);
+  expect(DELIVERY_RULES.maxDrinksStandard).toBe(6);
 });
 
-test("frontend and backend agree for every combination 0..40 x 0..20", () => {
-  for (let p = 0; p <= 40; p++) for (let d = 0; d <= 20; d++) {
+test("client's example baskets", () => {
+  expect(fee(30, 0).fee).toBe(7.99);
+  expect(fee(31, 0).fee).toBe(9.99);
+  expect(fee(0, 6).fee).toBe(7.99);
+  expect(fee(0, 7).fee).toBe(9.99);
+  expect(fee(20, 4).fee).toBe(7.99);
+  expect(fee(31, 2).fee).toBe(9.99);
+  expect(fee(10, 7).fee).toBe(9.99);
+});
+
+test("exact thresholds and immediately above; never summed", () => {
+  expect(fee(30, 6).tier).toBe("standard");
+  expect(fee(31, 6).tier).toBe("large");
+  expect(fee(30, 7).tier).toBe("large");
+  expect(fee(31, 7).fee).toBe(9.99);
+  expect(fee(16, 2).tier).toBe("standard"); // the old 15 limit is gone
+});
+
+test("frontend and backend agree for every combination 0..70 x 0..30", () => {
+  for (let p = 0; p <= 70; p++) for (let d = 0; d <= 30; d++) {
     expect(fee(p, d)).toEqual(server.calculateDelivery({ method: "Delivery", pastryCount: p, drinkCount: d }));
   }
   expect(fee(5, 5, "Pickup")).toEqual({ fee: 0, tier: "pickup" });
@@ -23,18 +39,27 @@ test("frontend and backend agree for every combination 0..40 x 0..20", () => {
 
 test("cart estimate counts pack units and ignores 'Other'", () => {
   const cart = [
-    { category: "Pastries", units: 12, quantity: 1, price: 66 },
+    { category: "Pastries", units: 12, quantity: 2, price: 66 },
     { category: "Pastries", units: 3, quantity: 1, price: 16.5 },
-    { category: "Pastries", units: 1, quantity: 1, price: 5.5 },
+    { category: "Pastries", units: 1, quantity: 4, price: 5.5 },
     { category: "Other", units: 1, quantity: 50, price: 1 },
   ];
-  expect(countCartUnits(cart)).toEqual({ pastryUnits: 16, drinkUnits: 0 });
+  expect(countCartUnits(cart)).toEqual({ pastryUnits: 31, drinkUnits: 0 });
   const e = estimateBasket(cart, "Delivery");
   expect(e.deliveryFee).toBe(9.99);
-  expect(e.subtotal).toBe(138);
-  expect(e.totalAmount).toBe(147.99);
+  expect(e.subtotal).toBe(220.5);
+  expect(e.totalAmount).toBe(230.49);
 });
 
 test("empty cart has no charge", () => {
   expect(estimateBasket([], "Delivery").deliveryFee).toBe(0);
+});
+
+test("customer-facing policy text uses the 30-piece threshold", () => {
+  const text = JSON.stringify(DELIVERY_POLICY);
+  expect(text).toContain("Up to 30 pieces of pastries");
+  expect(text).toContain("More than 30 pieces of pastries");
+  expect(text).toContain("Up to 6 bottles of drinks");
+  expect(text).toContain("More than 6 bottles of drinks");
+  expect(text).not.toMatch(/\b15 pieces\b/);
 });

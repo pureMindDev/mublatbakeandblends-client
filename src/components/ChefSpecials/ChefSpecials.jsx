@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ChefSpecials.css";
+import SafeImage from "../SafeImage/SafeImage";
 import { fetchProducts } from "../../services/productService";
 
 // Normalise DB product to a consistent display shape
@@ -50,7 +51,7 @@ function ChefSpecials() {
 
                 <span className="chef-tag">{item.category}</span>
 
-                <img src={item.image} alt={item.name} />
+                <SafeImage src={item.image} alt={item.name} />
 
                 <div className="chef-content">
                   <h3>{item.name}</h3>

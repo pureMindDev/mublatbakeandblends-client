@@ -169,8 +169,12 @@ function AdminProducts() {
     try {
       const res = await fetchProducts({ limit: 100 });
       setProducts(res.products.map(normalise));
-    } catch {
-      setApiError("Could not load products. Check your backend connection.");
+    } catch (e) {
+      setApiError(
+        e?.code === "ECONNABORTED"
+          ? "The server took too long to respond (it may be waking up). Please retry in a moment."
+          : "Could not load products. Check your backend connection."
+      );
     } finally {
       setLoading(false);
     }
@@ -532,11 +536,11 @@ function AdminProducts() {
 
         {/* STATS */}
         <motion.div className="ap-stats" variants={stagger} initial="hidden" animate="visible">
-          <motion.div variants={staggerItem} className="ap-stat-card"><span className="ap-stat-label">Total Products</span><strong>{products.length}</strong></motion.div>
-          <motion.div variants={staggerItem} className="ap-stat-card green"><span className="ap-stat-label">Active</span><strong>{totalActive}</strong></motion.div>
-          <motion.div variants={staggerItem} className="ap-stat-card red"><span className="ap-stat-label">Inactive</span><strong>{totalInactive}</strong></motion.div>
-          <motion.div variants={staggerItem} className="ap-stat-card gold"><span className="ap-stat-label">Pastries</span><strong>{totalPastries}</strong></motion.div>
-          <motion.div variants={staggerItem} className="ap-stat-card blue"><span className="ap-stat-label">Drinks</span><strong>{totalDrinks}</strong></motion.div>
+          <motion.div variants={staggerItem} className="ap-stat-card"><span className="ap-stat-label">Total Products</span><strong>{loading ? "–" : products.length}</strong></motion.div>
+          <motion.div variants={staggerItem} className="ap-stat-card green"><span className="ap-stat-label">Active</span><strong>{loading ? "–" : totalActive}</strong></motion.div>
+          <motion.div variants={staggerItem} className="ap-stat-card red"><span className="ap-stat-label">Inactive</span><strong>{loading ? "–" : totalInactive}</strong></motion.div>
+          <motion.div variants={staggerItem} className="ap-stat-card gold"><span className="ap-stat-label">Pastries</span><strong>{loading ? "–" : totalPastries}</strong></motion.div>
+          <motion.div variants={staggerItem} className="ap-stat-card blue"><span className="ap-stat-label">Drinks</span><strong>{loading ? "–" : totalDrinks}</strong></motion.div>
         </motion.div>
 
         {/* FILTERS */}

@@ -17,12 +17,19 @@
    BODY STYLING
 ================================ */
 
+html {
+  background-color: var(--dark);
+  color-scheme: dark;
+}
+
 body {
   font-family: var(--font-main);
 
-  background-color: var(--cream);
+  /* Dark base: loading screens and the first paint before React mounts used
+     to flash the near-white cream colour. Every page paints its own sections. */
+  background-color: var(--dark);
 
-  color: var(--primary-black);
+  color: var(--cream);
 
   line-height: 1.6;
 

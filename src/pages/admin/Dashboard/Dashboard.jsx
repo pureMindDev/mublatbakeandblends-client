@@ -36,9 +36,10 @@ function Dashboard() {
   const [apiError, setApiError] = useState("");
   const [lastUpdated, setLastUpdated] = useState(null);
 
-  const loadAll = useCallback(async () => {
-    setLoading(true);
-    setApiError("");
+  // `silent` = background auto-refresh: keep showing the current data (no
+  // full-page spinner, no error banner replacing good data).
+  const loadAll = useCallback(async (silent = false) => {
+    if (!silent) { setLoading(true); setApiError(""); }
     try {
       const [statsRes, ordersRes, productsRes] = await Promise.all([
         fetchOrderStats(),
@@ -56,10 +57,16 @@ function Dashboard() {
       })));
       setProductCount(productsRes.total);
       setLastUpdated(new Date());
-    } catch {
-      setApiError("Could not load dashboard data. Check your backend connection.");
+    } catch (e) {
+      if (!silent) {
+        setApiError(
+          e.code === "ECONNABORTED"
+            ? "The server took too long to respond (it may be waking up). Please retry in a moment."
+            : "Could not load dashboard data. Check your backend connection."
+        );
+      }
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, []);
 
@@ -67,7 +74,7 @@ function Dashboard() {
 
   /* Fix #13: auto-refresh every 30 seconds so live orders appear without manual reload */
   useEffect(() => {
-    const timer = setInterval(() => { loadAll(); }, 30_000);
+    const timer = setInterval(() => { loadAll(true); }, 30_000);
     return () => clearInterval(timer);
   }, [loadAll]);
 
@@ -124,7 +131,7 @@ function Dashboard() {
             <span className="dash-date">
               {new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
-            <button className="dash-refresh-btn" onClick={loadAll} title="Refresh data"><LuRefreshCw /></button>
+            <button className="dash-refresh-btn" onClick={() => loadAll()} title="Refresh data"><LuRefreshCw /></button>
           </div>
         </div>
 
@@ -133,7 +140,7 @@ function Dashboard() {
         ) : apiError ? (
           <div className="dash-api-error">
             <p>{apiError}</p>
-            <button onClick={loadAll}><LuRefreshCw /> Retry</button>
+            <button onClick={() => loadAll()}><LuRefreshCw /> Retry</button>
           </div>
         ) : (
           <>

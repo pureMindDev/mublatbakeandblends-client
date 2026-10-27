@@ -8,7 +8,7 @@ import api from "../../services/api";
 import DeliveryPolicy from "../../components/DeliveryPolicy/DeliveryPolicy";
 
 const FAQS = [
-  { q: "How much does delivery cost?", a: "We deliver across the UK. Standard Delivery is £7.99 for orders of up to 15 pieces of pastries and up to 6 bottles of drinks. Large Order Delivery is £9.99 for orders of more than 15 pieces of pastries or more than 6 bottles of drinks. Delivery charges depend on the total quantity of products ordered, and we will confirm the applicable delivery charge at checkout." },
+  { q: "How much does delivery cost?", a: "We deliver across the UK. Standard Delivery is £7.99 for orders of up to 30 pieces of pastries and up to 6 bottles of drinks. Large Order Delivery is £9.99 for orders of more than 30 pieces of pastries or more than 6 bottles of drinks. Delivery charges depend on the total quantity of products ordered, and we will confirm the applicable delivery charge at checkout." },
   { q: "What areas do you deliver to?", a: "We deliver our pastries and drinks across the UK. If you'd rather collect your order, you're welcome to use our pickup option." },
   { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at mublatbakeandblends@gmail.com." },
   { q: "Are your pastries freshly made?", a: "Yes — all pastries are baked fresh daily in small batches. We never use frozen ingredients. Our drinks are also prepared fresh with no artificial preservatives." },

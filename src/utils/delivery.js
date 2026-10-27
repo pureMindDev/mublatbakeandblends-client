@@ -8,7 +8,7 @@
 export const DELIVERY_RULES = Object.freeze({
   standardFee: 7.99,
   largeFee: 9.99,
-  maxPastriesStandard: 15,
+  maxPastriesStandard: 30,
   maxDrinksStandard: 6,
 });
 
@@ -78,7 +78,7 @@ export const DELIVERY_POLICY = {
     heading: "Standard Delivery — £7.99",
     lead: "For orders containing:",
     points: [
-      "Up to 15 pieces of pastries, such as meat pies, fish rolls, puff puff, spring rolls and samosas.",
+      "Up to 30 pieces of pastries, such as meat pies, fish rolls, puff puff, spring rolls and samosas.",
       "Up to 6 bottles of drinks, including 500ml bottles.",
     ],
   },
@@ -86,7 +86,7 @@ export const DELIVERY_POLICY = {
     heading: "Large Order Delivery — £9.99",
     lead: "For orders containing:",
     points: [
-      "More than 15 pieces of pastries, for example, 30 meat pies.",
+      "More than 30 pieces of pastries, for example, 40 meat pies.",
       "More than 6 bottles of drinks, for example, 12 bottles of 500ml drinks.",
     ],
   },

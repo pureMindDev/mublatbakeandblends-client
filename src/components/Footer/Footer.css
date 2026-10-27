@@ -199,7 +199,7 @@
   gap: 20px;
 }
 .footer-bottom-links a {
-  color: #666;
+  color: #A8A59E;
   font-size: 12px;
   text-decoration: none;
   transition: color 0.2s;
@@ -208,7 +208,7 @@
 
 .footer-credit {
   font-size: 12px;
-  color: #666;
+  color: #A8A59E;
 }
 .footer-credit a {
   color: #999;

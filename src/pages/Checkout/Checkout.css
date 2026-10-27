@@ -195,7 +195,7 @@ input:focus {
   text-align: right;
   font-size: 11px;
   font-style: italic;
-  color: #666;
+  color: #A8A59E;
   margin-top: -4px;
   margin-bottom: 14px;
 }
@@ -203,7 +203,7 @@ input:focus {
 /* ===== PAY HINT (step 2, left panel) ===== */
 .pay-hint {
   font-size: 13px;
-  color: #888;
+  color: #A8A59E;
   margin-top: 4px;
 }
 
@@ -468,7 +468,7 @@ input:focus {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #555;
+  color: #A8A59E;
   letter-spacing: 0.5px;
 }
 
@@ -482,7 +482,7 @@ input:focus {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  color: #555;
+  color: #A8A59E;
 }
 
 .checkout-step.active {
@@ -558,7 +558,7 @@ input:focus {
 }
 
 .pickup-info p {
-  color: #888;
+  color: #A8A59E;
   font-size: 13px;
   line-height: 1.7;
   margin: 0;
@@ -587,7 +587,7 @@ input:focus {
 }
 
 .details-summary-row span {
-  color: #666;
+  color: #A8A59E;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -605,7 +605,7 @@ input:focus {
   background: none;
   border: 1px solid #2a2a2a;
   border-radius: 7px;
-  color: #888;
+  color: #A8A59E;
   font-size: 12px;
   padding: 6px 14px;
   cursor: pointer;
@@ -624,7 +624,7 @@ input:focus {
 
 .stripe-section-title {
   font-size: 12px;
-  color: #888;
+  color: #A8A59E;
   letter-spacing: 2px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -636,7 +636,7 @@ input:focus {
 /* ===== HELPER TEXT ===== */
 .text {
   font-size: 11px;
-  color: #555;
+  color: #A8A59E;
   display: block;
   margin-top: -6px;
   margin-bottom: 10px;
@@ -681,13 +681,13 @@ input:focus {
 
 .bank-note {
   font-size: 11px;
-  color: #888;
+  color: #A8A59E;
   margin-top: 10px;
   line-height: 1.5;
 }
 
 /* Delivery information */
-.delivery-basket-note { margin: 6px 0 0; font-size: 12px; opacity: 0.75; }
+.delivery-basket-note { margin: 6px 0 0; font-size: 12px; opacity: 0.95; }
 .delivery-policy-toggle { margin: 0 0 14px; font-size: 13px; }
 .delivery-policy-toggle summary { cursor: pointer; color: var(--gold); font-weight: 600; padding: 4px 0; }
 .delivery-policy-toggle[open] summary { margin-bottom: 8px; }

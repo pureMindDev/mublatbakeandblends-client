@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { CartContext } from "../../context/CartContext";
+import { CartContext, getCachedImage } from "../../context/CartContext";
 import { LuPlus, LuMinus, LuTrash } from "react-icons/lu";
 import { toastError } from "../../utils/swal";
 import "./CartItem.css";
+import SafeImage from "../SafeImage/SafeImage";
 
 function CartItem({ item }) {
   const { increaseQty, decreaseQty, removeFromCart } = useContext(CartContext);
@@ -15,7 +16,7 @@ function CartItem({ item }) {
   return (
     <div className="cart-card">
 
-      <img src={item.image} alt={item.name} className="cart-img" />
+      <SafeImage src={item.image || getCachedImage(item.id, item.optionName)} alt={item.name} className="cart-img" />
 
       <div className="cart-info">
         <h4>{item.name}</h4>

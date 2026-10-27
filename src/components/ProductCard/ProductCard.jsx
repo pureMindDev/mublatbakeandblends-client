@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import formatCurrency from "../../utils/formatCurrency";
 import "./ProductCard.css";
+import SafeImage from "../SafeImage/SafeImage";
 
 function ProductCard({ product }) {
   const { addToCart }    = useContext(CartContext);
@@ -34,7 +35,7 @@ function ProductCard({ product }) {
       onClick={() => navigate(`/product/${product.id}`)}
       style={{ cursor: "pointer" }}
     >
-      <img src={product.image} alt={product.name} />
+      <SafeImage src={product.image} alt={product.name} />
 
       <div className="product-content">
         <h3>{product.name}</h3>

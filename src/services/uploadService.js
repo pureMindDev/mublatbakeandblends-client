@@ -11,6 +11,7 @@ export const uploadImages = async (files) => {
 
   const { data } = await api.post("/upload/images", formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    timeout: 180000, // image uploads can legitimately take longer than normal requests
   });
 
   return data.urls; // array of Cloudinary URLs

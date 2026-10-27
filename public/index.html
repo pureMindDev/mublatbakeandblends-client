@@ -6,6 +6,9 @@
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/logo192.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#1a0d06" />
+    <meta name="color-scheme" content="dark" />
+    <!-- Paint dark immediately (before the CSS/JS bundles arrive) to avoid a white flash -->
+    <style>html,body{background:#000;margin:0}</style>
     <meta
       name="description"
       content="Web site created using create-react-app"
