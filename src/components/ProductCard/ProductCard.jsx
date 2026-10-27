@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import formatCurrency from "../../utils/formatCurrency";
+import { optionUnits } from "../../utils/delivery";
 import "./ProductCard.css";
 import SafeImage from "../SafeImage/SafeImage";
 
@@ -20,7 +21,7 @@ function ProductCard({ product }) {
       optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
       price:      product.options?.[0]?.price  || product.price || 0,
       category:   product.category,
-      units:      product.options?.[0]?.units || 1,
+      units:      optionUnits(product.options?.[0], product.category),
       quantity:   1,
     });
 

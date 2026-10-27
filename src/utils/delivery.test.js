@@ -1,4 +1,4 @@
-import { calculateDelivery, estimateBasket, countCartUnits, DELIVERY_RULES, DELIVERY_POLICY } from "./delivery";
+import { calculateDelivery, estimateBasket, countCartUnits, optionUnits, DELIVERY_RULES, DELIVERY_POLICY } from "./delivery";
 
 // Parity: the storefront must agree with the backend helper for every basket.
 // eslint-disable-next-line import/no-commonjs
@@ -62,4 +62,33 @@ test("customer-facing policy text uses the 30-piece threshold", () => {
   expect(text).toContain("Up to 6 bottles of drinks");
   expect(text).toContain("More than 6 bottles of drinks");
   expect(text).not.toMatch(/\b15 pieces\b/);
+});
+
+// ---- optionUnits / countCartUnits with legacy cart lines (no units stored) ----
+
+test("optionUnits reads pack size from stored units or the label", () => {
+  expect(optionUnits({ label: "Trio Collection" }, "Pastries")).toBe(3);
+  expect(optionUnits({ label: "Grand Dozen (Box of 12)" }, "Pastries")).toBe(12);
+  expect(optionUnits({ label: "12 pieces" }, "Pastries")).toBe(12);
+  expect(optionUnits({ label: "Single Pastry", units: 1 }, "Pastries")).toBe(1);
+  expect(optionUnits({ label: "Anything", units: 6 }, "Pastries")).toBe(6);
+  expect(optionUnits({ label: "Family Bottle" }, "Drinks")).toBe(1);
+  expect(optionUnits({ label: "Box of 12" }, "Other")).toBe(1);
+});
+
+test("frontend and server optionUnits agree", () => {
+  for (const label of ["Single Pastry", "Trio Collection", "Grand Dozen (Box of 12)", "3 pieces", "12 pieces", "Half dozen", "Regular Cup", "Family Bottle", "Standard"]) {
+    for (const category of ["Pastries", "Drinks", "Other"]) {
+      expect(optionUnits({ label }, category)).toBe(server.optionUnits({ label }, category));
+    }
+  }
+});
+
+test("cart counts actual pieces: 1x3=3, 1x12=12, 2x12=24, 5x3=15, even for stale lines", () => {
+  const line = (optionName, quantity, extra = {}) => ({ id: "p", optionName, quantity, category: "Pastries", ...extra });
+  expect(countCartUnits([line("Trio Collection", 1)]).pastryUnits).toBe(3);
+  expect(countCartUnits([line("Grand Dozen (Box of 12)", 1)]).pastryUnits).toBe(12);
+  expect(countCartUnits([line("Grand Dozen (Box of 12)", 2)]).pastryUnits).toBe(24);
+  expect(countCartUnits([line("Trio Collection", 5, { units: 3 })]).pastryUnits).toBe(15);   // not counted twice
+  expect(estimateBasket([line("Grand Dozen (Box of 12)", 2), { id: "d", optionName: "Regular Cup", quantity: 7, category: "Drinks" }], "Delivery").deliveryTier).toBe("large");
 });

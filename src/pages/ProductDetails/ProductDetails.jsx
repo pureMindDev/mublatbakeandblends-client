@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeUp, stagger, staggerItem, pageTransition } from "../../utils/motion";
 import { toastSuccess } from "../../utils/swal";
+import { optionUnits } from "../../utils/delivery";
 import { CartContext } from "../../context/CartContext";
 import { fetchProductById, fetchProducts } from "../../services/productService";
 import { products as localProducts } from "../../data/products";
@@ -49,7 +50,7 @@ const normalise = (p) => ({
   category:        p.category,
   images:          p.images?.length ? p.images : [p.image].filter(Boolean),
   ingredients:     p.ingredients || [],
-  options:         (p.options || []).map(o => ({ name: o.label || o.name, price: o.price, units: o.units || 1 })),
+  options:         (p.options || []).map(o => ({ name: o.label || o.name, price: o.price, units: optionUnits(o, p.category) })),
   price:           p.options?.[0]?.price ?? p.price ?? 0,
 });
 
@@ -115,7 +116,7 @@ function ProductDetails() {
       optionName: selectedOption?.name || "Standard",
       price:      selectedOption?.price || product.price,
       category:   product.category,
-      units:      selectedOption?.units || 1,
+      units:      optionUnits(selectedOption, product.category),
       quantity,
     });
     setAdded(true);
@@ -128,7 +129,7 @@ function ProductDetails() {
       id: item.id, name: item.name, image: item.images[0]||"",
       optionName: item.options[0]?.name||"Standard",
       price: item.options[0]?.price||item.price, quantity:1,
-      category: item.category, units: item.options[0]?.units || 1,
+      category: item.category, units: optionUnits(item.options[0], item.category),
     });
     toastSuccess(`${item.name} added to cart!`);
   };

@@ -3,6 +3,7 @@ import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { fetchProducts } from "../../services/productService";
 import { toastSuccess } from "../../utils/swal";
+import { optionUnits } from "../../utils/delivery";
 
 import "./Menu.css";
 
@@ -174,7 +175,7 @@ function Menu() {
                             optionName: product.options?.[0]?.label || product.options?.[0]?.name || "Standard",
                             price: product.options?.[0]?.price || product.price,
                             category: product.category,
-                            units: product.options?.[0]?.units || 1,
+                            units: optionUnits(product.options?.[0], product.category),
                             quantity: 1,
                           });
                           toastSuccess(`${product.name} added to cart!`);

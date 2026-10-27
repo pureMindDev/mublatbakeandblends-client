@@ -17,6 +17,24 @@ const toCount = (n) => {
   return Number.isFinite(v) && v > 0 ? v : 0;
 };
 
+/**
+ * Pieces/bottles one unit of an option contains (mirror of the server's
+ * optionUnits). Stored `units` > 1 wins; otherwise a pack size stated in the
+ * label ("Trio Collection", "Box of 12", "6 pieces") is used.
+ */
+export const optionUnits = (option, category) => {
+  const stored = toCount(option && option.units);
+  if (stored > 1) return stored;
+  if (category !== "Pastries" && category !== "Drinks") return Math.max(1, stored);
+  const label = String((option && (option.label || option.name || option.optionName)) || "").toLowerCase();
+  const m = label.match(/(?:box|pack|set|tray)\s+of\s+(\d+)/) || label.match(/(\d+)\s*[- ]?\s*(?:pieces?|pcs|pc|pack|box|bottles?)\b/);
+  if (m) { const n = toCount(m[1]); if (n > 0 && n <= 500) return n; }
+  if (/half[\s-]*dozen/.test(label)) return 6;
+  if (/dozen/.test(label)) return 12;
+  if (/trio/.test(label)) return 3;
+  return Math.max(1, stored);
+};
+
 /** @returns {{fee:number, tier:"none"|"pickup"|"standard"|"large"}} */
 export function calculateDelivery({ method, pastryCount, drinkCount, hasItems = true }) {
   if (!hasItems) return { fee: 0, tier: "none" };
@@ -36,7 +54,7 @@ export function countCartUnits(cartItems = []) {
   let pastryUnits = 0;
   let drinkUnits = 0;
   for (const i of cartItems) {
-    const pieces = toCount(i.quantity) * (toCount(i.units) || 1);
+    const pieces = toCount(i.quantity) * optionUnits({ units: i.units, label: i.optionName }, i.category);
     if (i.category === "Pastries") pastryUnits += pieces;
     else if (i.category === "Drinks") drinkUnits += pieces;
   }
