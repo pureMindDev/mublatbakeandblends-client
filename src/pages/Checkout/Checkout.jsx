@@ -170,7 +170,7 @@ function Checkout() {
                     className={deliveryMethod === "pickup" ? "delivery-card active" : "delivery-card"}
                     onClick={() => setDeliveryMethod("pickup")}
                   >
-                    <div><p>Pickup Only</p><span>Ready in 15 mins</span></div>
+                    <div><p>Pickup Only</p><span>Collect your order yourself</span></div>
                     <strong>FREE</strong>
                   </div>
                 </div>

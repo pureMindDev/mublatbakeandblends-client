@@ -376,7 +376,7 @@ function AdminOrders() {
 
           <motion.div variants={staggerItem} className="ao-stat">
             <div className="ao-stat-top">
-              <div><p>REVENUE TODAY</p><h2>{loading ? "–" : `£${Number(todayRevenue).toFixed(2)}`}</h2><span className="green">+8.5% from yesterday</span></div>
+              <div><p>REVENUE TODAY</p><h2>{loading ? "–" : `£${Number(todayRevenue).toFixed(2)}`}</h2><span className="green">Live from orders</span></div>
               <div className="ao-stat-icon" style={{ color: "#4caf82" }}><LuBanknote /></div>
             </div>
           </motion.div>

@@ -13,7 +13,7 @@ const FAQS = [
   { q: "Can I cancel or modify my order?", a: "Orders can be cancelled or modified within 5 minutes of placing them. After that, your order will already be in preparation. Please contact us immediately at mublatbakeandblends@gmail.com." },
   { q: "Are your pastries freshly made?", a: "Yes — all pastries are baked fresh daily in small batches. We never use frozen ingredients. Our drinks are also prepared fresh with no artificial preservatives." },
   { q: "Do you cater for events or large orders?", a: "Absolutely. We offer catering for events, corporate orders, and large gatherings. Contact us at least 48 hours in advance via email or phone and we'll prepare a custom quote." },
-  { q: "What payment methods do you accept?", a: "We accept all major credit and debit cards (Visa, Mastercard, Amex) through our secure Stripe payment system. We do not currently accept cash for online orders." },
+  { q: "What payment methods do you accept?", a: "Payment is by bank transfer. When you place your order you will see our bank details and your order reference to pay with. We do not currently accept cash for online orders." },
   { q: "My order arrived incorrect — what should I do?", a: "We sincerely apologise. Please contact us within 1 hour of receiving your order with a photo and your order number. We'll arrange a replacement or full refund immediately." },
   { q: "Do you offer allergen information?", a: "Yes. All our products contain gluten (wheat flour) and may contain dairy, eggs, fish, and nuts. If you have a specific allergy, please contact us before ordering and we'll advise accordingly." },
 ];

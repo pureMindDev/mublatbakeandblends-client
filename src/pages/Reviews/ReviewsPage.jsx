@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./ReviewsPage.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import api from "../../services/api";
-import VideoReviews from "../../components/VideoReviews/VideoReviews";
 
 const blankForm   = () => ({ name: "", rating: 0, text: "" });
 const getInitials = name => name.trim().split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
@@ -131,8 +130,6 @@ function ReviewsPage() {
         )}
       </div>
 
-      {/* Customer video testimonials, shown above the written reviews */}
-      <VideoReviews variant="page" />
 
       {toast && <div className="rp-toast">✓ Your review has been posted! Thank you.</div>}
 

@@ -24,7 +24,7 @@ function PrivacyPolicy() {
           <li>Your name, email address, phone number and delivery address</li>
           <li>Details of the products you order and your order history</li>
           <li>Messages you send us through the support/contact form</li>
-          <li>Payment information — this is collected and processed directly by our payment provider, Stripe. We never see or store your full card details.</li>
+          <li>Payment information — payment is made by bank transfer, so we do not collect or store your card details on this website.</li>
         </ul>
 
         <h2>How We Use Your Information</h2>
@@ -43,7 +43,6 @@ function PrivacyPolicy() {
           perform its function:
         </p>
         <ul>
-          <li><strong>Stripe</strong> — processes payments securely; we never store your card details.</li>
           <li><strong>Brevo</strong> — sends order confirmation and status-update emails on our behalf.</li>
           <li><strong>MongoDB Atlas</strong> — securely hosts our order and account database.</li>
           <li><strong>Cloudinary</strong> — hosts our product images (this does not involve your personal data).</li>

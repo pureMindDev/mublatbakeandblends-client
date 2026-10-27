@@ -58,12 +58,6 @@ function Cart() {
             )}
           </div>
 
-          {/* MEMBERSHIP */}
-          <div className="membership-card">
-            <p><strong>Mublat Premium Members</strong></p>
-            <span>Sign in to earn {Math.floor(subtotal * 10)} reward points on this purchase.</span>
-          </div>
-
         </div>
 
         {/* RIGHT SIDE — SUMMARY */}

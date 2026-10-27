@@ -20,8 +20,8 @@ function TermsOfService() {
         <h2>Orders &amp; Payment</h2>
         <p>
           All prices are shown in GBP (£) and include any applicable taxes
-          unless stated otherwise. Payment is taken at checkout through our
-          payment provider, Stripe. We do not currently accept cash for
+          unless stated otherwise. Payment is made by bank transfer using the
+          details shown at checkout. We do not currently accept cash for
           online orders. An order is confirmed once you receive an order
           confirmation email.
         </p>
