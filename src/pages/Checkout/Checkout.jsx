@@ -39,7 +39,13 @@ function Checkout() {
   const {
     subtotal, deliveryFee, deliveryTier, totalAmount: total,
     pastryUnits, drinkUnits, error: quoteError,
-  } = useOrderQuote(cartItems, deliveryMethod === "delivery" ? "Delivery" : "Pickup");
+  } = useOrderQuote(
+    cartItems,
+    deliveryMethod === "delivery" ? "Delivery" : "Pickup",
+    // Same "street, town, postcode" string that is saved with the order, so
+    // the server can recognise a Newry address.
+    `${form.street}, ${form.city}, ${form.postcode}`
+  );
 
   const handleChange = (e) => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }));
@@ -162,7 +168,7 @@ function Checkout() {
                   >
                     <div>
                       <p>{tierLabel(deliveryTier) || "UK Delivery"}</p>
-                      <span>Standard £{DELIVERY_RULES.standardFee.toFixed(2)} · Large order £{DELIVERY_RULES.largeFee.toFixed(2)}</span>
+                      <span>Standard £{DELIVERY_RULES.standardFee.toFixed(2)} · Large order £{DELIVERY_RULES.largeFee.toFixed(2)} · Newry £{DELIVERY_RULES.newryFee.toFixed(2)}</span>
                     </div>
                     <strong>{cartItems.length > 0 && deliveryMethod === "delivery" ? `£${deliveryFee.toFixed(2)}` : "From £" + DELIVERY_RULES.standardFee.toFixed(2)}</strong>
                   </div>

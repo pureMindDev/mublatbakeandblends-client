@@ -10,14 +10,15 @@ import { estimateBasket } from "../utils/delivery";
  * `error` is set when the server rejects the basket (e.g. a product was
  * removed from the menu); network failures just keep the local estimate.
  */
-export default function useOrderQuote(cartItems, method) {
-  const estimate = useMemo(() => estimateBasket(cartItems, method), [cartItems, method]);
+export default function useOrderQuote(cartItems, method, address = "") {
+  const estimate = useMemo(() => estimateBasket(cartItems, method, address), [cartItems, method, address]);
   const [server, setServer] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const key = JSON.stringify([
     method,
+    method === "Delivery" ? address : "",
     cartItems.map((i) => [i.id, i.optionName, i.quantity]),
   ]);
 
@@ -30,6 +31,7 @@ export default function useOrderQuote(cartItems, method) {
       try {
         const { data } = await api.post("/orders/quote", {
           method,
+          address: method === "Delivery" ? address : undefined,
           items: cartItems.map((i) => ({
             product: i.id, optionName: i.optionName, quantity: i.quantity, name: i.name,
           })),

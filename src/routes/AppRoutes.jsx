@@ -14,6 +14,8 @@ import ReviewsPage    from "../pages/Reviews/ReviewsPage";
 import SupportPage    from "../pages/Support/SupportPage";
 import OrderTracking  from "../pages/OrderTracking/OrderTracking";
 import NotFound       from "../pages/NotFound/NotFound";
+import PrivacyPolicy  from "../pages/Legal/PrivacyPolicy";
+import TermsOfService from "../pages/Legal/TermsOfService";
 
 /* Admin pages */
 import AdminLogin    from "../pages/admin/AdminLogin/AdminLogin";
@@ -49,6 +51,8 @@ function AppRoutes() {
       <Route path="/reviews"     element={<ReviewsPage />} />
       <Route path="/support"     element={<SupportPage />} />
       <Route path="/track"       element={<OrderTracking />} />
+      <Route path="/privacy"     element={<PrivacyPolicy />} />
+      <Route path="/terms"       element={<TermsOfService />} />
       <Route path="/cart"        element={<Cart />} />
       <Route path="/checkout"    element={<Checkout />} />
       <Route path="/success"     element={<Success />} />

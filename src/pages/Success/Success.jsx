@@ -123,7 +123,7 @@ function PaymentSuccess() {
           <nav className="info-icon"><MdAccessTime className="in-icon" /></nav>
           <nav className="info-box">
             <span>{displayMethod === "Pickup" ? "ESTIMATED PICKUP" : "DELIVERY CHARGE"}</span>
-            <strong>{displayMethod === "Pickup" ? "15 Mins" : (tierLabel(order.deliveryTier) || "Delivery")}</strong>
+            <strong>{displayMethod === "Pickup" ? "Pickup" : (tierLabel(order.deliveryTier) || "Delivery")}</strong>
             <small>{displayMethod === "Pickup" ? "Once payment is confirmed" : `£${Number(order.deliveryFee || 0).toFixed(2)} — we'll be in touch about your delivery`}</small>
           </nav>
         </div>

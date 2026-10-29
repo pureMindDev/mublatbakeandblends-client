@@ -10,6 +10,7 @@ export const DELIVERY_RULES = Object.freeze({
   largeFee: 9.99,
   maxPastriesStandard: 30,
   maxDrinksStandard: 6,
+  newryFee: 3.5,
 });
 
 const toCount = (n) => {
@@ -35,10 +36,29 @@ export const optionUnits = (option, category) => {
   return Math.max(1, stored);
 };
 
-/** @returns {{fee:number, tier:"none"|"pickup"|"standard"|"large"}} */
-export function calculateDelivery({ method, pastryCount, drinkCount, hasItems = true }) {
+
+/* Newry special delivery area — exact mirror of server/utils/delivery.js.
+ * Flat £3.50 when the town is Newry AND the postcode is BT34/BT35. The
+ * server decides; this only drives the on-screen estimate. */
+const NEWRY_POSTCODE = /^BT3[45]\d[A-Z]{2}$/;
+const normalise = (s) =>
+  String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+
+export function isNewryAddress(address) {
+  const parts = String(address || "").split(",").map((p) => p.trim()).filter(Boolean);
+  if (parts.length < 2) return false;
+  const postcode = parts[parts.length - 1].toUpperCase().replace(/\s+/g, "");
+  if (!NEWRY_POSTCODE.test(postcode)) return false;
+  const towns = parts.length === 2 ? [parts[0]] : parts.slice(1, -1);
+  return towns.some((t) => ["newry", "newry city"].includes(normalise(t)));
+}
+
+/** @returns {{fee:number, tier:"none"|"pickup"|"newry"|"standard"|"large"}} */
+export function calculateDelivery({ method, pastryCount, drinkCount, hasItems = true, address }) {
   if (!hasItems) return { fee: 0, tier: "none" };
   if (String(method || "").toLowerCase() !== "delivery") return { fee: 0, tier: "pickup" };
+
+  if (isNewryAddress(address)) return { fee: DELIVERY_RULES.newryFee, tier: "newry" };
 
   const isLarge =
     toCount(pastryCount) > DELIVERY_RULES.maxPastriesStandard ||
@@ -62,13 +82,13 @@ export function countCartUnits(cartItems = []) {
 }
 
 /** Local (instant) estimate of a basket; the server quote confirms it. */
-export function estimateBasket(cartItems, method) {
+export function estimateBasket(cartItems, method, address) {
   const { pastryUnits, drinkUnits } = countCartUnits(cartItems);
   const subtotalPence = cartItems.reduce(
     (t, i) => t + Math.round(Number(i.price) * 100) * toCount(i.quantity), 0
   );
   const d = calculateDelivery({
-    method, pastryCount: pastryUnits, drinkCount: drinkUnits, hasItems: cartItems.length > 0,
+    method, pastryCount: pastryUnits, drinkCount: drinkUnits, hasItems: cartItems.length > 0, address,
   });
   return {
     subtotal: subtotalPence / 100,
@@ -80,6 +100,7 @@ export function estimateBasket(cartItems, method) {
 }
 
 export const TIER_LABELS = {
+  newry: "Newry Delivery",
   standard: "Standard Delivery",
   large: "Large Order Delivery",
   pickup: "Pickup",
@@ -107,6 +128,11 @@ export const DELIVERY_POLICY = {
       "More than 30 pieces of pastries, for example, 40 meat pies.",
       "More than 6 bottles of drinks, for example, 12 bottles of 500ml drinks.",
     ],
+  },
+  newry: {
+    heading: "Newry Delivery — £3.50",
+    lead: "For delivery addresses in Newry (postcodes BT34 and BT35).",
+    points: [],
   },
   note: "Delivery charges depend on the total quantity of products ordered. We will confirm the applicable delivery charge at checkout.",
   thanks: "Thank you for choosing Mublat Bakes & Blends!",

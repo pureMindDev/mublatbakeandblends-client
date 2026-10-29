@@ -103,6 +103,7 @@ function Cart() {
           {method === "Delivery" && cartItems.length > 0 && (
             <p className="delivery-basket-note">
               Your basket: {pastryUnits} pastry piece{pastryUnits === 1 ? "" : "s"} · {drinkUnits} drink bottle{drinkUnits === 1 ? "" : "s"}
+              <br />Delivering to Newry? The £3.50 Newry fee is applied at checkout once you enter your address.
             </p>
           )}
 

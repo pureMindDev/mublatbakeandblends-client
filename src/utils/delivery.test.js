@@ -1,4 +1,4 @@
-import { calculateDelivery, estimateBasket, countCartUnits, optionUnits, DELIVERY_RULES, DELIVERY_POLICY } from "./delivery";
+import { calculateDelivery, estimateBasket, countCartUnits, optionUnits, isNewryAddress, DELIVERY_RULES, DELIVERY_POLICY } from "./delivery";
 
 // Parity: the storefront must agree with the backend helper for every basket.
 // eslint-disable-next-line import/no-commonjs
@@ -91,4 +91,29 @@ test("cart counts actual pieces: 1x3=3, 1x12=12, 2x12=24, 5x3=15, even for stale
   expect(countCartUnits([line("Grand Dozen (Box of 12)", 2)]).pastryUnits).toBe(24);
   expect(countCartUnits([line("Trio Collection", 5, { units: 3 })]).pastryUnits).toBe(15);   // not counted twice
   expect(estimateBasket([line("Grand Dozen (Box of 12)", 2), { id: "d", optionName: "Regular Cup", quantity: 7, category: "Drinks" }], "Delivery").deliveryTier).toBe("large");
+});
+
+test("Newry: flat £3.50 for confirmed addresses only; parity with the backend", () => {
+  const yes = ["12 Hill Street, Newry, BT35 6DR", "12 Hill Street, NEWRY, bt34 1aa", "Flat 2, 12 Hill St, Newry, Co. Down, BT35 6DR"];
+  const no = ["12 Hill Street, Belfast, BT1 1AA", "Newry Road, Kilkeel, BT34 4AB", "3 Main St, Warrenpoint, BT34 3JA", "12 Hill St, Newry, E1 1AA", "12 Hill St, Newry", "", undefined];
+  for (const a of yes) {
+    expect(isNewryAddress(a)).toBe(true);
+    expect(calculateDelivery({ method: "Delivery", pastryCount: 99, drinkCount: 20, address: a })).toEqual({ fee: 3.5, tier: "newry" });
+  }
+  for (const a of no) {
+    expect(isNewryAddress(a)).toBe(false);
+    expect(calculateDelivery({ method: "Delivery", pastryCount: 5, drinkCount: 1, address: a }).fee).toBe(7.99);
+    expect(calculateDelivery({ method: "Delivery", pastryCount: 31, drinkCount: 0, address: a }).fee).toBe(9.99);
+  }
+  for (const a of [...yes, ...no]) expect(isNewryAddress(a)).toBe(server.isNewryAddress(a));
+  expect(calculateDelivery({ method: "Pickup", pastryCount: 5, drinkCount: 1, address: yes[0] })).toEqual({ fee: 0, tier: "pickup" });
+});
+
+test("cart estimate uses the Newry fee and keeps piece counts", () => {
+  const cart = [{ id: "p", optionName: "Grand Dozen (Box of 12)", quantity: 2, price: 66, category: "Pastries" }];
+  const e = estimateBasket(cart, "Delivery", "12 Hill Street, Newry, BT35 6DR");
+  expect(e.pastryUnits).toBe(24);
+  expect(e.deliveryFee).toBe(3.5);
+  expect(e.totalAmount).toBe(135.5);
+  expect(estimateBasket(cart, "Delivery", "12 Hill Street, Belfast, BT1 1AA").deliveryFee).toBe(7.99);
 });

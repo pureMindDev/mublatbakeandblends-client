@@ -10,11 +10,11 @@ function DeliveryPolicy({ id, heading = true, className = "" }) {
       <p className="dp-intro">{P.intro}</p>
 
       <div className="dp-tiers">
-        {[P.standard, P.large].map((t) => (
+        {[P.standard, P.large, P.newry].map((t) => (
           <div key={t.heading} className="dp-tier">
             <h4>{t.heading}</h4>
             <p>{t.lead}</p>
-            <ul>{t.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
+            {t.points.length > 0 && <ul>{t.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>}
           </div>
         ))}
       </div>
