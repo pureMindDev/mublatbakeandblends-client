@@ -3,6 +3,7 @@ import { CartContext } from "../../context/CartContext";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LuShoppingBag, LuSearch, LuMenu, LuX } from "react-icons/lu";
 import logo from "../../assets/images/mublat-logo.png";
+import useScrollDirection from "../../hooks/useScrollDirection";
 import "./Navbar.css";
 
 function Navbar() {
@@ -13,6 +14,17 @@ function Navbar() {
 
   /* Transparent over the hero on the home page, solid bar everywhere else */
   const isHome = location.pathname === "/";
+
+  /* Hide on scroll down, reveal on any scroll up. On the home page the bar is
+     transparent only near the top; once scrolled it becomes the compact solid
+     bar (so the tall hanging logo never covers content). */
+  const { atTop, hidden } = useScrollDirection({
+    topOffset: isHome ? 60 : 8,
+    disabled: menuOpen,
+  });
+  const [focusShown, setFocusShown] = useState(false);
+  useEffect(() => { setFocusShown(false); }, [hidden]);
+  const overlayMode = isHome && atTop;
 
   /* Close menu on route change */
   useEffect(() => { setMenuOpen(false); }, [location]);
@@ -27,7 +39,15 @@ function Navbar() {
     isActive ? "nav-link nav-link--active" : "nav-link";
 
   return (
-    <header className={`navbar ${isHome ? "navbar--overlay" : "navbar--solid"}`}>
+    <header
+      className={
+        `navbar ${overlayMode ? "navbar--overlay" : "navbar--solid"}` +
+        `${isHome ? " navbar--fixed" : ""}` +
+        `${hidden && !menuOpen && !focusShown ? " navbar--hidden" : ""}`
+      }
+      /* keyboard users tabbing into a hidden header bring it back */
+      onFocusCapture={() => setFocusShown(true)}
+    >
       <div className="navbar-inner">
 
         {/* LOGO — left */}

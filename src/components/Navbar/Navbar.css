@@ -18,6 +18,19 @@
   background: transparent;
 }
 
+/* Home keeps the bar fixed so it can return from anywhere on the page.
+   (A fixed bar is out of flow, exactly like the old absolute one.) */
+.navbar--fixed,
+.navbar--solid.navbar--fixed { position: fixed; }
+
+/* Smooth hide / reveal: transform only, so layout never shifts */
+.navbar {
+  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1),
+              background-color 0.25s ease;
+  will-change: transform;
+}
+.navbar--hidden { transform: translateY(-110%); }
+
 /* Every other page: solid sticky bar */
 .navbar--solid {
   position: sticky;
@@ -361,4 +374,7 @@
   body .adminbtn {
     display: none;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navbar { transition: none; }
 }

@@ -20,6 +20,8 @@
 html {
   background-color: var(--dark);
   color-scheme: dark;
+  /* hash links (e.g. /support#delivery) land below the sticky header */
+  scroll-padding-top: 96px;
 }
 
 body {
